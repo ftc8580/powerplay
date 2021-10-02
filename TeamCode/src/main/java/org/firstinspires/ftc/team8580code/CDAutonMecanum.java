@@ -34,7 +34,7 @@ public class CDAutonMecanum extends LinearOpMode {
     myHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     myHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         
-    //Wait fo the fame to start (driver presses PLAY)
+    //Wait fo the game to start (driver presses PLAY)
     waitForStart();
     myTimer.reset();
         
@@ -62,9 +62,9 @@ public class CDAutonMecanum extends LinearOpMode {
       //Turn Right
       if (myTimer.seconds()<4) {
         frontLeftPower = 0.5;
-        backLeftPower = 0.5;
+        backLeftPower = -0.5;
         frontRightPower = -0.5;
-        backRightPower = -0.5;      
+        backRightPower = 0.5;
       }      
       //Go Straight
       if (myTimer.seconds()<7) {
@@ -73,11 +73,11 @@ public class CDAutonMecanum extends LinearOpMode {
         frontRightPower = 0.5;
         backRightPower = 0.5;      
       }
-      //Turn Right
+      //Turn Left
       if (myTimer.seconds()<8) {
-        frontLeftPower = 0.5;
+        frontLeftPower = -0.5;
         backLeftPower = 0.5;
-        frontRightPower = -0.5;
+        frontRightPower = 0.5;
         backRightPower = -0.5;      
       }
       //Go Straight
@@ -87,7 +87,7 @@ public class CDAutonMecanum extends LinearOpMode {
         frontRightPower = 0.5;
         backRightPower = 0.5; 
       }
-      //Turn Right
+      //dont Turn
       if (myTimer.seconds()<12) {
         frontLeftPower = 0.5;
         backLeftPower = 0.5;

@@ -36,7 +36,7 @@ public class CDTeleopMecanum extends LinearOpMode {
       //Run until the end (Driver presses STOP)
       while (opModeIsActive()) {
          double y = -gamepad1.left_stick_y; // Remember, this is reversed!
-         double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+         double x = gamepad1.left_stick_x * -1.1; // Counteract imperfect strafing
          double rx = gamepad1.right_stick_x;
 
          // Denominator is the largest motor power (absolute value) or 1
