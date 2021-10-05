@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class CDHardware {
 
-// idk he told me to do this
 
     public DcMotor leftfrontmotor;
     public DcMotor rightfrontmotor;
