@@ -10,8 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 public class CDHardware {
-
-// idk he told me to do this
+//Defines the motors and (possible) sensors
 
     public DcMotor leftfrontmotor;
     public DcMotor rightfrontmotor;
