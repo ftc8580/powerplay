@@ -8,4 +8,26 @@ import com.qualcomm.robotcore.util.Range;
 
 public class CDElevator {
 
+    CDHardware robotHardware;
+
+    public CDElevator(CDHardware theHardware){
+
+        robotHardware = theHardware;
+
+
+
+       // robotHardware.elevatorswitchtop;
+       // robotHardware.elevatorswitchmiddle;
+       // robotHardware.elevatorswitchbottom;
+       // robotHardware.elevatorswitchground;
+        robotHardware.elevatormotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        robotHardware.elevatormotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
+
+    }
+
+
+
 }
