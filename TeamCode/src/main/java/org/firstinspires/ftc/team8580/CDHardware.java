@@ -19,7 +19,7 @@ public class CDHardware {
     public DcMotor turretmotor;
     public DcMotor elevatormotor;
     public DcMotor intakemotor;
-    public DcMotor spinnermotor;
+    public DcMotor duckspinnermotor;
 //    public Sensor elevatorswitchtop;
 //    public Sensor elevatorswitchmiddle;
 //    public Sensor elevatorswitchbottom;
@@ -34,7 +34,7 @@ public class CDHardware {
         turretmotor = myHardware.get(DcMotor.class, "motorTurret");
         elevatormotor = myHardware.get(DcMotor.class, "motorElevator");
         intakemotor = myHardware.get(DcMotor.class, "motorIntake");
-        spinnermotor = myHardware.get(DcMotor.class, "motorSpinner");
+        spinnermotor = myHardware.get(DcMotor.class, "motorDuckSpinner");
         // Unused sensors
 //        elevatorswitchtop = myHardware.get(Sensor.class,"switchElevatorTop");
 //        elevatorswitchmiddle = myHardware.get(Sensor.class,"switchElevatorMidddle");
