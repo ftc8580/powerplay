@@ -9,7 +9,7 @@ public class CDIntake {
     CDHardware robotHardware;
 
     public  CDIntake(CDHardware theHardware){
-
+// define hardware class
         robotHardware = theHardware;
 
 
