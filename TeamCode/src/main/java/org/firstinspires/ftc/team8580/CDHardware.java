@@ -19,13 +19,14 @@ public class CDHardware {
     public DcMotor turretmotor;
     public DcMotor elevatormotor;
     public DcMotor intakemotor;
-    public Sensor elevatorswitchtop;
-    public Sensor elevatorswitchmiddle;
-    public Sensor elevatorswitchbottom;
-    public Sensor elevatorswitchground;
-    public DcMotor spinner;
+    public DcMotor spinnermotor;
+//    public Sensor elevatorswitchtop;
+//    public Sensor elevatorswitchmiddle;
+//    public Sensor elevatorswitchbottom;
+//    public Sensor elevatorswitchground;
+
     public CDHardware (HardwareMap myHardware){
-        
+       //Defines Hardware map from Control Hub
         leftfrontmotor = myHardware.get(DcMotor.class, "motorLF"); 
         rightfrontmotor = myHardware.get(DcMotor.class, "motorRF");
         leftrearmotor = myHardware.get(DcMotor.class, "motorLR");
@@ -33,11 +34,11 @@ public class CDHardware {
         turretmotor = myHardware.get(DcMotor.class, "motorTurret");
         elevatormotor = myHardware.get(DcMotor.class, "motorElevator");
         intakemotor = myHardware.get(DcMotor.class, "motorIntake");
-        elevatorswitchtop = myHardware.get(Sensor.class,"switchElevatorTop");
-        elevatorswitchmiddle = myHardware.get(Sensor.class,"switchElevatorMidddle");
-        elevatorswitchbottom = myHardware.get(Sensor.class,"switchElevatorBottom");
-        spinner = myHardware.get(DcMotor.class, "spinner");
-        elevatorswitchground = myHardware.get(Sensor.class,"switchElevatorGround");
+        spinnermotor = myHardware.get(DcMotor.class, "motorSpinner");
+//        elevatorswitchtop = myHardware.get(Sensor.class,"switchElevatorTop");
+//        elevatorswitchmiddle = myHardware.get(Sensor.class,"switchElevatorMidddle");
+//        elevatorswitchbottom = myHardware.get(Sensor.class,"switchElevatorBottom");
+//        elevatorswitchground = myHardware.get(Sensor.class,"switchElevatorGround");
     }
 }
 
