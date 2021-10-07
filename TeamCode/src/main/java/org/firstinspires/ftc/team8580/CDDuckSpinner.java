@@ -4,16 +4,16 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Hardware;
 
 
-public class CDSpinner {
+public class CDDuckSpinner {
 
     CDHardware robotHardware;
 
-    public  CDSpinner(CDHardware theHardware){
+    public  CDDuckSpinner(CDHardware theHardware){
 
         robotHardware = theHardware;
 
 
-        robotHardware.spinnermotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        robotHardware.duckspinnermotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
 
