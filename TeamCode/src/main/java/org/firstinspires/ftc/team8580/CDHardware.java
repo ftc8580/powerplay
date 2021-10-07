@@ -35,6 +35,7 @@ public class CDHardware {
         elevatormotor = myHardware.get(DcMotor.class, "motorElevator");
         intakemotor = myHardware.get(DcMotor.class, "motorIntake");
         spinnermotor = myHardware.get(DcMotor.class, "motorSpinner");
+        // Unused sensors
 //        elevatorswitchtop = myHardware.get(Sensor.class,"switchElevatorTop");
 //        elevatorswitchmiddle = myHardware.get(Sensor.class,"switchElevatorMidddle");
 //        elevatorswitchbottom = myHardware.get(Sensor.class,"switchElevatorBottom");
