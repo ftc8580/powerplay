@@ -17,15 +17,15 @@ public class CDTeleopMecanum extends LinearOpMode {
       
       CDHardware myHardware = new CDHardware(hardwareMap);
       
-        myHardware.leftfrontmotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        myHardware.leftrearmotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        myHardware.rightfrontmotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        myHardware.rightrearmotor.setDirection(DcMotorSimple.Direction.REVERSE);
+      myHardware.leftfrontmotor.setDirection(DcMotorSimple.Direction.FORWARD);
+      myHardware.leftrearmotor.setDirection(DcMotorSimple.Direction.FORWARD);
+      myHardware.rightfrontmotor.setDirection(DcMotorSimple.Direction.REVERSE);
+      myHardware.rightrearmotor.setDirection(DcMotorSimple.Direction.REVERSE);
         
-        myHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        myHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        myHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        myHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+      myHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+      myHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+      myHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+      myHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
       
       telemetry.addData("Status", "Fully Initialized");
       telemetry.update();
@@ -64,7 +64,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           double deliver = gamepad2.right_trigger;
           myHardware.intakemotor.setPower(intake);
 
-          //boolean is on off if do not see option try boolean
+          //duck input is a boolean is on off if do not see option try boolean
           boolean duckA = gamepad1.a;
           double duckpower;
 
@@ -73,15 +73,13 @@ public class CDTeleopMecanum extends LinearOpMode {
           } else if (gamepad1.b) {
               duckpower = -0.5;
           } else  {
-          duckpower = 0;
-      }
-
+            duckpower = 0;
+          }
           myHardware.duckspinnermotor.setPower(duckpower);
 
-
+          // turret code
           double turretA = gamepad1.left_stick_x;
           myHardware.turretmotor.setPower(turretA);
-
 
          telemetry.addData("y ", "%.2f", y);
          telemetry.addData("x ", "%.2f", x);
