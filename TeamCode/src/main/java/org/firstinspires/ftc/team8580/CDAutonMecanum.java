@@ -1,18 +1,17 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.team8580;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DcMotor;
+//import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+//import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+//import com.qualcomm.robotcore.hardware.DcMotorSimple;
+//import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name="CDAutonMecanum", group="Linear Opmode")
 
 public class CDAutonMecanum extends LinearOpMode {
 
-    // todo: write your code here
   @Override
   public void runOpMode() {
     telemetry.addData("Status", "Initialized");
@@ -22,18 +21,8 @@ public class CDAutonMecanum extends LinearOpMode {
     double moveBackTimer = -1;
       
     CDHardware myHardware = new CDHardware(hardwareMap);
-      
-    //Most robots need the motor on one side to ve reversed to drive forward
-    myHardware.leftfrontmotor.setDirection(DcMotorSimple.Direction.FORWARD);
-    myHardware.leftrearmotor.setDirection(DcMotorSimple.Direction.FORWARD);
-    myHardware.rightfrontmotor.setDirection(DcMotorSimple.Direction.REVERSE);
-    myHardware.rightrearmotor.setDirection(DcMotorSimple.Direction.REVERSE);
-     
-    myHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    myHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    myHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    myHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        
+    CDDriveChassis myChassis = new CDDriveChassis(myHardware);
+
     //Wait fo the game to start (driver presses PLAY)
     waitForStart();
     myTimer.reset();
@@ -42,85 +31,85 @@ public class CDAutonMecanum extends LinearOpMode {
     while (opModeIsActive()) {
         
       //Setup a variable for each drive wheel to save power level for telemetry
-      double frontLeftPower;
-      double backLeftPower;
-      double frontRightPower;
-      double backRightPower; 
+      double leftFrontPower;
+      double leftRearPower;
+      double rightFrontPower;
+      double rightRearPower;
       
-      frontLeftPower = 0.5;
-      backLeftPower = 0.5;
-      frontRightPower = 0.5;
-      backRightPower = 0.5; 
+      leftFrontPower = 0.5;
+      leftRearPower = 0.5;
+      rightFrontPower = 0.5;
+      rightRearPower = 0.5;
       
       //Go Straight
       if (myTimer.seconds()<3) {
-        frontLeftPower = 0.5;
-        backLeftPower = 0.5;
-        frontRightPower = 0.5;
-        backRightPower = 0.5;      
+        leftFrontPower = 0.5;
+        leftRearPower = 0.5;
+        rightFrontPower = 0.5;
+        rightRearPower = 0.5;
       }
       //Turn Right
       if (myTimer.seconds()<4) {
-        frontLeftPower = 0.5;
-        backLeftPower = -0.5;
-        frontRightPower = -0.5;
-        backRightPower = 0.5;
+        leftFrontPower = 0.5;
+        leftRearPower = -0.5;
+        rightFrontPower = -0.5;
+        rightRearPower = 0.5;
       }      
       //Go Straight
       if (myTimer.seconds()<7) {
-        frontLeftPower = 0.5;
-        backLeftPower = 0.5;
-        frontRightPower = 0.5;
-        backRightPower = 0.5;      
+        leftFrontPower = 0.5;
+        leftRearPower = 0.5;
+        rightFrontPower = 0.5;
+        rightRearPower = 0.5;
       }
       //Turn Left
       if (myTimer.seconds()<8) {
-        frontLeftPower = -0.5;
-        backLeftPower = 0.5;
-        frontRightPower = 0.5;
-        backRightPower = -0.5;      
+        leftFrontPower = -0.5;
+        leftRearPower = 0.5;
+        rightFrontPower = 0.5;
+        rightRearPower = -0.5;
       }
       //Go Straight
       if (myTimer.seconds()<11) {
-        frontLeftPower = 0.5;
-        backLeftPower = 0.5;
-        frontRightPower = 0.5;
-        backRightPower = 0.5; 
+        leftFrontPower = 0.5;
+        leftRearPower = 0.5;
+        rightFrontPower = 0.5;
+        rightRearPower = 0.5;
       }
       //dont Turn
       if (myTimer.seconds()<12) {
-        frontLeftPower = 0.5;
-        backLeftPower = 0.5;
-        frontRightPower = -0.5;
-        backRightPower = -0.5;      
+        leftFrontPower = 0.5;
+        leftRearPower = 0.5;
+        rightFrontPower = -0.5;
+        rightRearPower = -0.5;
       }
       //Go Straight
       if (myTimer.seconds()<15) {
-        frontLeftPower = 0.5;
-        backLeftPower = 0.5;
-        frontRightPower = 0.5;
-        backRightPower = 0.5; 
+        leftFrontPower = 0.5;
+        leftRearPower = 0.5;
+        rightFrontPower = 0.5;
+        rightRearPower = 0.5;
       }
       //Stop
       if (myTimer.seconds()>=15) {
-        frontLeftPower = 0.0;
-        backLeftPower = 0.0;
-        frontRightPower = 0.0;
-        backRightPower = 0.0;   
+        leftFrontPower = 0.0;
+        leftRearPower = 0.0;
+        rightFrontPower = 0.0;
+        rightRearPower = 0.0;
       }
       
       //Send power to wheel motors
-      myHardware.leftfrontmotor.setPower(frontLeftPower);
-      myHardware.leftrearmotor.setPower(backLeftPower);
-      myHardware.rightfrontmotor.setPower(frontRightPower);
-      myHardware.rightrearmotor.setPower(backRightPower);
+      myChassis.setLeftFrontPower(leftFrontPower);
+      myChassis.setLeftFrontPower(leftFrontPower);
+      myChassis.setLeftFrontPower(leftFrontPower);
+      myChassis.setLeftFrontPower(leftFrontPower);
       
       //Show elapsed time and wheel power
       telemetry.addData("Status", "Run Time: " + myTimer.toString());
-      telemetry.addData("motorLF ", "%.2f", frontLeftPower);
-      telemetry.addData("motorRF ", "%.2f", frontRightPower);
-      telemetry.addData("motorLR ", "%.2f", backLeftPower);
-      telemetry.addData("motorRR ", "%.2f", backRightPower);
+      telemetry.addData("motorLF ", "%.2f", leftFrontPower);
+      telemetry.addData("motorRF ", "%.2f", rightFrontPower);
+      telemetry.addData("motorLR ", "%.2f", leftRearPower);
+      telemetry.addData("motorRR ", "%.2f", rightRearPower);
       telemetry.update();
     }
   }

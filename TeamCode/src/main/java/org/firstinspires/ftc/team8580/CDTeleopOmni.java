@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.team8580;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,7 +13,7 @@ public class CDTeleopOmni extends LinearOpMode {
       double moveBackTimer = -1;
       
       CDHardware myHardware = new CDHardware(hardwareMap);
-      CDDriveChassis myChassis = new CDDriveChassis(myHardware);
+      CDDriveChassisOmni myChassis = new CDDriveChassisOmni(myHardware);
       
       telemetry.addData("Status", "Fully Initialized");
       telemetry.update();

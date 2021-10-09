@@ -2,10 +2,10 @@ package org.firstinspires.ftc.team8580;
 
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+//import com.qualcomm.robotcore.util.ElapsedTime;
+//import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -20,7 +20,6 @@ import com.qualcomm.robotcore.util.Range;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-
 
 public class CDDriveChassis {
 
@@ -40,16 +39,20 @@ public class CDDriveChassis {
         robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    
-    public void setLeftPower (double pow) {
+
+    public void setLeftFrontPower (double pow) {
         robotHardware.leftfrontmotor.setPower(pow);
-        robotHardware.leftrearmotor.setPower(pow);
     }
-    
-    public void setRightPower (double pow) {
+    public void setLeftRearPower (double pow) {
+        robotHardware.leftfrontmotor.setPower(pow);
+    }
+    public void setRightFrontPower (double pow) {
         robotHardware.rightfrontmotor.setPower(pow);
-        robotHardware.rightrearmotor.setPower(pow);
     }
+    public void setRightRearPower (double pow) {
+        robotHardware.rightfrontmotor.setPower(pow);
+    }
+
 }
 
 
