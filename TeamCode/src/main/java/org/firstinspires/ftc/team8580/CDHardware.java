@@ -17,10 +17,10 @@ public class CDHardware {
     public DcMotor elevatormotor;
     public DcMotor intakemotor;
     public DcMotor duckspinnermotor;
-//    public Sensor elevatorswitchtop;
-//    public Sensor elevatorswitchmiddle;
-//    public Sensor elevatorswitchbottom;
-//    public Sensor elevatorswitchground;
+    //    public Sensor elevatorswitchtop;
+    //    public Sensor elevatorswitchmiddle;
+    //    public Sensor elevatorswitchbottom;
+    //    public Sensor elevatorswitchground;
 
     public CDHardware (HardwareMap hwMap){
        //Defines Hardware map from Control Hub
