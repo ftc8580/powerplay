@@ -1,32 +1,26 @@
 package org.firstinspires.ftc.team8580;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.Hardware;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
+//import com.qualcomm.robotcore.util.ElapsedTime;
+//import com.qualcomm.robotcore.util.Hardware;
+//import com.qualcomm.robotcore.hardware.DcMotor;
+//import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 
 @TeleOp(name="CDTeleopMecanum", group="Linear Opmode")
 public class CDTeleopMecanum extends LinearOpMode { 
 
   @Override
   public void runOpMode() {
-      ElapsedTime myTimer = new ElapsedTime();
-      double moveBackTimer = -1;
-      
+
       CDHardware myHardware = new CDHardware(hardwareMap);
-      
-      myHardware.leftfrontmotor.setDirection(DcMotorSimple.Direction.FORWARD);
-      myHardware.leftrearmotor.setDirection(DcMotorSimple.Direction.FORWARD);
-      myHardware.rightfrontmotor.setDirection(DcMotorSimple.Direction.REVERSE);
-      myHardware.rightrearmotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        
-      myHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-      myHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-      myHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-      myHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-      
+      CDDriveChassis myChassis = new CDDriveChassis(myHardware);
+      CDDuckSpinner myDuckSpinner = new CDDuckSpinner(myHardware);
+      CDElevator myElevator = new CDElevator(myHardware);
+      CDIntake myIntake = new CDIntake(myHardware);
+      CDTurret myTurret = new CDTurret(myHardware);
+
       telemetry.addData("Status", "Fully Initialized");
       telemetry.update();
       
@@ -43,47 +37,47 @@ public class CDTeleopMecanum extends LinearOpMode {
           // This ensures all the powers maintain the same ratio, but only when
           // at least one is out of the range [-1, 1]
           double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-          double frontLeftPower = (y + x + rx) / denominator;
-          double backLeftPower = (y - x + rx) / denominator;
-          double frontRightPower = (y - x - rx) / denominator;
-          double backRightPower = (y + x - rx) / denominator;
+          double leftFrontPower = (y + x + rx) / denominator;
+          double leftRearPower = (y - x + rx) / denominator;
+          double rightFrontPower = (y - x - rx) / denominator;
+          double rightRearPower = (y + x - rx) / denominator;
 
-          myHardware.leftfrontmotor.setPower(frontLeftPower);
-          myHardware.leftrearmotor.setPower(backLeftPower);
-          myHardware.rightfrontmotor.setPower(frontRightPower);
-          myHardware.rightrearmotor.setPower(backRightPower);
+          //move robot - drive chassis
+          myChassis.setLeftFrontPower(leftFrontPower);
+          myChassis.setLeftRearPower(leftRearPower);
+          myChassis.setRightFrontPower(rightFrontPower);
+          myChassis.setRightRearPower(rightRearPower);
 
           //move elevator + = up - = down
           double elevator = gamepad2.left_stick_y;
-          myHardware.elevatormotor.setPower(elevator);
+          myElevator.setElevatorPower(elevator);
 
           //intake ( left trigger), deliver(right trigger)
           double intake = gamepad2.left_trigger;
-          myHardware.intakemotor.setPower(intake);
+          myIntake.setIntakePower(intake);
 
           double deliver = gamepad2.right_trigger;
-          myHardware.intakemotor.setPower(intake);
+          myIntake.setIntakePower(deliver);
 
-          //duck input is a boolean is on off if do not see option try boolean
-          boolean duckA = gamepad1.a;
+          //duck input is a boolean - it is on or off - if do not see option try boolean
           double duckpower;
 
           if (gamepad1.a) {
-              duckpower = 0.5;
+              duckpower = 1;
           } else if (gamepad1.b) {
-              duckpower = -0.5;
+              duckpower = -1;
           } else  {
             duckpower = 0;
           }
-          myHardware.duckspinnermotor.setPower(duckpower);
+          myDuckSpinner.setDuckSpinnerPower(duckpower);
 
           // turret code
           double turretA = gamepad1.left_stick_x;
-          myHardware.turretmotor.setPower(turretA);
+          myTurret.setTurretPower(turretA);
 
-         telemetry.addData("y ", "%.2f", y);
-         telemetry.addData("x ", "%.2f", x);
-         telemetry.addData("rx ", "%.2f", rx);
+         telemetry.addData("y input", "%.2f", y);
+         telemetry.addData("x input", "%.2f", x);
+         telemetry.addData("rx input", "%.2f", rx);
          telemetry.update();
       }
       
