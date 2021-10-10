@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.team8580;
+package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
 //import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 //import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,7 +8,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name="CDAutonMecanum", group="Linear Opmode")
-
+// TODO: First prove out Telop before enabling Auton to protect the robot
+@Disabled
 public class CDAutonMecanum extends LinearOpMode {
 
   @Override

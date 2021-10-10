@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.team8580;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 //import com.qualcomm.robotcore.util.ElapsedTime;
 //import com.qualcomm.robotcore.util.Hardware;
 //import com.qualcomm.robotcore.hardware.DcMotor;
@@ -29,6 +30,9 @@ public class CDTeleopMecanum extends LinearOpMode {
       
       //Run until the end (Driver presses STOP)
       while (opModeIsActive()) {
+
+          // TODO: Need to make driving make sense to the driver, something broken here in map or inputs
+
           double y = -gamepad1.left_stick_y; // Remember, this is reversed!
           double x = gamepad1.left_stick_x * -1.1; // Counteract imperfect strafing
           double rx = gamepad1.right_stick_x;
@@ -50,16 +54,18 @@ public class CDTeleopMecanum extends LinearOpMode {
 
           //move elevator + = up - = down
           double elevator = gamepad2.left_stick_y;
+          // TODO: Need to limit the elevator range with the encoder sensor
           myElevator.setElevatorPower(elevator);
 
           //intake ( left trigger), deliver(right trigger)
           double intake = gamepad2.left_trigger;
           myIntake.setIntakePower(intake);
-
+          // TODO: Need to reverse the delivery double
           double deliver = gamepad2.right_trigger;
           myIntake.setIntakePower(deliver);
 
           //duck input is a boolean - it is on or off - if do not see option try boolean
+          // TODO: motorDuckSpinner is defined, but not installed on robot by build team
           double duckpower;
 
           if (gamepad1.a) {
@@ -71,10 +77,14 @@ public class CDTeleopMecanum extends LinearOpMode {
           }
           myDuckSpinner.setDuckSpinnerPower(duckpower);
 
-          // turret code
-          double turretA = gamepad1.left_stick_x;
+          // turret codd
+          double turretA = gamepad2.left_stick_x;
+          // TODO: Turret is not limited by the encoder, risk of breaking robot
+          // TODO: Set up encoder sensor for motorTurret
           myTurret.setTurretPower(turretA);
 
+         // TODO: Add telemetry for all input controls for testing
+         // TODO: Consider telementry for each motor for debugging controls
          telemetry.addData("y input", "%.2f", y);
          telemetry.addData("x input", "%.2f", x);
          telemetry.addData("rx input", "%.2f", rx);

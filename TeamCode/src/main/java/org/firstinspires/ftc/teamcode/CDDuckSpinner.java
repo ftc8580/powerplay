@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.team8580;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.Hardware;
 
 
 public class CDDuckSpinner {

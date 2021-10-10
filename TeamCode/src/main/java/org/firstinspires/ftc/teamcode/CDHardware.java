@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team8580;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -24,14 +24,15 @@ public class CDHardware {
 
     public CDHardware (HardwareMap hwMap){
        //Defines Hardware map from Control Hub
+        //TODO: Need to double check motor mapping on the driver hub and check orientation
         leftfrontmotor = hwMap.get(DcMotor.class, "motorLF");
         rightfrontmotor = hwMap.get(DcMotor.class, "motorRF");
         leftrearmotor = hwMap.get(DcMotor.class, "motorLR");
         rightrearmotor = hwMap.get(DcMotor.class, "motorRR");
-        turretmotor = hwMap.get(DcMotor.class, "motorTurret");
         elevatormotor = hwMap.get(DcMotor.class, "motorElevator");
-        intakemotor = hwMap.get(DcMotor.class, "motorIntake");
         duckspinnermotor = hwMap.get(DcMotor.class, "motorDuckSpinner");
+        intakemotor = hwMap.get(DcMotor.class, "motorIntake");
+        turretmotor = hwMap.get(DcMotor.class, "motorTurret");
 
         // Unused sensors- Switched to using motor encoder
         //        elevatorswitchtop = hwMap.get(Sensor.class,"switchElevatorTop");
