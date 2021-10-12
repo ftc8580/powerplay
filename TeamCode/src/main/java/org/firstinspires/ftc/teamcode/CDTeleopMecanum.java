@@ -59,8 +59,8 @@ public class CDTeleopMecanum extends LinearOpMode {
           //intake ( left trigger), deliver(right trigger)
           double intake = gamepad2.left_trigger;
           myIntake.setIntakePower(intake);
-          // TODO: Need to reverse the delivery double
-          double deliver = gamepad2.right_trigger;
+
+          double deliver = -gamepad2.right_trigger;
           myIntake.setIntakePower(deliver);
 
           //duck input is a boolean - it is on or off - if do not see option try boolean
