@@ -31,8 +31,6 @@ public class CDTeleopMecanum extends LinearOpMode {
       //Run until the end (Driver presses STOP)
       while (opModeIsActive()) {
 
-          // TODO: Need to make driving make sense to the driver, something broken here in map or inputs
-
           double y = gamepad1.left_stick_y; // Remember, this is reversed!
           double x = gamepad1.left_stick_x * -1.1; // Counteract imperfect strafing
           double rx = gamepad1.right_stick_x;
