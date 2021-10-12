@@ -33,7 +33,7 @@ public class CDTeleopMecanum extends LinearOpMode {
 
           // TODO: Need to make driving make sense to the driver, something broken here in map or inputs
 
-          double y = -gamepad1.left_stick_y; // Remember, this is reversed!
+          double y = gamepad1.left_stick_y; // Remember, this is reversed!
           double x = gamepad1.left_stick_x * -1.1; // Counteract imperfect strafing
           double rx = gamepad1.right_stick_x;
 
@@ -43,6 +43,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
           double leftFrontPower = (y + x + rx) / denominator;
           double leftRearPower = (y - x + rx) / denominator;
+          // TODO: FIX DIRECTION
           double rightFrontPower = (y - x - rx) / denominator;
           double rightRearPower = (y + x - rx) / denominator;
 

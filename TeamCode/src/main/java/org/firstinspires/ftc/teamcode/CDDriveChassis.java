@@ -44,13 +44,13 @@ public class CDDriveChassis {
         robotHardware.leftfrontmotor.setPower(pow);
     }
     public void setLeftRearPower (double pow) {
-        robotHardware.leftfrontmotor.setPower(pow);
+        robotHardware.leftrearmotor.setPower(pow);
     }
     public void setRightFrontPower (double pow) {
         robotHardware.rightfrontmotor.setPower(pow);
     }
     public void setRightRearPower (double pow) {
-        robotHardware.rightfrontmotor.setPower(pow);
+        robotHardware.rightrearmotor.setPower(pow);
     }
 
 }
