@@ -91,11 +91,13 @@ public class CDTeleopMecanum extends LinearOpMode {
           // TODO: Set up encoder sensor for motorTurret
           myTurret.setTurretPower(turretA*slow);
 
-         // TODO: Add telemetry for all input controls for testing
-         // TODO: Consider telementry for each motor for debugging controls
          telemetry.addData("y input", "%.2f", y);
          telemetry.addData("x input", "%.2f", x);
          telemetry.addData("rx input", "%.2f", rx);
+         telemetry.addData("motorLF ", "%.2f", leftFrontPower);
+         telemetry.addData("motorRF ", "%.2f", rightFrontPower);
+         telemetry.addData("motorLR ", "%.2f", leftRearPower);
+         telemetry.addData("motorRR ", "%.2f", rightRearPower);
          telemetry.update();
       }
       
