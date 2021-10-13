@@ -31,15 +31,14 @@ public class CDTeleopMecanum extends LinearOpMode {
       
       //Run until the end (Driver presses STOP)
       while (opModeIsActive()) {
-          // TODO: SET THIS VALUE TO 0.5
-          double slow = .25;
-          if (gamepad1.x) {
-              // TODO: SET THIS TO BE GAMEPAD1 LEFT BUMPER
-              slow = 0.5;
-          } else if (gamepad1.y) {
-              // TODO: SET THIS TO BE GAMEPAD1 LEFT BUMPER
 
-              slow = .75;
+          double slow = 0.5;
+          if (gamepad1.left_bumper) {
+
+              slow = 0.25;
+          } else if (gamepad1.right_bumper) {
+
+              slow = 0.75;
           }
           double y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
           double x = Math.pow(gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
@@ -64,7 +63,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           //move elevator + = up - = down
           double elevator = gamepad2.left_stick_y;
           // TODO: Need to limit the elevator range with the encoder sensor
-          myElevator.setElevatorPower(elevator*slow);
+          myElevator.setElevatorPower(-elevator*slow);
 
           //intake ( left trigger), deliver(right trigger)
           double intake = gamepad2.left_trigger;
@@ -87,7 +86,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           myDuckSpinner.setDuckSpinnerPower(duckpower*slow);
 
           // turret codd
-          double turretA = gamepad2.left_stick_x;
+          double turretA = gamepad2.right_stick_x;
           // TODO: Turret is not limited by the encoder, risk of breaking robot
           // TODO: Set up encoder sensor for motorTurret
           myTurret.setTurretPower(turretA*slow);
