@@ -48,10 +48,10 @@ public class CDTeleopMecanum extends LinearOpMode {
           // This ensures all the powers maintain the same ratio, but only when
           // at least one is out of the range [-1, 1]
           double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-          double leftFrontPower = (y + x + rx) / denominator;
+          double leftFrontPower = (y + x + rx) / denominator*2;
           double leftRearPower = (y - x + rx) / denominator;
           // TODO: FIX DIRECTION
-          double rightFrontPower = (y - x - rx) / denominator;
+          double rightFrontPower = (y - x - rx) / denominator*2;
           double rightRearPower = (y + x - rx) / denominator;
 
           //move robot - drive chassis
