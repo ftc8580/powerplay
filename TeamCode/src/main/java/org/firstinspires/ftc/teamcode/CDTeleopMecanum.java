@@ -21,7 +21,6 @@ public class CDTeleopMecanum extends LinearOpMode {
       CDElevator myElevator = new CDElevator(myHardware);
       CDIntake myIntake = new CDIntake(myHardware);
       CDTurret myTurret = new CDTurret(myHardware);
-      // TODO: Add Boost public variable and implement it where power is used
 
 
       telemetry.addData("Status", "Fully Initialized");
@@ -32,9 +31,12 @@ public class CDTeleopMecanum extends LinearOpMode {
       
       //Run until the end (Driver presses STOP)
       while (opModeIsActive()) {
-          // TODO: Add keybinding for .25, .5, 1.0  boost values (talk to someone about what buttons on gamepad1)
-
-
+          double slow = .25;
+          if (gamepad1.x) {
+              slow = 0.5;
+          } else if (gamepad1.y) {
+              slow = .75;
+          }
           double y = gamepad1.left_stick_y; // Remember, this is reversed!
           double x = gamepad1.left_stick_x * -1.1; // Counteract imperfect strafing
           double rx = gamepad1.right_stick_x;
@@ -50,16 +52,15 @@ public class CDTeleopMecanum extends LinearOpMode {
           double rightRearPower = (y - x - rx) / denominator;
 
           //move robot - drive chassis
-          // TODO: Add boost multiplier to ALL motor variables (including elevator and turret)
-          myChassis.setLeftFrontPower(leftFrontPower);
-          myChassis.setLeftRearPower(leftRearPower);
-          myChassis.setRightFrontPower(rightFrontPower);
-          myChassis.setRightRearPower(rightRearPower);
+          myChassis.setLeftFrontPower(leftFrontPower*slow);
+          myChassis.setLeftRearPower(leftRearPower*slow);
+          myChassis.setRightFrontPower(rightFrontPower*slow);
+          myChassis.setRightRearPower(rightRearPower*slow);
 
           //move elevator + = up - = down
           double elevator = gamepad2.left_stick_y;
           // TODO: Need to limit the elevator range with the encoder sensor
-          myElevator.setElevatorPower(elevator);
+          myElevator.setElevatorPower(elevator*slow);
 
           //intake ( left trigger), deliver(right trigger)
           double intake = gamepad2.left_trigger;
@@ -79,13 +80,13 @@ public class CDTeleopMecanum extends LinearOpMode {
           } else  {
             duckpower = 0;
           }
-          myDuckSpinner.setDuckSpinnerPower(duckpower);
+          myDuckSpinner.setDuckSpinnerPower(duckpower*slow);
 
           // turret codd
           double turretA = gamepad2.left_stick_x;
           // TODO: Turret is not limited by the encoder, risk of breaking robot
           // TODO: Set up encoder sensor for motorTurret
-          myTurret.setTurretPower(turretA);
+          myTurret.setTurretPower(turretA*slow);
 
          // TODO: Add telemetry for all input controls for testing
          // TODO: Consider telementry for each motor for debugging controls
