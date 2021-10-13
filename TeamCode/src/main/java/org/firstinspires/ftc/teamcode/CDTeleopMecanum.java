@@ -37,9 +37,9 @@ public class CDTeleopMecanum extends LinearOpMode {
           } else if (gamepad1.y) {
               slow = .75;
           }
-          double y = (gamepad1.left_stick_y,3),; // Remember, this is reversed!
-          double x = (gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
-          double rx = gamepad1.right_stick_x;
+          double y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
+          double x = Math.pow(gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
+          double rx = Math.pow(gamepad1.right_stick_x,3);
 
           // Denominator is the largest motor power (absolute value) or 1
           // This ensures all the powers maintain the same ratio, but only when
