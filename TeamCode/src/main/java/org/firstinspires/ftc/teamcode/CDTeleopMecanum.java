@@ -31,10 +31,14 @@ public class CDTeleopMecanum extends LinearOpMode {
       
       //Run until the end (Driver presses STOP)
       while (opModeIsActive()) {
+          // TODO: SET THIS VALUE TO 0.5
           double slow = .25;
           if (gamepad1.x) {
+              // TODO: SET THIS TO BE GAMEPAD1 LEFT BUMPER
               slow = 0.5;
           } else if (gamepad1.y) {
+              // TODO: SET THIS TO BE GAMEPAD1 LEFT BUMPER
+
               slow = .75;
           }
           double y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!

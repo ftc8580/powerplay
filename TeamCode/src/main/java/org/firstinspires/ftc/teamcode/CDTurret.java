@@ -21,4 +21,5 @@ public class CDTurret {
         robotHardware.turretmotor.setPower(pow);
     }
 
+    // TODO: ADD BRAKE FOR TURRET
 }
