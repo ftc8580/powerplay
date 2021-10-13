@@ -32,13 +32,13 @@ public class CDTeleopMecanum extends LinearOpMode {
       //Run until the end (Driver presses STOP)
       while (opModeIsActive()) {
 
-          double slow = 0.5;
+          double slow = 0.25;
+
           if (gamepad1.left_bumper) {
+              slow = 0.12;
 
-              slow = 0.25;
           } else if (gamepad1.right_bumper) {
-
-              slow = 0.75;
+              slow = 0.55;
           }
           double y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
           double x = Math.pow(gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
@@ -48,10 +48,10 @@ public class CDTeleopMecanum extends LinearOpMode {
           // This ensures all the powers maintain the same ratio, but only when
           // at least one is out of the range [-1, 1]
           double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-          double leftFrontPower = (y + x + rx) / denominator*2;
+          double leftFrontPower = (y + x + rx) / denominator*1.5;
           double leftRearPower = (y - x + rx) / denominator;
           // TODO: FIX DIRECTION
-          double rightFrontPower = (y - x - rx) / denominator*2;
+          double rightFrontPower = (y - x - rx) / denominator*1.5;
           double rightRearPower = (y + x - rx) / denominator;
 
           //move robot - drive chassis
@@ -63,7 +63,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           //move elevator + = up - = down
           double elevator = gamepad2.left_stick_y;
           // TODO: Need to limit the elevator range with the encoder sensor
-          myElevator.setElevatorPower(-elevator*slow);
+          myElevator.setElevatorPower(-elevator);
 
           //intake ( left trigger), deliver(right trigger)
           double intake = gamepad2.left_trigger;
@@ -83,13 +83,14 @@ public class CDTeleopMecanum extends LinearOpMode {
           } else  {
             duckpower = 0;
           }
-          myDuckSpinner.setDuckSpinnerPower(duckpower*slow);
+          myDuckSpinner.setDuckSpinnerPower(duckpower);
 
-          // turret codd
+          // turret code
+          double Turretslow = .33;
           double turretA = gamepad2.right_stick_x;
           // TODO: Turret is not limited by the encoder, risk of breaking robot
           // TODO: Set up encoder sensor for motorTurret
-          myTurret.setTurretPower(turretA*slow);
+          myTurret.setTurretPower(turretA*Turretslow);
 
          telemetry.addData("y input", "%.2f", y);
          telemetry.addData("x input", "%.2f", x);
