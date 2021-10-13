@@ -31,15 +31,19 @@ public class CDTeleopMecanum extends LinearOpMode {
       
       //Run until the end (Driver presses STOP)
       while (opModeIsActive()) {
+          // TODO: SET THIS VALUE TO 0.5
           double slow = .25;
           if (gamepad1.x) {
+              // TODO: SET THIS TO BE GAMEPAD1 LEFT BUMPER
               slow = 0.5;
           } else if (gamepad1.y) {
+              // TODO: SET THIS TO BE GAMEPAD1 LEFT BUMPER
+
               slow = .75;
           }
-          double y = gamepad1.left_stick_y; // Remember, this is reversed!
-          double x = gamepad1.left_stick_x * -1.1; // Counteract imperfect strafing
-          double rx = gamepad1.right_stick_x;
+          double y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
+          double x = Math.pow(gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
+          double rx = Math.pow(gamepad1.right_stick_x,3);
 
           // Denominator is the largest motor power (absolute value) or 1
           // This ensures all the powers maintain the same ratio, but only when
