@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import com.qualcomm.robotcore.util.Hardware;
 
 public class CDTurret {
-
+    double Turretslow = .33;
     CDHardware robotHardware;
 
     public  CDTurret(CDHardware theHardware){
@@ -20,7 +20,7 @@ public class CDTurret {
 
     public void setTurretPower(double pow) {
         robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robotHardware.turretmotor.setPower(pow);
+        robotHardware.turretmotor.setPower(pow * Turretslow);
     }
 
     // TODO: ADD BRAKE FOR TURRET
