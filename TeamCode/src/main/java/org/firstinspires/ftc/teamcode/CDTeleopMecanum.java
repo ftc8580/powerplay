@@ -87,11 +87,11 @@ public class CDTeleopMecanum extends LinearOpMode {
 
           // turret code
           //TODO: This variable Turretslow should be in the CDTurret class and addressed at the object level
-          double Turretslow = .33;
+
           double turretA = gamepad2.right_stick_x;
           // TODO: Turret is not limited by the encoder, risk of breaking robot
           // TODO: Set up encoder sensor for motorTurret
-          myTurret.setTurretPower(turretA*Turretslow);
+          myTurret.setTurretPower(turretA);
 
          telemetry.addData("y input", "%.2f", y);
          telemetry.addData("x input", "%.2f", x);
