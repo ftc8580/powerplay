@@ -100,6 +100,8 @@ public class CDTeleopMecanum extends LinearOpMode {
          telemetry.addData("motorRF ", "%.2f", rightFrontPower);
          telemetry.addData("motorLR ", "%.2f", leftRearPower);
          telemetry.addData("motorRR ", "%.2f", rightRearPower);
+         //TODO: Add telemetry for IMU Gyro
+
          telemetry.update();
       }
       

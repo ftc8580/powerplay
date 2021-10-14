@@ -16,7 +16,7 @@ public class CDAutonMecanum extends LinearOpMode {
   public void runOpMode() {
     telemetry.addData("Status", "Initialized");
     telemetry.update();
-      
+
     ElapsedTime myTimer = new ElapsedTime();
     double moveBackTimer = -1;
       
@@ -26,7 +26,8 @@ public class CDAutonMecanum extends LinearOpMode {
     //Wait fo the game to start (driver presses PLAY)
     waitForStart();
     myTimer.reset();
-        
+    // TODO: Need to use the timer to program the robot in Auton competition
+
     //Run until the end of the match (Driver presses STOP)
     while (opModeIsActive()) {
         
@@ -110,6 +111,7 @@ public class CDAutonMecanum extends LinearOpMode {
       telemetry.addData("motorRF ", "%.2f", rightFrontPower);
       telemetry.addData("motorLR ", "%.2f", leftRearPower);
       telemetry.addData("motorRR ", "%.2f", rightRearPower);
+      //TODO: Add telemetry for IMU Gyro
       telemetry.update();
     }
   }
