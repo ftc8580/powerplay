@@ -13,11 +13,13 @@ public class CDTurret {
         robotHardware = theHardware;
 
         robotHardware.turretmotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        // Added to make sure that the turret defaults to brake mode
+        robotHardware.turretmotor.setMode(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void setTurretPower(double pow) {
+        robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robotHardware.turretmotor.setPower(pow);
     }
 
