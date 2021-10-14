@@ -14,7 +14,7 @@ public class CDTurret {
 
         robotHardware.turretmotor.setDirection(DcMotorSimple.Direction.FORWARD);
         // Added to make sure that the turret defaults to brake mode
-        robotHardware.turretmotor.setMode(DcMotor.ZeroPowerBehavior.BRAKE);
+        robotHardware.turretmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
 
