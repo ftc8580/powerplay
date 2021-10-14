@@ -31,7 +31,7 @@ public class CDTeleopMecanum extends LinearOpMode {
       
       //Run until the end (Driver presses STOP)
       while (opModeIsActive()) {
-
+          // This "slow" variable is used to control the overall speed of the robot
           double slow = 0.25;
 
           if (gamepad1.left_bumper) {
@@ -40,6 +40,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           } else if (gamepad1.right_bumper) {
               slow = 0.55;
           }
+          // We cubed the inputs to make the inputs more responsive
           double y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
           double x = Math.pow(gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
           double rx = Math.pow(gamepad1.right_stick_x,3);
@@ -75,7 +76,6 @@ public class CDTeleopMecanum extends LinearOpMode {
           //duck input is a boolean - it is on or off - if do not see option try boolean
           // TODO: motorDuckSpinner is defined, but not installed on robot by build team
           double duckpower;
-
           if (gamepad1.a) {
               duckpower = 1;
           } else if (gamepad1.b) {
@@ -86,6 +86,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           myDuckSpinner.setDuckSpinnerPower(duckpower);
 
           // turret code
+          //TODO: This variable Turretslow should be in the CDTurret class and addressed at the object level
           double Turretslow = .33;
           double turretA = gamepad2.right_stick_x;
           // TODO: Turret is not limited by the encoder, risk of breaking robot
