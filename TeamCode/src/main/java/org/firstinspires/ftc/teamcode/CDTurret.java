@@ -22,6 +22,4 @@ public class CDTurret {
         robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robotHardware.turretmotor.setPower(pow * Turretslow);
     }
-
-    // TODO: ADD BRAKE FOR TURRET
 }
