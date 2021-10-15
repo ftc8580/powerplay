@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.mechisms;
+package org.firstinspires.ftc.teamcode;
 
 import android.graphics.drawable.GradientDrawable;
 
@@ -16,7 +16,7 @@ public class CDGyroscope {
 
     private BNO055IMU imu;
 
-    public double getHeding(AngleUnit angleUnit) {
+    public double getHeading(AngleUnit angleUnit) {
         Orientation angles =imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
         return angles.firstAngle;
     }
