@@ -25,7 +25,7 @@ public class CDElevator {
         robotHardware.elevatormotor.setPower(pow);
     }
 
-    // TODO: Add public method to gotoPosition()
+    // TODO: Add public method to gotoPosition(Top, Middle, bottom)
 
     //
 }
