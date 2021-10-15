@@ -21,7 +21,7 @@ public class CDTeleopMecanum extends LinearOpMode {
       CDElevator myElevator = new CDElevator(myHardware);
       CDIntake myIntake = new CDIntake(myHardware);
       CDTurret myTurret = new CDTurret(myHardware);
-
+      CDGyroscope myGyro = new CDGyroscope();
 
       telemetry.addData("Status", "Fully Initialized");
       telemetry.update();
@@ -93,6 +93,8 @@ public class CDTeleopMecanum extends LinearOpMode {
           // TODO: Set up encoder sensor for motorTurret
           myTurret.setTurretPower(turretA);
 
+         double heading = myGyro.getHeading()
+
          telemetry.addData("y input", "%.2f", y);
          telemetry.addData("x input", "%.2f", x);
          telemetry.addData("rx input", "%.2f", rx);
@@ -100,8 +102,8 @@ public class CDTeleopMecanum extends LinearOpMode {
          telemetry.addData("motorRF ", "%.2f", rightFrontPower);
          telemetry.addData("motorLR ", "%.2f", leftRearPower);
          telemetry.addData("motorRR ", "%.2f", rightRearPower);
-         //TODO: Add telemetry for IMU Gyro
-
+         //TODO: Add telemetry for IMU Gyro need to be tested
+         // telemetry.addData("heading ", "%.2f", heading);
          telemetry.update();
       }
       
