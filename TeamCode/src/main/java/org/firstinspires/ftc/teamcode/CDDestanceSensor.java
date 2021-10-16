@@ -6,7 +6,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@TeleOp(name="CDDistanceSensor")
+@TeleOp(name = "distance")
 
      public class CDDestanceSensor extends LinearOpMode {
         DistanceSensor distance;
