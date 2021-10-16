@@ -9,20 +9,20 @@ public class CDMagneticSwitchTest {
     @TeleOp(name="CDMagneticSwitchTest", group="Linear Opmode")
     public class TouchTest extends LinearOpMode {
         TouchSensor touch;
-        DcMotor motor;
+        DcMotor leftfrontmotor;
         @Override
         public void runOpMode() {
-            touch = hardwareMap.get(TouchSensor.class, "Limit");
-            motor = hardwareMap.get(DcMotor.class, "Motor");
+            touch = hardwareMap.get(TouchSensor.class, "magnetic");
+            leftfrontmotor = hardwareMap.get(DcMotor.class, "motorLF");
 
             waitForStart();
             while (opModeIsActive()) {
                 if (touch.isPressed()) {
-                    motor.setPower(0);
+                    leftfrontmotor.setPower(0);
                 } else {
-                    motor.setPower(0.3);
+                    leftfrontmotor.setPower(0.3);
                 }
-                telemetry.addData("Arm Motor Power:", motor.getPower());
+                telemetry.addData("Arm Motor Power:", leftfrontmotor.getPower());
                 telemetry.update();
             }
         }
