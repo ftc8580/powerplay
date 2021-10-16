@@ -6,17 +6,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@TeleOp(name="CDDistanceSenssor", group="Linear Opmode")
+@TeleOp(name="CDDistanceSensor", group="Linear Opmode")
 
 
-    class DistanceTest extends LinearOpMode {
+
+     public class CDDestanceSensor extends LinearOpMode {
         DistanceSensor distance;
         DcMotor motor;
 
         @Override
         public void runOpMode() {
-            distance = hardwareMap.get(DistanceSensor.class, "Distance");
-            motor = hardwareMap.get(DcMotor.class, "Motor");
+            distance = hardwareMap.get(DistanceSensor.class, "distance");
+            motor = hardwareMap.get(DcMotor.class, "motorIntake");
 
             double dist = 0;
 
