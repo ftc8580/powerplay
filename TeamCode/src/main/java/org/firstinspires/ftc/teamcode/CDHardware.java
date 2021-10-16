@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.hardware.Sensor;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 //import com.qualcomm.robotcore.util.Hardware;
 //import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -17,10 +20,8 @@ public class CDHardware {
     public DcMotor elevatormotor;
     public DcMotor intakemotor;
     public DcMotor duckspinnermotor;
-    //    public Sensor elevatorswitchtop;
-    //    public Sensor elevatorswitchmiddle;
-    //    public Sensor elevatorswitchbottom;
-    //    public Sensor elevatorswitchground;
+    public DistanceSensor elevatordistancesensor;
+
 
     public CDHardware (HardwareMap hwMap){
        //Defines Hardware map from Control Hub
@@ -35,10 +36,8 @@ public class CDHardware {
         turretmotor = hwMap.get(DcMotor.class, "motorTurret");
 
         // Unused sensors- Switched to using motor encoder
-        //        elevatorswitchtop = hwMap.get(Sensor.class,"switchElevatorTop");
-        //        elevatorswitchmiddle = hwMap.get(Sensor.class,"switchElevatorMidddle");
-        //        elevatorswitchbottom = hwMap.get(Sensor.class,"switchElevatorBottom");
-        //        elevatorswitchground = hwMap.get(Sensor.class,"switchElevatorGround");
+        elevatordistancesensor = hwMap.get(DistanceSensor.class,"Distance");
+
     }
 }
 
