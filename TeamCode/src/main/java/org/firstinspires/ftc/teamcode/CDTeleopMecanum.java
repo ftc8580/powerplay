@@ -94,7 +94,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           // TODO: Set up encoder sensor for motorTurret
           myTurret.setTurretPower(turretA);
 
-         double heading = myGyro.getHeading(AngleUnit.DEGREES)
+         double heading = myGyro.getHeading(AngleUnit.DEGREES);
 
          telemetry.addData("y input", "%.2f", y);
          telemetry.addData("x input", "%.2f", x);
