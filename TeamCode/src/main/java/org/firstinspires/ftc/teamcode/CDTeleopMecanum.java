@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+//import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 //import com.qualcomm.robotcore.util.ElapsedTime;
 //import com.qualcomm.robotcore.util.Hardware;
@@ -22,7 +22,7 @@ public class CDTeleopMecanum extends LinearOpMode {
       CDElevator myElevator = new CDElevator(myHardware);
       CDIntake myIntake = new CDIntake(myHardware);
       CDTurret myTurret = new CDTurret(myHardware);
-      CDGyroscope myGyro = new CDGyroscope();
+      //CDGyroscope myGyro = new CDGyroscope();
 
       telemetry.addData("Status", "Fully Initialized");
       telemetry.update();
@@ -94,7 +94,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           // TODO: Set up encoder sensor for motorTurret
           myTurret.setTurretPower(turretA);
 
-         double heading = myGyro.getHeading(AngleUnit.DEGREES);
+         //double heading = myGyro.getHeading(AngleUnit.DEGREES);
 
          telemetry.addData("y input", "%.2f", y);
          telemetry.addData("x input", "%.2f", x);
@@ -104,7 +104,7 @@ public class CDTeleopMecanum extends LinearOpMode {
          telemetry.addData("motorLR ", "%.2f", leftRearPower);
          telemetry.addData("motorRR ", "%.2f", rightRearPower);
          //TODO: Add telemetry for IMU Gyro need to be tested
-         telemetry.addData("heading ", heading);
+         //telemetry.addData("heading ", heading);
          telemetry.update();
       }
       
