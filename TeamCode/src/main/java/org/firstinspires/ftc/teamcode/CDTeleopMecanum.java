@@ -68,14 +68,16 @@ public class CDTeleopMecanum extends LinearOpMode {
           myElevator.setElevatorPower(-elevator);
 
           //intake ( left trigger), deliver(right trigger)
-          double intake = gamepad2.left_trigger;
-          myIntake.setIntakePower(intake);
-
-          double deliver = -gamepad2.right_trigger;
-          myIntake.setIntakePower(deliver);
+          // Convert the analog trigger to a button push
+          double intake = 1.0;
+          double deliver = -1.0;
+          if (gamepad2.left_trigger < 0.2) {
+              myIntake.setIntakePower(intake);
+          } else if (gamepad2.right_trigger < 0.2) {
+              myIntake.setIntakePower(deliver);
+          }
 
           //duck input is a boolean - it is on or off - if do not see option try boolean
-          // TODO: motorDuckSpinner is defined, but not installed on robot by build team
           double duckpower;
           if (gamepad1.a) {
               duckpower = 1;
@@ -84,6 +86,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           } else  {
             duckpower = 0;
           }
+
           myDuckSpinner.setDuckSpinnerPower(duckpower);
 
           // turret code
