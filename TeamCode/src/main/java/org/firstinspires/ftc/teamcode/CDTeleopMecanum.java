@@ -33,13 +33,13 @@ public class CDTeleopMecanum extends LinearOpMode {
       //Run until the end (Driver presses STOP)
       while (opModeIsActive()) {
           // This "slow" variable is used to control the overall speed of the robot
-          double slow = 0.25;
+          double slow = 0.60;
 
           if (gamepad1.left_bumper) {
-              slow = 0.12;
+              slow = 0.30;
 
           } else if (gamepad1.right_bumper) {
-              slow = 0.55;
+              slow = 0.90;
           }
           // We cubed the inputs to make the inputs more responsive
           double y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
