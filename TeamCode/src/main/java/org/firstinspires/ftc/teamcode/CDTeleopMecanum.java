@@ -71,10 +71,12 @@ public class CDTeleopMecanum extends LinearOpMode {
           // Convert the analog trigger to a button push
           double intake = 1.0;
           double deliver = -1.0;
-          if (gamepad2.left_trigger < 0.2) {
+          if (gamepad2.left_trigger > 0.2) {
               myIntake.setIntakePower(intake);
-          } else if (gamepad2.right_trigger < 0.2) {
+          } else if (gamepad2.right_trigger > 0.2) {
               myIntake.setIntakePower(deliver);
+          } else {
+              myIntake.setIntakePower(0.0);
           }
 
           //duck input is a boolean - it is on or off - if do not see option try boolean
