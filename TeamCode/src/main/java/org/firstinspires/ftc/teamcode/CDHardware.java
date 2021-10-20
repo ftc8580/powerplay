@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.hardware.Sensor;
-
+import com.qualcomm.hardware.bosch.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
 //import com.qualcomm.robotcore.util.Hardware;
 //import com.qualcomm.robotcore.hardware.TouchSensor;
 //import com.qualcomm.robotcore.hardware.Servo;
@@ -20,8 +19,12 @@ public class CDHardware {
     public DcMotor elevatormotor;
     public DcMotor intakemotor;
     public DcMotor duckspinnermotor;
-    public DistanceSensor elevatordistancesensor;
+    private BNO055IMU imu;
 
+    //    public Sensor elevatorswitchtop;
+    //    public Sensor elevatorswitchmiddle;
+    //    public Sensor elevatorswitchbottom;
+    //    public Sensor elevatorswitchground;
 
     public CDHardware (HardwareMap hwMap){
        //Defines Hardware map from Control Hub
@@ -34,10 +37,16 @@ public class CDHardware {
         duckspinnermotor = hwMap.get(DcMotor.class, "motorDuckSpinner");
         intakemotor = hwMap.get(DcMotor.class, "motorIntake");
         turretmotor = hwMap.get(DcMotor.class, "motorTurret");
+        //initialize IMU
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters params = new BNO055IMU.Parameters();
+        imu.initialize(params);
 
         // Unused sensors- Switched to using motor encoder
-        elevatordistancesensor = hwMap.get(DistanceSensor.class,"Distance");
-
+        //        elevatorswitchtop = hwMap.get(Sensor.class,"switchElevatorTop");
+        //        elevatorswitchmiddle = hwMap.get(Sensor.class,"switchElevatorMidddle");
+        //        elevatorswitchbottom = hwMap.get(Sensor.class,"switchElevatorBottom");
+        //        elevatorswitchground = hwMap.get(Sensor.class,"switchElevatorGround");
     }
 }
 

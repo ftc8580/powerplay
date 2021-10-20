@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+//import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 //import com.qualcomm.robotcore.util.ElapsedTime;
 //import com.qualcomm.robotcore.util.Hardware;
@@ -22,7 +22,7 @@ public class CDTeleopMecanum extends LinearOpMode {
       CDElevator myElevator = new CDElevator(myHardware);
       CDIntake myIntake = new CDIntake(myHardware);
       CDTurret myTurret = new CDTurret(myHardware);
-      CDGyroscope myGyro = new CDGyroscope();
+      //CDGyroscope myGyro = new CDGyroscope();
 
       telemetry.addData("Status", "Fully Initialized");
       telemetry.update();
@@ -33,13 +33,13 @@ public class CDTeleopMecanum extends LinearOpMode {
       //Run until the end (Driver presses STOP)
       while (opModeIsActive()) {
           // This "slow" variable is used to control the overall speed of the robot
-          double slow = 0.25;
+          double slow = 0.60;
 
           if (gamepad1.left_bumper) {
-              slow = 0.12;
+              slow = 0.30;
 
           } else if (gamepad1.right_bumper) {
-              slow = 0.55;
+              slow = 0.90;
           }
           // We cubed the inputs to make the inputs more responsive
           double y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
@@ -50,10 +50,10 @@ public class CDTeleopMecanum extends LinearOpMode {
           // This ensures all the powers maintain the same ratio, but only when
           // at least one is out of the range [-1, 1]
           double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-          double leftFrontPower = (y + x - rx) / denominator*1.5;
+          double leftFrontPower = (y + x - rx) / denominator;
           double leftRearPower = (y - x - rx) / denominator;
           // TODO: FIX DIRECTION
-          double rightFrontPower = (y - x + rx) / denominator*1.5;
+          double rightFrontPower = (y - x + rx) / denominator;
           double rightRearPower = (y + x + rx) / denominator;
 
           //move robot - drive chassis
@@ -68,14 +68,18 @@ public class CDTeleopMecanum extends LinearOpMode {
           myElevator.setElevatorPower(-elevator);
 
           //intake ( left trigger), deliver(right trigger)
-          double intake = gamepad2.left_trigger;
-          myIntake.setIntakePower(intake);
-
-          double deliver = -gamepad2.right_trigger;
-          myIntake.setIntakePower(deliver);
+          // Convert the analog trigger to a button push
+          double intake = 1.0;
+          double deliver = -1.0;
+          if (gamepad2.left_trigger > 0.2) {
+              myIntake.setIntakePower(intake);
+          } else if (gamepad2.right_trigger > 0.2) {
+              myIntake.setIntakePower(deliver);
+          } else {
+              myIntake.setIntakePower(0.0);
+          }
 
           //duck input is a boolean - it is on or off - if do not see option try boolean
-          // TODO: motorDuckSpinner is defined, but not installed on robot by build team
           double duckpower;
           if (gamepad1.a) {
               duckpower = 1;
@@ -84,6 +88,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           } else  {
             duckpower = 0;
           }
+
           myDuckSpinner.setDuckSpinnerPower(duckpower);
 
           // turret code
@@ -94,7 +99,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           // TODO: Set up encoder sensor for motorTurret
           myTurret.setTurretPower(turretA);
 
-         double heading = myGyro.getHeading(AngleUnit.DEGREES);
+         //double heading = myGyro.getHeading(AngleUnit.DEGREES);
 
          telemetry.addData("y input", "%.2f", y);
          telemetry.addData("x input", "%.2f", x);
@@ -104,7 +109,7 @@ public class CDTeleopMecanum extends LinearOpMode {
          telemetry.addData("motorLR ", "%.2f", leftRearPower);
          telemetry.addData("motorRR ", "%.2f", rightRearPower);
          //TODO: Add telemetry for IMU Gyro need to be tested
-         telemetry.addData("heading ", heading);
+         //telemetry.addData("heading ", heading);
          telemetry.update();
       }
       
