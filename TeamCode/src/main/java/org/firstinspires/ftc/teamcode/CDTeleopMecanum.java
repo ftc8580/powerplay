@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+// import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-//import com.qualcomm.robotcore.util.ElapsedTime;
-//import com.qualcomm.robotcore.util.Hardware;
-//import com.qualcomm.robotcore.hardware.DcMotor;
-//import com.qualcomm.robotcore.hardware.DcMotorSimple;
+// import com.qualcomm.robotcore.util.ElapsedTime;
+// import com.qualcomm.robotcore.util.Hardware;
+// import com.qualcomm.robotcore.hardware.DcMotor;
+// import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 @TeleOp(name="CDTeleopMecanum", group="Linear Opmode")
@@ -69,12 +69,15 @@ public class CDTeleopMecanum extends LinearOpMode {
 
           //intake ( left trigger), deliver(right trigger)
           // Convert the analog trigger to a button push
-          double intake = 1.0;
-          double deliver = -1.0;
-          if (gamepad2.left_trigger > 0.2) {
-              myIntake.setIntakePower(intake);
-          } else if (gamepad2.right_trigger > 0.2) {
-              myIntake.setIntakePower(deliver);
+          double intake = gamepad2.left_trigger;
+          double deliver = gamepad2.right_trigger;
+          double intakemult = 1.5;
+          double delivermult = 1.5;
+
+          if (intake> 0.2) {
+              myIntake.setIntakePower(intake*intakemult);
+          } else if (deliver > 0.2) {
+              myIntake.setIntakePower(-deliver*delivermult);
           } else {
               myIntake.setIntakePower(0.0);
           }
