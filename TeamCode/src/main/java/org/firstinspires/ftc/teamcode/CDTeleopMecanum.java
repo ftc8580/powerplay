@@ -140,6 +140,11 @@ public class CDTeleopMecanum extends LinearOpMode {
 
          //double heading = myGyro.getHeading(AngleUnit.DEGREES);
 
+          // magnetic switch
+          boolean elevatorstop = false;
+          if (myHardware.elevatormagneticswitch.isPressed()) {
+              elevatorstop = true;
+          }
          telemetry.addData("y input", "%.2f", y);
          telemetry.addData("x input", "%.2f", x);
          telemetry.addData("rx input", "%.2f", rx);
@@ -150,7 +155,10 @@ public class CDTeleopMecanum extends LinearOpMode {
          telemetry.addData( "ElevatorDist", "%.2f", elevatorposcurrent);
          //TODO: Add telemetry for IMU Gyro need to be tested
          //telemetry.addData("heading ", heading);
+          telemetry.addData("elevatorstop", elevatorstop );
          telemetry.update();
+
+
       }
       
   }

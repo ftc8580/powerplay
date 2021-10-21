@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.hardware.Sensor;
 import com.qualcomm.hardware.bosch.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 //import com.qualcomm.robotcore.util.Hardware;
 //import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -21,8 +23,9 @@ public class CDHardware {
     public DcMotor intakemotor;
     public DcMotor duckspinnermotor;
     private BNO055IMU imu;
-
     public DistanceSensor elevatordistancesensor;
+    public TouchSensor elevatormagneticswitch;
+
     //    public Sensor elevatorswitchtop;
     //    public Sensor elevatorswitchmiddle;
     //    public Sensor elevatorswitchbottom;
@@ -44,7 +47,7 @@ public class CDHardware {
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
         imu.initialize(params);
         elevatordistancesensor = hwMap.get(DistanceSensor.class, "distanceElev");
-
+        elevatormagneticswitch = hwMap.get(TouchSensor.class,"ElvStop");
 
         // Unused sensors- Switched to using motor encoder
         //        elevatorswitchtop = hwMap.get(Sensor.class,"switchElevatorTop");
