@@ -119,10 +119,10 @@ public class CDTeleopMecanum extends LinearOpMode {
 
           //duck input is a boolean - it is on or off - if do not see option try boolean
           double duckpower;
-          double duckmulti = 1.0;
+          double duckmulti = 0.8;
 
           if (gamepad1.a) {
-              duckpower = 1;
+              duckpower = 1*duckmulti;
           } else if (gamepad1.b) {
               duckpower = -1*duckmulti;
           } else  {
