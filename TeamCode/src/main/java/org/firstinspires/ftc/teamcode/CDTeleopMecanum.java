@@ -26,11 +26,6 @@ public class CDTeleopMecanum extends LinearOpMode {
       // CDGyroscope myGyro = new CDGyroscope();
       CDDistanceSensor myDistanceSensor = new CDDistanceSensor(myHardware);
 
-      double elevatorposground = 2;
-      double elevatorposbottom = 7;
-      double elevatorposmiddle = 12;
-      double elevatorpostop = 17;
-      double elevatorpostarget = 0;
       //CDGyroscope myGyro = new CDGyroscope();
 
       telemetry.addData("Status", "Fully Initialized");
@@ -82,23 +77,34 @@ public class CDTeleopMecanum extends LinearOpMode {
           // TODO: Need to limit the elevator range with the encoder sensor
           myElevator.setElevatorPower(-elevator);
             //Set elevator position using buttons
+          double elevatorposground = 3.5;
+          double elevatorposbottom = 12.5;
+          double elevatorposmiddle = 28.0;
+          double elevatorpostop = 41.0;
+          double elevatorpostarget = 0.0;
+          boolean elevatorstop = true;
           if (gamepad2.a) {
             elevatorpostarget=elevatorposground;
+              elevatorstop = false;
           } else if (gamepad2.x) {
-            elevatorpostarget=elevatorposbottom;
+              elevatorpostarget=elevatorposbottom;
+              elevatorstop = false;
           } else if (gamepad2.b) {
               elevatorpostarget=elevatorposmiddle;
+              elevatorstop = false;
           } else if (gamepad2.y) {
               elevatorpostarget=elevatorpostop;
+              elevatorstop = false;
           }
-          while (elevatorpostarget != 0) {
+
+          while (!elevatorstop) {
               if (elevatorposcurrent > elevatorpostarget) {
-                  myElevator.setElevatorPower(1);
-              } else if (elevatorposcurrent < elevatorpostarget) {
                   myElevator.setElevatorPower(-1);
+              } else if (elevatorposcurrent < elevatorpostarget) {
+                  myElevator.setElevatorPower(1);
               } else {
                   myElevator.setElevatorPower(0);
-                  elevatorpostarget = 0;
+                  elevatorstop = true;
               }
           }
 
@@ -119,14 +125,14 @@ public class CDTeleopMecanum extends LinearOpMode {
 
           //duck input is a boolean - it is on or off - if do not see option try boolean
           double duckpower;
-          double duckmulti = 0.8;
+          double duckmulti = 0.6;
 
           if (gamepad1.a) {
               duckpower = 1*duckmulti;
           } else if (gamepad1.b) {
               duckpower = -1*duckmulti;
           } else  {
-            duckpower = 0*duckmulti;
+            duckpower = 0;
           }
           myDuckSpinner.setDuckSpinnerPower(duckpower);
 
@@ -141,9 +147,9 @@ public class CDTeleopMecanum extends LinearOpMode {
          //double heading = myGyro.getHeading(AngleUnit.DEGREES);
 
           // magnetic switch
-          boolean elevatorstop = false;
+          boolean magneticstop = false;
           if (myHardware.elevatormagneticswitch.isPressed()) {
-              elevatorstop = true;
+              magneticstop = true;
           }
          telemetry.addData("y input", "%.2f", y);
          telemetry.addData("x input", "%.2f", x);
@@ -155,7 +161,7 @@ public class CDTeleopMecanum extends LinearOpMode {
          telemetry.addData( "ElevatorDist", "%.2f", elevatorposcurrent);
          //TODO: Add telemetry for IMU Gyro need to be tested
          //telemetry.addData("heading ", heading);
-          telemetry.addData("elevatorstop", elevatorstop );
+          telemetry.addData("magneticstop", magneticstop );
          telemetry.update();
 
 
