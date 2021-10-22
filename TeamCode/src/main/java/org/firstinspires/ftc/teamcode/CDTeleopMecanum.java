@@ -127,6 +127,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           double duckpower;
           double duckmulti = 0.6;
 
+
           if (gamepad1.a) {
               duckpower = 1*duckmulti;
           } else if (gamepad1.b) {
