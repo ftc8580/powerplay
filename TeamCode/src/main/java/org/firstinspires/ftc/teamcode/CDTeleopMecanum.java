@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 // import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+//import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 //import com.qualcomm.robotcore.util.ElapsedTime;
 //import com.qualcomm.robotcore.util.Hardware;
@@ -74,38 +74,25 @@ public class CDTeleopMecanum extends LinearOpMode {
 
           //move elevator + = up - = down
           double elevator = gamepad2.left_stick_y;
-          // TODO: Need to limit the elevator range with the encoder sensor
+          // TODO: Need to limit the elevator range with the sensor so drivers don't loosen string
           myElevator.setElevatorPower(-elevator);
-            //Set elevator position using buttons
+
+          //Set elevator position using buttons
+          //This is where you can set the values of the positions based off telemetry
           double elevatorposground = 3.5;
           double elevatorposbottom = 12.5;
           double elevatorposmiddle = 28.0;
           double elevatorpostop = 41.0;
-          double elevatorpostarget = 0.0;
-          boolean elevatorstop = true;
-          if (gamepad2.a) {
-            elevatorpostarget=elevatorposground;
-              elevatorstop = false;
-          } else if (gamepad2.x) {
-              elevatorpostarget=elevatorposbottom;
-              elevatorstop = false;
-          } else if (gamepad2.b) {
-              elevatorpostarget=elevatorposmiddle;
-              elevatorstop = false;
-          } else if (gamepad2.y) {
-              elevatorpostarget=elevatorpostop;
-              elevatorstop = false;
-          }
 
-          while (!elevatorstop) {
-              if (elevatorposcurrent > elevatorpostarget) {
-                  myElevator.setElevatorPower(-1);
-              } else if (elevatorposcurrent < elevatorpostarget) {
-                  myElevator.setElevatorPower(1);
-              } else {
-                  myElevator.setElevatorPower(0);
-                  elevatorstop = true;
-              }
+          //
+          if (gamepad2.a) {
+            myElevator.setElevatorPosition(elevatorposground);
+          } else if (gamepad2.x) {
+              myElevator.setElevatorPosition(elevatorposbottom);
+          } else if (gamepad2.b) {
+              myElevator.setElevatorPosition(elevatorposmiddle);
+          } else if (gamepad2.y) {
+              myElevator.setElevatorPosition(elevatorpostop);
           }
 
           //intake ( left trigger), deliver(right trigger)
