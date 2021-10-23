@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="CDAutonMecanum", group="Linear Opmode")
+@Autonomous(name="CDAutonMecanumDriveByTime", group="Linear Opmode")
 // TODO: First prove out Telop before enabling Auton to protect the robot
 @Disabled
 public class CDAutonMecanumDriveByTime extends LinearOpMode {
