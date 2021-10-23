@@ -29,7 +29,7 @@ public class CDElevator {
 
     // TODO: Add public method to gotoPosition(Top, Middle, bottom)
     public void setElevatorPosition(double elevatorpostarget) {
-        final double THRESHOLD_POS = 1; // CM or whatever the Distance sensor is configured
+        final double THRESHOLD_POS = 3; // CM or whatever the Distance sensor is configured
         double elevatormult = 0.75; // to slow down the elevator if needed
 
         boolean elevatorstop = false; // initially we want the elevator to move for the while loop
