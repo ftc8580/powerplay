@@ -36,11 +36,11 @@ public class CDAutonMecanum extends LinearOpMode {
       double leftRearPower;
       double rightFrontPower;
       double rightRearPower;
-      
-      //leftFrontPower = 0.5;
-      //leftRearPower = 0.5;
-      //rightFrontPower = 0.5;
-      //rightRearPower = 0.5;
+
+      leftFrontPower = 0.5;
+      leftRearPower = 0.5;
+      rightFrontPower = 0.5;
+      rightRearPower = 0.5;
       
       //Go Straight
       if (myTimer.seconds()<3) {
@@ -50,49 +50,49 @@ public class CDAutonMecanum extends LinearOpMode {
         rightRearPower = 0.5;
       }
       //Turn Right
-      if (myTimer.seconds()<4) {
+      else if (myTimer.seconds()<4) {
         leftFrontPower = 0.5;
         leftRearPower = -0.5;
         rightFrontPower = -0.5;
         rightRearPower = 0.5;
       }      
       //Go Straight
-      if (myTimer.seconds()<7) {
+      else if (myTimer.seconds()<7) {
         leftFrontPower = 0.5;
         leftRearPower = 0.5;
         rightFrontPower = 0.5;
         rightRearPower = 0.5;
       }
       //Turn Left
-      if (myTimer.seconds()<8) {
+      else if (myTimer.seconds()<8) {
         leftFrontPower = -0.5;
         leftRearPower = 0.5;
         rightFrontPower = 0.5;
         rightRearPower = -0.5;
       }
       //Go Straight
-      if (myTimer.seconds()<11) {
+      else if (myTimer.seconds()<11) {
         leftFrontPower = 0.5;
         leftRearPower = 0.5;
         rightFrontPower = 0.5;
         rightRearPower = 0.5;
       }
       //dont Turn
-      if (myTimer.seconds()<12) {
+      else if (myTimer.seconds()<12) {
         leftFrontPower = 0.5;
         leftRearPower = 0.5;
         rightFrontPower = -0.5;
         rightRearPower = -0.5;
       }
       //Go Straight
-      if (myTimer.seconds()<15) {
+      else if (myTimer.seconds()<15) {
         leftFrontPower = 0.5;
         leftRearPower = 0.5;
         rightFrontPower = 0.5;
         rightRearPower = 0.5;
       }
       //Stop
-      if (myTimer.seconds()>=15) {
+      else if (myTimer.seconds()>=15) {
         leftFrontPower = 0.0;
         leftRearPower = 0.0;
         rightFrontPower = 0.0;
