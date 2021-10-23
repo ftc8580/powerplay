@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="CDAutonMecanum", group="Linear Opmode")
 // TODO: First prove out Telop before enabling Auton to protect the robot
-@Disabled
+//@Disabled
 public class CDAutonMecanum extends LinearOpMode {
 
   @Override
