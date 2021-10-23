@@ -101,9 +101,9 @@ public class CDAutonMecanum extends LinearOpMode {
       
       //Send power to wheel motors
       myChassis.setLeftFrontPower(leftFrontPower);
-      myChassis.setLeftFrontPower(leftFrontPower);
-      myChassis.setLeftFrontPower(leftFrontPower);
-      myChassis.setLeftFrontPower(leftFrontPower);
+      myChassis.setLeftRearPower(leftRearPower);
+      myChassis.setRightFrontPower(rightFrontPower);
+      myChassis.setRightRearPower(rightRearPower);
       
       //Show elapsed time and wheel power
       telemetry.addData("Status", "Run Time: " + myTimer.toString());
