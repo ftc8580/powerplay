@@ -37,10 +37,10 @@ public class CDAutonMecanum extends LinearOpMode {
       double rightFrontPower;
       double rightRearPower;
       
-      leftFrontPower = 0.5;
-      leftRearPower = 0.5;
-      rightFrontPower = 0.5;
-      rightRearPower = 0.5;
+      //leftFrontPower = 0.5;
+      //leftRearPower = 0.5;
+      //rightFrontPower = 0.5;
+      //rightRearPower = 0.5;
       
       //Go Straight
       if (myTimer.seconds()<3) {
