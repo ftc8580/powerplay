@@ -15,11 +15,17 @@ public class CDAutonMecanum extends LinearOpMode {
 
   @Override
   public void runOpMode() {
-   //ElapsedTime myTimer = new ElapsedTime();
+   ElapsedTime myTimer = new ElapsedTime();
    //double moveBackTimer = -1;
       
     CDHardware myHardware = new CDHardware(hardwareMap);
     CDDriveChassisAuton myChassis = new CDDriveChassisAuton(myHardware);
+    CDDuckSpinner myDuckSpinner = new CDDuckSpinner(myHardware);
+    CDElevator myElevator = new CDElevator(myHardware);
+    CDIntake myIntake = new CDIntake(myHardware);
+    CDTurret myTurret = new CDTurret(myHardware);
+    // CDGyroscope myGyro = new CDGyroscope();
+    CDDistanceSensor myDistanceSensor = new CDDistanceSensor(myHardware);
 
     //Send telemetry to signify robot waiting
     telemetry.addData("Status", "Resetting Encoders");
@@ -47,19 +53,29 @@ public class CDAutonMecanum extends LinearOpMode {
 
     //Step through each leg of path
     //Note: Reverse movement is obtained by selling a negative distance not speed
-    /*Drive code is written using 4 methods
+    /*Drive code is written using 3 methods
     *     speed should be either DRIVE_SPEED or TURN_SPEED
     * These assumes that each movement is relative to the last stopping place
     * 1. encoderDriveStraight (speed, straightInches, straightTimeout)
-    * 2.
-    * 3.
-    * 4.
+    * 2. encoderDriveStrafe (speed, strafeInches, strafeTimeout)
+    * 3. encodeDriveTurn (speed, turnDeg, turnTimeout)
      */
     if (opModeIsActive()) {
 
-      myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 30, 20.0); //Move forward 30 inches with 10 second timeout
+      //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 30, 20.0); //Move forward 30 inches with 10 second timeout
       //sleep(250); //optional pause after each move in milliseconds
-      myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -20, 10.0); //Move back 20 inches with 10 second timeout
+      //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -20, 10.0); //Move back 20 inches with 10 second timeout
+      //myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 10, 5); //Move right 10 inches with 5 second timeout
+      //myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15); //Move left 15 inches with 15 second timeout
+      //yChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10); //Turn right 90 degrees with 10 second timeout
+      //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -180, 20); //Turn left 180 degrees with a 20 second timeout
+      //sleep(250); //optional pause after each move in milliseconds
+      //myElevator.setElevatorPosition(28); //Move elevator to middle position. Do not set outside of range 2.5-39.
+      while (myTimer.seconds()<3.0) {
+        myIntake.setIntakePower(1.0);
+        myDuckSpinner.setDuckSpinnerPower(.7);
+      }
+      //TODO Add Turret Position
 
 
       //Run until the end of the match (Driver presses STOP)
