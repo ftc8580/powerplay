@@ -78,10 +78,8 @@ public class CDAutonMecanum extends LinearOpMode {
       myTurret.setTurretPosition(-90, "right");  //Starting on right side - Set turret position -90 (right)
       myTurret.setTurretPosition(90, "right");   //Starting on right side - Set turret position 90 (left)
 
-        // while (myTimer.seconds()<3.0) {
-        //  myIntake.setIntakePower(1.0);
-        //  myDuckSpinner.setDuckSpinnerPower(.7);
-        //}
+     //  myIntake.setIntakePower(1.0);
+     //  myDuckSpinner.setDuckSpinnerPower(.7);
 
 
       //Run until the end of the match (Driver presses STOP)
