@@ -132,6 +132,35 @@ public class CDTeleopMecanum extends LinearOpMode {
           // TODO: Set up encoder sensor for motorTurret
           myTurret.setTurretPower(turretA);
 
+          if (gamepad2.dpad_up){
+              myTurret.setTurretPosition(0,"center");
+              if (myTurret.turretstop){
+              myElevator.setElevatorPosition(elevatorposground);
+              }
+
+          }
+
+          if (gamepad2.dpad_left){
+              myElevator.setElevatorPosition(elevatorposmiddle);
+              if (myElevator.elevatorstop){
+              myTurret.setTurretPosition(-90,"left");
+
+
+              }
+
+          }
+
+          if (gamepad2.dpad_right){
+              myElevator.setElevatorPosition(elevatorposmiddle);
+              if (myElevator.elevatorstop){
+                  myTurret.setTurretPosition(90,"right");
+
+              }
+
+          }
+
+
+
          //double heading = myGyro.getHeading(AngleUnit.DEGREES);
 
           // magnetic switch
