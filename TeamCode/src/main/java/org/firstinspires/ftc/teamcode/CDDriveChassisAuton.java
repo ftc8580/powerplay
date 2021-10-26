@@ -111,12 +111,13 @@ public class CDDriveChassisAuton {
         int newStrafeTargetRF;
         int newStrafeTargetLR;
         int newStrafeTargetLF;
+        double strafemult = 1.25;
 
         //Determine new target position and pass to motor controller
-        newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int)(strafeInches * COUNTS_PER_INCH);
-        newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int)(strafeInches * COUNTS_PER_INCH);
-        newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() - (int)(strafeInches * COUNTS_PER_INCH);
-        newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int)(strafeInches * COUNTS_PER_INCH);
+        newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int)(strafeInches * COUNTS_PER_INCH*strafemult);
+        newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int)(strafeInches * COUNTS_PER_INCH*strafemult);
+        newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() - (int)(strafeInches * COUNTS_PER_INCH*strafemult);
+        newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int)(strafeInches * COUNTS_PER_INCH*strafemult);
 
         robotHardware.rightrearmotor.setTargetPosition(newStrafeTargetRR);
         robotHardware.rightfrontmotor.setTargetPosition(newStrafeTargetRF);

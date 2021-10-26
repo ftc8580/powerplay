@@ -81,9 +81,10 @@ public class CDAutonRedDuck extends LinearOpMode {
             //  myIntake.setIntakePower(1.0);
             //  myDuckSpinner.setDuckSpinnerPower(.7);
 
-            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 9.5, 3);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -4.5, 3);
             myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90.0, 3);
-            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 47.0, 3);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -34.0, 3);
+
 
 
             //Run until the end of the match (Driver presses STOP)
