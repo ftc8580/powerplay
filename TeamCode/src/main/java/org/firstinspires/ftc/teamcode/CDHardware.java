@@ -22,7 +22,6 @@ public class CDHardware {
     public DcMotor elevatormotor;
     public DcMotor intakemotor;
     public DcMotor duckspinnermotor;
-    private BNO055IMU imu;
     public DistanceSensor elevatordistancesensor;
     public TouchSensor elevatormagneticswitch;
 
