@@ -7,7 +7,7 @@ public class CDElevator {
 
     CDHardware robotHardware;
     CDDistanceSensor myDistanceSensor;
-
+    public boolean elevatorstop;
     public CDElevator(CDHardware theHardware){
 
         robotHardware = theHardware;
@@ -32,7 +32,7 @@ public class CDElevator {
         final double THRESHOLD_POS = 3; // CM or whatever the Distance sensor is configured
         double elevatormult = 0.75; // to slow down the elevator if needed
 
-        boolean elevatorstop = false; // initially we want the elevator to move for the while loop
+        elevatorstop = false; // initially we want the elevator to move for the while loop
         while (!elevatorstop) {
             /* This gets the current distance off the floor from the Elevator Distance Sensor
           and sets it to a variable
