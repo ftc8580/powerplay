@@ -42,10 +42,6 @@ public class CDHardware {
         duckspinnermotor = hwMap.get(DcMotor.class, "motorDuckSpinner");
         intakemotor = hwMap.get(DcMotor.class, "motorIntake");
         turretmotor = hwMap.get(DcMotor.class, "motorTurret");
-        //initialize IMU
-        imu = hwMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters params = new BNO055IMU.Parameters();
-        imu.initialize(params);
         elevatordistancesensor = hwMap.get(DistanceSensor.class, "distanceElev");
         elevatormagneticswitch = hwMap.get(TouchSensor.class,"ElvStop");
 
