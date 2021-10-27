@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+
 //import com.qualcomm.robotcore.util.Hardware;
 //import com.qualcomm.robotcore.hardware.TouchSensor;
 //import com.qualcomm.robotcore.hardware.Servo;
@@ -24,14 +25,15 @@ public class CDHardware {
     public DcMotor duckspinnermotor;
     public DistanceSensor elevatordistancesensor;
     public TouchSensor elevatormagneticswitch;
-
+    // IMU sensor
+    public BNO055IMU cdimu;
     //    public Sensor elevatorswitchtop;
     //    public Sensor elevatorswitchmiddle;
     //    public Sensor elevatorswitchbottom;
     //    public Sensor elevatorswitchground;
 
     public CDHardware (HardwareMap hwMap){
-       //Defines Hardware map from Control Hub
+        //Defines Hardware map from Control Hub
         //TODO: Need to double check motor mapping on the driver hub and check orientation
         leftfrontmotor = hwMap.get(DcMotor.class, "motorLF");
         rightfrontmotor = hwMap.get(DcMotor.class, "motorRF");
@@ -44,11 +46,23 @@ public class CDHardware {
         elevatordistancesensor = hwMap.get(DistanceSensor.class, "distanceElev");
         elevatormagneticswitch = hwMap.get(TouchSensor.class,"ElvStop");
 
-        // Unused sensors- Switched to using motor encoder
-        //        elevatorswitchtop = hwMap.get(Sensor.class,"switchElevatorTop");
-        //        elevatorswitchmiddle = hwMap.get(Sensor.class,"switchElevatorMidddle");
-        //        elevatorswitchbottom = hwMap.get(Sensor.class,"switchElevatorBottom");
-        //        elevatorswitchground = hwMap.get(Sensor.class,"switchElevatorGround");
+        // Retrieved above and here we initialize the IMU. We expect the IMU to be attached to an I2C port
+        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
+        // and named "imu".
+        cdimu = hwMap.get(BNO055IMU.class, "imu");
+
+        // Set up the parameters with which we will use our IMU. Note that integration
+        // algorithm here just reports accelerations to the logcat log; it doesn't actually
+        // provide positional information.
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        cdimu.initialize(parameters);
     }
 }
 
