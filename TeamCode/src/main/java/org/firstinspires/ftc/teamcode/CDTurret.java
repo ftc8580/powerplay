@@ -61,4 +61,6 @@ public class CDTurret {
             }
         }
     }
+
+    public double getTurrentPos () { return this.turretposcurrent; }
 }
