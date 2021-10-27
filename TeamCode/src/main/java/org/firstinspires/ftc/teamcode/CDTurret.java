@@ -8,6 +8,7 @@ public class CDTurret {
     double Turretslow = .33;
     CDHardware robotHardware;
     public boolean turretstop;
+    public double turretposcurrent;
 
     public  CDTurret(CDHardware theHardware){
 
@@ -45,11 +46,11 @@ public class CDTurret {
         final double TURRET_THRESHOLD_POS = 5; // counts
         double turretmult = 0.75; // to slow down the turret if needed
 
-         turretstop = false; // initially we want the turret to move for the while loop
+        turretstop = false; // initially we want the turret to move for the while loop
         while (!turretstop) {
-            /* This gets the urrent turret position and sets it to a variable
+            /* This gets the current turret position and sets it to a variable
            */
-            double turretposcurrent = robotHardware.turretmotor.getCurrentPosition(); //updates every loop
+            turretposcurrent = robotHardware.turretmotor.getCurrentPosition(); //updates every loop
             if (Math.abs(turretposcurrent - turretpostarget) < TURRET_THRESHOLD_POS) {
                 setTurretPower(0); // need to stop the turret before leaving the loop
                 turretstop = true; // leave the while loop

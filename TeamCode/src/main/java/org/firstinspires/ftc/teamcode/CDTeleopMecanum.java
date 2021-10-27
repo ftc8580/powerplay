@@ -133,7 +133,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           myTurret.setTurretPower(turretA);
 
           if (gamepad2.dpad_up){
-              myTurret.setTurretPosition(0,"center");
+              myTurret.setTurretPosition(0,"right");
               if (myTurret.turretstop){
               myElevator.setElevatorPosition(elevatorposground);
               }
@@ -143,9 +143,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           if (gamepad2.dpad_left){
               myElevator.setElevatorPosition(elevatorposmiddle);
               if (myElevator.elevatorstop){
-              myTurret.setTurretPosition(-90,"left");
-
-
+                  myTurret.setTurretPosition(90,"right");
               }
 
           }
@@ -153,7 +151,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           if (gamepad2.dpad_right){
               myElevator.setElevatorPosition(elevatorposmiddle);
               if (myElevator.elevatorstop){
-                  myTurret.setTurretPosition(90,"right");
+                  myTurret.setTurretPosition(-90,"right");
 
               }
 
@@ -176,6 +174,7 @@ public class CDTeleopMecanum extends LinearOpMode {
          telemetry.addData("motorLR ", "%.2f", leftRearPower);
          telemetry.addData("motorRR ", "%.2f", rightRearPower);
          telemetry.addData( "ElevatorDist", "%.2f", elevatorposcurrent);
+         //telemetry.addData("TurretPosition", "%.2f", turretposcurrent);
          //TODO: Add telemetry for IMU Gyro need to be tested
          //telemetry.addData("heading ", heading);
           telemetry.addData("magneticstop", magneticstop );
