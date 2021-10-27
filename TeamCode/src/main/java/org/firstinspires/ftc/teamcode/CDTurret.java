@@ -62,5 +62,5 @@ public class CDTurret {
         }
     }
 
-    public double getTurrentPos () { return this.turretposcurrent; }
+    public double getTurrentPos () { return robotHardware.turretmotor.getCurrentPosition(); }
 }
