@@ -125,36 +125,33 @@ public class CDTeleopMecanum extends LinearOpMode {
           myDuckSpinner.setDuckSpinnerPower(duckpower);
 
           // turret code
-          //TODO: This variable Turretslow should be in the CDTurret class and addressed at the object level
 
-          double turretA = gamepad2.right_stick_x;
-          // TODO: Turret is not limited by the encoder, risk of breaking robot
-          // TODO: Set up encoder sensor for motorTurret
-          myTurret.setTurretPower(turretA);
-
+          // Used to make sure that the elevator is up when we turn the turret past wheels
+          boolean elevatorisdown = false;
+          if (elevatorposcurrent < 10) {
+            elevatorisdown = true;
+          }
+          if (!elevatorisdown) {
+              double turretA = gamepad2.right_stick_x;
+              // TODO: Turret is not limited by the encoder, risk of breaking robot
+              // TODO: Set up encoder sensor for motorTurret
+              myTurret.setTurretPower(turretA);
+          }
           if (gamepad2.dpad_up){
               myTurret.setTurretPosition(0,"right");
               if (myTurret.turretstop){
               myElevator.setElevatorPosition(elevatorposground);
               }
-
-          }
-
-          if (gamepad2.dpad_left){
+          } else if (gamepad2.dpad_left){
               myElevator.setElevatorPosition(elevatorposmiddle);
               if (myElevator.elevatorstop){
                   myTurret.setTurretPosition(90,"right");
               }
-
-          }
-
-          if (gamepad2.dpad_right){
+          } else if (gamepad2.dpad_right) {
               myElevator.setElevatorPosition(elevatorposmiddle);
-              if (myElevator.elevatorstop){
-                  myTurret.setTurretPosition(-90,"right");
-
+              if (myElevator.elevatorstop) {
+                  myTurret.setTurretPosition(-90, "right");
               }
-
           }
 
 
@@ -174,7 +171,9 @@ public class CDTeleopMecanum extends LinearOpMode {
          telemetry.addData("motorLR ", "%.2f", leftRearPower);
          telemetry.addData("motorRR ", "%.2f", rightRearPower);
          telemetry.addData( "ElevatorDist", "%.2f", elevatorposcurrent);
-         //telemetry.addData("TurretPosition", "%.2f", turretposcurrent);
+         telemetry.addData("TurretLockedElevatorDown", elevatorisdown);
+         telemetry.addData("TurretPosition", "%.2f", myTurret.getTurrentPos());
+
          //TODO: Add telemetry for IMU Gyro need to be tested
          //telemetry.addData("heading ", heading);
           telemetry.addData("magneticstop", magneticstop );
