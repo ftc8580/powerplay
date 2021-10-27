@@ -50,7 +50,6 @@ public class CDTeleopMecanum extends LinearOpMode {
           and sets it to a variable
            */
         double elevatorposcurrent = myDistanceSensor.getElevatorDistance();
-
           // We cubed the inputs to make the inputs more responsive
           double y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
           double x = Math.pow(gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
@@ -87,6 +86,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           //
           if (gamepad2.a) {
             myElevator.setElevatorPosition(elevatorposground);
+
           } else if (gamepad2.x) {
               myElevator.setElevatorPosition(elevatorposbottom);
           } else if (gamepad2.b) {
@@ -131,6 +131,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           if (elevatorposcurrent < 10) {
             elevatorisdown = true;
           }
+          double currentturretposition;
           if (!elevatorisdown) {
               double turretA = gamepad2.right_stick_x;
               // TODO: Turret is not limited by the encoder, risk of breaking robot
@@ -163,6 +164,8 @@ public class CDTeleopMecanum extends LinearOpMode {
           if (myHardware.elevatormagneticswitch.isPressed()) {
               magneticstop = true;
           }
+          // We always want the latest position
+          currentturretposition = myTurret.getTurrentPos();
          telemetry.addData("y input", "%.2f", y);
          telemetry.addData("x input", "%.2f", x);
          telemetry.addData("rx input", "%.2f", rx);
@@ -172,7 +175,7 @@ public class CDTeleopMecanum extends LinearOpMode {
          telemetry.addData("motorRR ", "%.2f", rightRearPower);
          telemetry.addData( "ElevatorDist", "%.2f", elevatorposcurrent);
          telemetry.addData("TurretLockedElevatorDown", elevatorisdown);
-         telemetry.addData("TurretPosition", "%.2f", myTurret.getTurrentPos());
+         telemetry.addData("TurretPosition", "%.2f", currentturretposition);
 
          //TODO: Add telemetry for IMU Gyro need to be tested
          //telemetry.addData("heading ", heading);
