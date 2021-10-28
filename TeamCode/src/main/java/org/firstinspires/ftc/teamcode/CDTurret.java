@@ -9,6 +9,7 @@ public class CDTurret {
     CDHardware robotHardware;
     public boolean turretstop;
     public double turretposcurrent;
+    public double TURRET_CURRENT_THRESHOLD;
 
     public  CDTurret(CDHardware theHardware){
 
@@ -17,6 +18,7 @@ public class CDTurret {
         robotHardware.turretmotor.setDirection(DcMotorSimple.Direction.FORWARD);
         // Added to make sure that the turret defaults to brake mode
         robotHardware.turretmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
     }
 
@@ -51,7 +53,8 @@ public class CDTurret {
             /* This gets the current turret position and sets it to a variable
            */
             turretposcurrent = robotHardware.turretmotor.getCurrentPosition(); //updates every loop
-            if (Math.abs(turretposcurrent - turretpostarget) < TURRET_THRESHOLD_POS) {
+            TURRET_CURRENT_THRESHOLD = Math.abs(turretposcurrent - turretpostarget);
+            if (TURRET_CURRENT_THRESHOLD < TURRET_THRESHOLD_POS) {
                 setTurretPower(0); // need to stop the turret before leaving the loop
                 turretstop = true; // leave the while loop
             } else if (turretposcurrent > turretpostarget) {
@@ -63,4 +66,11 @@ public class CDTurret {
     }
 
     public double getTurrentPos () { return robotHardware.turretmotor.getCurrentPosition(); }
+
+    public double getTurretCurrentThreshold () { return this.TURRET_CURRENT_THRESHOLD; }
+
+    public void calibrateZeroTurret () {
+        // Reset the encoder to zero on init
+        robotHardware.turretmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
 }
