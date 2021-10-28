@@ -21,55 +21,62 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import java.util.Locale;
 
 
-
 @TeleOp(name="CDTeleopMecanum", group="Linear Opmode")
 public class CDTeleopMecanum extends LinearOpMode {
-    // Initialize our classes to variables
-    CDHardware myHardware = new CDHardware(hardwareMap);
-    CDDriveChassis myChassis = new CDDriveChassis(myHardware);
-    CDDuckSpinner myDuckSpinner = new CDDuckSpinner(myHardware);
-    CDElevator myElevator = new CDElevator(myHardware);
-    CDIntake myIntake = new CDIntake(myHardware);
-    CDTurret myTurret = new CDTurret(myHardware);
-    CDDistanceSensor myDistanceSensor = new CDDistanceSensor(myHardware);
-    BNO055IMU imu = myHardware.cdimu;
-
-    // State used for updating telemetry
-    Orientation angles;
-    Acceleration gravity;
 
     // Initialize our local variables with values
     // These "slow" variable is used to control the overall speed of the robot
-    double slow = 0.60;
-    double intakemult = 1.5;
-    double delivermult = 1.5;
-    double duckmulti = 0.6;
-
+    public double slow = 0.60;
+    public double intakemult = 1.5;
+    public double delivermult = 1.5;
+    public double duckmulti = 0.6;
+    public boolean imuTelemetry = false;
     //For setting elevator position using buttons
     //This is where you can set the values of the positions based off telemetry
-    double elevatorposground = 3.5;
-    double elevatorposbottom = 12.5;
-    double elevatorposmiddle = 28.0;
-    double elevatorpostop = 41.0;
+    public double elevatorposground = 3.5;
+    public double elevatorposbottom = 12.5;
+    public double elevatorposmiddle = 28.0;
+    public double elevatorpostop = 40;
 
     // Initialize some booleans for use later
     // Initialize our local variables for use later in telemetry or other methods
-    double currentturretposition;
-    double duckpower;
-    double y;
-    double x;
-    double rx;
-    double elevatorposcurrent;
-    boolean elevatorisdown;
-    double leftFrontPower;
-    double leftRearPower;
-    double rightFrontPower;
-    double rightRearPower;
-    boolean magneticstop;
+    public double currentturretposition;
+    public double currentturretthreshold;
+    public double duckpower;
+    public double y;
+    public double x;
+    public double rx;
+    public double elevatorposcurrent;
+    public double elevatorcurrentthreshold;
+    public boolean elevatorisdown;
+    public double leftFrontPower;
+    public double leftRearPower;
+    public double rightFrontPower;
+    public double rightRearPower;
+    public boolean magneticstop;
+    // State used for updating telemetry
+    public Orientation angles;
+    public Acceleration gravity;
+    public CDHardware myHardware;
+    public BNO055IMU imu;
 
-    @Override public void runOpMode() {
 
-       // Set up the parameters with which we will use our IMU. Note that integration
+    @Override
+    public void runOpMode() {
+
+        // Initialize our classes to variables
+        myHardware = new CDHardware(hardwareMap);
+        imu = myHardware.cdimu;
+        CDDriveChassis myChassis = new CDDriveChassis(myHardware);
+        CDDuckSpinner myDuckSpinner = new CDDuckSpinner(myHardware);
+        CDElevator myElevator = new CDElevator(myHardware);
+        CDIntake myIntake = new CDIntake(myHardware);
+        CDTurret myTurret = new CDTurret(myHardware);
+        CDDistanceSensor myDistanceSensor = new CDDistanceSensor(myHardware);
+
+
+
+        // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -81,26 +88,22 @@ public class CDTeleopMecanum extends LinearOpMode {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu.initialize(parameters);
 
-//        telemetry.addData("Status", "Fully Initialized");
-//        telemetry.update();
-
-
-        // Set up our telemetry dashboard, everything is now in this method
-        composeTelemetry();
+        telemetry.addData("Status", "Fully Initialized");
+        telemetry.update();
 
         //Wait for the driver to press PLAY on the driver station phone
         waitForStart();
 
         //Run until the end (Driver presses STOP)
+
+        // Polling rate for logging gets set to zero before the while loop
+        int i = 0;
+
         while (opModeIsActive()) {
 
             // Start the logging of measured acceleration
             imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
-            // Loop and update the dashboard
-            while (opModeIsActive()) {
-                telemetry.update();
-            }
 
             // User controls for the robot speed overall
             if (gamepad1.left_bumper) {
@@ -114,6 +117,7 @@ public class CDTeleopMecanum extends LinearOpMode {
           and sets it to a variable
            */
             elevatorposcurrent = myDistanceSensor.getElevatorDistance();
+            elevatorcurrentthreshold = myElevator.ELEVATORCURRENTTHRESHOLD;
             // We cubed the inputs to make the inputs more responsive
             y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
             x = Math.pow(gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
@@ -140,14 +144,15 @@ public class CDTeleopMecanum extends LinearOpMode {
             // Insert while not
             myElevator.setElevatorPower(-elevatorinput);
 
-            // Values of the elevator position are in the variable init at the beginning
-            if (gamepad2.a) {
+//             Values of the elevator position are in the variable init at the beginning
+            // Dpad controls the position of the elevator
+            if (gamepad2.dpad_down) {
                 myElevator.setElevatorPosition(elevatorposground);
-            } else if (gamepad2.x) {
+            } else if (gamepad2.dpad_left) {
                 myElevator.setElevatorPosition(elevatorposbottom);
-            } else if (gamepad2.b) {
+            } else if (gamepad2.dpad_right) {
                 myElevator.setElevatorPosition(elevatorposmiddle);
-            } else if (gamepad2.y) {
+            } else if (gamepad2.dpad_up) {
                 myElevator.setElevatorPosition(elevatorpostop);
             }
 
@@ -187,111 +192,133 @@ public class CDTeleopMecanum extends LinearOpMode {
                 double turretA = gamepad2.right_stick_x;
                 myTurret.setTurretPower(turretA);
             }
-            // Dpad controls the turret position
-            if (gamepad2.dpad_up) {
+            // Buttons control the turret position
+            if (gamepad2.y) {
                 myTurret.setTurretPosition(0,"right");
                 if (myTurret.turretstop) {
                     myElevator.setElevatorPosition(elevatorposground);
                 }
-            } else if (gamepad2.dpad_left) {
+            } else if (gamepad2.x) {
                 myElevator.setElevatorPosition(elevatorposmiddle);
                 if (myElevator.elevatorstop) {
                     myTurret.setTurretPosition(90,"right");
                 }
-            } else if (gamepad2.dpad_right) {
+            } else if (gamepad2.b) {
                 myElevator.setElevatorPosition(elevatorposmiddle);
                 if (myElevator.elevatorstop) {
                     myTurret.setTurretPosition(-90, "right");
                 }
+            } else if (gamepad2.a) {
+                myTurret.calibrateZeroTurret();
             }
-            // Refresh the turret position
+            // Refresh the turret position and reported threshold
             currentturretposition = myTurret.getTurrentPos();
+            currentturretthreshold = myTurret.getTurretCurrentThreshold();
             // magnetic switch
             magneticstop = false;
             if (myHardware.elevatormagneticswitch.isPressed()) {
                 magneticstop = true;
             }
+
+            // Set up our telemetry dashboard, everything is now in this method
+            // Use the imuTelemetry bool to toggle IMU feedback on driver station
+            if (gamepad1.dpad_left) {
+                imuTelemetry = false;
+            } else if (gamepad1.dpad_right) {
+                imuTelemetry = true;
+            }
+            // need to slow down the logging
+            if (i == 10) {
+                composeTelemetry(imuTelemetry);
+                i = 0;
+            } else {
+                i++;
+            }
         }
-
     }
-
 
     //----------------------------------------------------------------------------------------------
     // Telemetry Configuration
     //----------------------------------------------------------------------------------------------
 
-    void composeTelemetry() {
+    void composeTelemetry(boolean imuTelemetry) {
+        telemetry.clearAll();
+        if (imuTelemetry) {
+            // At the beginning of each telemetry update, grab a bunch of data
+            // from the IMU that we will then display in separate lines.
+            telemetry.addAction(new Runnable() {
+                @Override
+                public void run() {
+                    // Acquiring the angles is relatively expensive; we don't want
+                    // to do that in each of the three items that need that info, as that's
+                    // three times the necessary expense.
+                    angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                    gravity = imu.getGravity();
+                }
+            });
+            //TODO: Add telemetry for IMU Gyro need to be tested
+            //telemetry.addData("heading ", heading);
+            telemetry.addData("magneticstop", magneticstop );
+            telemetry.addLine()
+                    .addData("status", new Func<String>() {
+                        @Override public String value() {
+                            return imu.getSystemStatus().toShortString();
+                        }
+                    })
+                    .addData("calib", new Func<String>() {
+                        @Override public String value() {
+                            return imu.getCalibrationStatus().toString();
+                        }
+                    });
 
-        // At the beginning of each telemetry update, grab a bunch of data
-        // from the IMU that we will then display in separate lines.
-        telemetry.addAction(new Runnable() { @Override public void run()
-        {
-            // Acquiring the angles is relatively expensive; we don't want
-            // to do that in each of the three items that need that info, as that's
-            // three times the necessary expense.
-            angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            gravity  = imu.getGravity();
+            telemetry.addLine()
+                    .addData("heading", new Func<String>() {
+                        @Override public String value() {
+                            return formatAngle(angles.angleUnit, angles.firstAngle);
+                        }
+                    })
+                    .addData("roll", new Func<String>() {
+                        @Override public String value() {
+                            return formatAngle(angles.angleUnit, angles.secondAngle);
+                        }
+                    })
+                    .addData("pitch", new Func<String>() {
+                        @Override public String value() {
+                            return formatAngle(angles.angleUnit, angles.thirdAngle);
+                        }
+                    });
+
+            telemetry.addLine()
+                    .addData("grvty", new Func<String>() {
+                        @Override public String value() {
+                            return gravity.toString();
+                        }
+                    })
+                    .addData("mag", new Func<String>() {
+                        @Override public String value() {
+                            return String.format(Locale.getDefault(), "%.3f",
+                                    Math.sqrt(gravity.xAccel*gravity.xAccel
+                                            + gravity.yAccel*gravity.yAccel
+                                            + gravity.zAccel*gravity.zAccel));
+                        }
+                    });
+            // Loop and update the dashboard
+        } else {
+            telemetry.addData("y input", "%.2f", y);
+            telemetry.addData("x input", "%.2f", x);
+            telemetry.addData("rx input", "%.2f", rx);
+            telemetry.addData("motorLF ", "%.2f", leftFrontPower);
+            telemetry.addData("motorRF ", "%.2f", rightFrontPower);
+            telemetry.addData("motorLR ", "%.2f", leftRearPower);
+            telemetry.addData("motorRR ", "%.2f", rightRearPower);
+            telemetry.addData("ElevatorDist", "%.2f", elevatorposcurrent);
+            telemetry.addData("CurrElevatorThresh", "%.2f", elevatorcurrentthreshold);
+            telemetry.addData("TurretLockedElevatorDown", elevatorisdown);
+            telemetry.addData("TurretPosition", "%.2f", currentturretposition);
+            telemetry.addData("CurrTurretThreshold", "%.2f", currentturretthreshold);
         }
-        });
-        // We always want the latest position
-
-        telemetry.addData("y input", "%.2f", y);
-        telemetry.addData("x input", "%.2f", x);
-        telemetry.addData("rx input", "%.2f", rx);
-        telemetry.addData("motorLF ", "%.2f", leftFrontPower);
-        telemetry.addData("motorRF ", "%.2f", rightFrontPower);
-        telemetry.addData("motorLR ", "%.2f", leftRearPower);
-        telemetry.addData("motorRR ", "%.2f", rightRearPower);
-        telemetry.addData( "ElevatorDist", "%.2f", elevatorposcurrent);
-        telemetry.addData("TurretLockedElevatorDown", elevatorisdown);
-        telemetry.addData("TurretPosition", "%.2f", currentturretposition);
-
-        //TODO: Add telemetry for IMU Gyro need to be tested
-        //telemetry.addData("heading ", heading);
-        telemetry.addData("magneticstop", magneticstop );
-        telemetry.addLine()
-                .addData("status", new Func<String>() {
-                    @Override public String value() {
-                        return imu.getSystemStatus().toShortString();
-                    }
-                })
-                .addData("calib", new Func<String>() {
-                    @Override public String value() {
-                        return imu.getCalibrationStatus().toString();
-                    }
-                });
-
-        telemetry.addLine()
-                .addData("heading", new Func<String>() {
-                    @Override public String value() {
-                        return formatAngle(angles.angleUnit, angles.firstAngle);
-                    }
-                })
-                .addData("roll", new Func<String>() {
-                    @Override public String value() {
-                        return formatAngle(angles.angleUnit, angles.secondAngle);
-                    }
-                })
-                .addData("pitch", new Func<String>() {
-                    @Override public String value() {
-                        return formatAngle(angles.angleUnit, angles.thirdAngle);
-                    }
-                });
-
-        telemetry.addLine()
-                .addData("grvty", new Func<String>() {
-                    @Override public String value() {
-                        return gravity.toString();
-                    }
-                })
-                .addData("mag", new Func<String>() {
-                    @Override public String value() {
-                        return String.format(Locale.getDefault(), "%.3f",
-                                Math.sqrt(gravity.xAccel*gravity.xAccel
-                                        + gravity.yAccel*gravity.yAccel
-                                        + gravity.zAccel*gravity.zAccel));
-                    }
-                });
+        // Loop and update the dashboard
+        telemetry.update();
     }
 
     //----------------------------------------------------------------------------------------------
