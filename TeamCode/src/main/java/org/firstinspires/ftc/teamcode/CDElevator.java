@@ -50,13 +50,13 @@ public class CDElevator {
             if (ELEVATORCURRENTTHRESHOLD < THRESHOLD_POS)  {
                 setElevatorPower(0); // need to stop the elevator before leaving the loop
                 elevatorstop = true; // leave the while loop
+            } else if (elevatorposcurrent >= 42.0) {
+                setElevatorPower(0); // need to stop the elevator before leaving the loop
+                elevatorstop = true; // leave the while loop
             } else if (elevatorposcurrent > elevatorpostarget) {
                 setElevatorPower(-1*elevatormult);
             } else if (elevatorposcurrent < elevatorpostarget) {
                 setElevatorPower(1*elevatormult);
-            } else if (elevatorposcurrent <= 42.0) {
-                setElevatorPower(0); // need to stop the elevator before leaving the loop
-                elevatorstop = true; // leave the while loop
             }
 
         }
