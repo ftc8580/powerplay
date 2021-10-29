@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.*;
 //import com.qualcomm.robotcore.util.Hardware;
 
 public class CDTurret {
@@ -10,7 +9,7 @@ public class CDTurret {
     public boolean turretstop;
     public double turretposcurrent;
     public double TURRET_CURRENT_THRESHOLD;
-
+    public AnalogInput turretpot;
     public  CDTurret(CDHardware theHardware){
 
         robotHardware = theHardware;
@@ -18,7 +17,7 @@ public class CDTurret {
         robotHardware.turretmotor.setDirection(DcMotorSimple.Direction.FORWARD);
         // Added to make sure that the turret defaults to brake mode
         robotHardware.turretmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        turretpot = robotHardware.turretpot;
 
     }
 
@@ -26,7 +25,9 @@ public class CDTurret {
         robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robotHardware.turretmotor.setPower(pow * Turretslow);
     }
-
+    public double getTurretPotPosition() {
+        return turretpot.getVoltage();
+    }
     // create variable for counts per motor rev for the turret
     static final double COUNTS_PER_TURRET_MOTOR_REV = 288; //Core Hex Motor
     static final double DRIVE_GEAR_REDUCTION = .52; //This is greater than 1 if geared up
@@ -51,7 +52,7 @@ public class CDTurret {
         turretstop = false; // initially we want the turret to move for the while loop
         while (!turretstop) {
             /* This gets the current turret position and sets it to a variable
-           */
+             */
             turretposcurrent = robotHardware.turretmotor.getCurrentPosition(); //updates every loop
             TURRET_CURRENT_THRESHOLD = Math.abs(turretposcurrent - turretpostarget);
             if (TURRET_CURRENT_THRESHOLD < TURRET_THRESHOLD_POS) {
@@ -64,6 +65,7 @@ public class CDTurret {
             }
         }
     }
+// 2/3 Digital control hub
 
     public double getTurrentPos () { return robotHardware.turretmotor.getCurrentPosition(); }
 

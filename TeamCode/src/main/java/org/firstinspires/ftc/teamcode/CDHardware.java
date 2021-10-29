@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.hardware.Sensor;
 import com.qualcomm.hardware.bosch.*;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.*;
 
 
 //import com.qualcomm.robotcore.util.Hardware;
@@ -25,6 +22,7 @@ public class CDHardware {
     public DcMotor duckspinnermotor;
     public DistanceSensor elevatordistancesensor;
     public TouchSensor elevatormagneticswitch;
+    public AnalogInput turretpot;
     // IMU sensor
     public BNO055IMU cdimu;
 
@@ -46,7 +44,7 @@ public class CDHardware {
         turretmotor = hwMap.get(DcMotor.class, "motorTurret");
         elevatordistancesensor = hwMap.get(DistanceSensor.class, "distanceElev");
         elevatormagneticswitch = hwMap.get(TouchSensor.class,"ElvStop");
-
+        turretpot = hwMap.get(AnalogInput.class, "turretpot");
         // Retrieved above and here we initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".

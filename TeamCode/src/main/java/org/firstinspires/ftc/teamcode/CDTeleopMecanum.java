@@ -55,6 +55,7 @@ public class CDTeleopMecanum extends LinearOpMode {
     public double rightRearPower;
     public boolean magneticstop;
     public double robotSpeed;
+    public double turretpotcurrent;
     // State used for updating telemetry
     public Orientation angles;
     public Acceleration gravity;
@@ -74,7 +75,6 @@ public class CDTeleopMecanum extends LinearOpMode {
         CDIntake myIntake = new CDIntake(myHardware);
         CDTurret myTurret = new CDTurret(myHardware);
         CDDistanceSensor myDistanceSensor = new CDDistanceSensor(myHardware);
-
 
 
         // Set up the parameters with which we will use our IMU. Note that integration
@@ -215,6 +215,7 @@ public class CDTeleopMecanum extends LinearOpMode {
             }
             // Refresh the turret position and reported threshold
             currentturretposition = myTurret.getTurrentPos();
+            turretpotcurrent = myTurret.getTurretPotPosition();
             currentturretthreshold = myTurret.getTurretCurrentThreshold();
             // magnetic switch
             magneticstop = false;
@@ -260,7 +261,6 @@ public class CDTeleopMecanum extends LinearOpMode {
             });
             //TODO: Add telemetry for IMU Gyro need to be tested
             //telemetry.addData("heading ", heading);
-            telemetry.addData("magneticstop", magneticstop );
             telemetry.addLine()
                     .addData("status", new Func<String>() {
                         @Override public String value() {
@@ -317,7 +317,9 @@ public class CDTeleopMecanum extends LinearOpMode {
             telemetry.addData("CurrElevatorThresh", "%.2f", elevatorcurrentthreshold);
             telemetry.addData("TurretLockedElevatorDown", elevatorisdown);
             telemetry.addData("TurretPosition", "%.2f", currentturretposition);
+            telemetry.addData("TurretPotCurrent", "%.2f", turretpotcurrent);
             telemetry.addData("CurrTurretThreshold", "%.2f", currentturretthreshold);
+            telemetry.addData("magneticstop", magneticstop );
         }
         // Loop and update the dashboard
         telemetry.update();
