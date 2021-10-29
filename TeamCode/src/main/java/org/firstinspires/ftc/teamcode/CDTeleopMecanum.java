@@ -26,7 +26,8 @@ public class CDTeleopMecanum extends LinearOpMode {
 
     // Initialize our local variables with values
     // These "slow" variable is used to control the overall speed of the robot
-    public double slow = 0.60;
+    // TODO: Change the drive speed to be a base speed not
+    public double baseSpeed = 0.60;
     public double intakemult = 1.5;
     public double delivermult = 1.5;
     public double duckmulti = 0.6;
@@ -38,7 +39,6 @@ public class CDTeleopMecanum extends LinearOpMode {
     public double elevatorposmiddle = 28.0;
     public double elevatorpostop = 40;
 
-    // Initialize some booleans for use later
     // Initialize our local variables for use later in telemetry or other methods
     public double currentturretposition;
     public double currentturretthreshold;
@@ -54,6 +54,7 @@ public class CDTeleopMecanum extends LinearOpMode {
     public double rightFrontPower;
     public double rightRearPower;
     public boolean magneticstop;
+    public double robotSpeed;
     // State used for updating telemetry
     public Orientation angles;
     public Acceleration gravity;
@@ -107,12 +108,13 @@ public class CDTeleopMecanum extends LinearOpMode {
 
             // User controls for the robot speed overall
             if (gamepad1.left_bumper) {
-                slow = 0.30;
+                robotSpeed=baseSpeed*0.5;
 
             } else if (gamepad1.right_bumper) {
-                slow = 0.90;
+                robotSpeed = baseSpeed*1.5;
+            } else {
+                robotSpeed=baseSpeed;
             }
-
           /* This gets the current distance off the floor from the Elevator Distance Sensor
           and sets it to a variable
            */
@@ -133,10 +135,10 @@ public class CDTeleopMecanum extends LinearOpMode {
             rightRearPower = (y + x + rx) / denominator;
 
             //move robot - drive chassis
-            myChassis.setLeftFrontPower(leftFrontPower*slow);
-            myChassis.setLeftRearPower(leftRearPower*slow);
-            myChassis.setRightFrontPower(rightFrontPower*slow);
-            myChassis.setRightRearPower(rightRearPower*slow);
+            myChassis.setLeftFrontPower(leftFrontPower* robotSpeed);
+            myChassis.setLeftRearPower(leftRearPower* robotSpeed);
+            myChassis.setRightFrontPower(rightFrontPower* robotSpeed);
+            myChassis.setRightRearPower(rightRearPower* robotSpeed);
 
             //move elevator + = up - = down
             double elevatorinput = gamepad2.left_stick_y;
