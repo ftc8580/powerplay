@@ -82,7 +82,7 @@ public class CDAutonRedDuck extends LinearOpMode {
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");
 //        telemetry.update();
-
+// Setting the Modes, Do not need to change
         myChassis.robotHardware.rightrearmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         myChassis.robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         myChassis.robotHardware.leftrearmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -164,7 +164,7 @@ public class CDAutonRedDuck extends LinearOpMode {
          * 3. encodeDriveTurn (speed, turnDeg, turnTimeout)
          */
         if (opModeIsActive()) {
-
+                // THIS IS WHERE YOU CHANGE THINGS FOR AUTON
                 //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 30, 20.0); //Move forward 30 inches with 10 second timeout
                 //sleep(250); //optional pause after each move in milliseconds
                 //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -20, 10.0); //Move back 20 inches with 10 second timeout
