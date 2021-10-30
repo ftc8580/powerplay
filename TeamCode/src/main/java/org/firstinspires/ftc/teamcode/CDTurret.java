@@ -34,26 +34,25 @@ public class CDTurret {
     static final double COUNTS_PER_TURRET_MOTOR_REV = 288; //Core Hex Motor
     static final double DRIVE_GEAR_REDUCTION = .52; //This is greater than 1 if geared up
 
-    public boolean setTurretPosition(double turretpostargetdeg, String turretstartside) {
+    public boolean setTurretPosition(double turretpostarget, String turretstartside) {
         // This method will return true for successful turn or false for an error.
-        double turretoffset=0;
-        //calculate turret target position
-        if (turretstartside == "right" ) {
-            turretoffset = 90;
-        }else if (turretstartside == "left") {
-            turretoffset = -90;
-        }else if (turretstartside == "center") {
-            turretoffset = 0;
-        }
+//        double turretoffset=0;
+//        //calculate turret target position
+//        if (turretstartside == "right" ) {
+//            turretoffset = 90;
+//        }else if (turretstartside == "left") {
+//            turretoffset = -90;
+//        }else if (turretstartside == "center") {
+//            turretoffset = 0;
+//        }
 
-        double turretpostarget = -(turretpostargetdeg+turretoffset)/360 * COUNTS_PER_TURRET_MOTOR_REV / DRIVE_GEAR_REDUCTION;
+//        double turretpostarget = -(turretpostargetdeg)/360 * COUNTS_PER_TURRET_MOTOR_REV / DRIVE_GEAR_REDUCTION;
 
         final double TURRET_THRESHOLD_POS = 5; // counts
-        double turretmult = 0.75; // to slow down the turret if needed
+        double turretmult = 0.15; // to slow down the turret if needed
         // TODO: Need to change from our turretposcurrent to
         turretstop = false; // initially we want the turret to move for the while loop
         turretposcurrent = 0; //updates every loop at the end, zero to start while loop for comparison
-        turretposlast = robotHardware.turretmotor.getCurrentPosition(); // Turret error detection, last position to compare to current, no change, no move.
         while (!turretstop) {
             /* This gets the current turret position and sets it to a variable
              */

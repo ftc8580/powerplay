@@ -207,19 +207,19 @@ public class CDTeleopMecanum extends LinearOpMode {
 
             // Buttons control the turret position
             if (gamepad2.y) {
-                turreterror = myTurret.setTurretPosition(0, "right");
+                turreterror = myTurret.setTurretPosition(122, "NONE");
                 if (myTurret.turretstop && !turreterror) {
                     myElevator.setElevatorPosition(elevatorposground);
                 }
             } else if (gamepad2.x) {
                 myElevator.setElevatorPosition(elevatorposmiddle);
                 if (myElevator.elevatorstop) {
-                    turreterror = myTurret.setTurretPosition(90,"right");
+                    turreterror = myTurret.setTurretPosition(60,"NONE");
                 }
             } else if (gamepad2.b) {
                 myElevator.setElevatorPosition(elevatorposmiddle);
                 if (myElevator.elevatorstop) {
-                    turreterror =  myTurret.setTurretPosition(-90, "right");
+                    turreterror =  myTurret.setTurretPosition(236, "NONE");
                 }
             } else if (gamepad2.a) {
                 myTurret.calibrateZeroTurret(); // TODO: We will remove the need to calibrate the turret if we can rely on the pot
