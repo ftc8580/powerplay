@@ -8,6 +8,7 @@ public class CDTurret {
     CDHardware robotHardware;
     public boolean turretstop;
     public double turretposcurrent;
+    public double turretposlast;
     public double TURRET_CURRENT_THRESHOLD;
     public AnalogInput turretpot;
     public  CDTurret(CDHardware theHardware){
@@ -33,8 +34,8 @@ public class CDTurret {
     static final double COUNTS_PER_TURRET_MOTOR_REV = 288; //Core Hex Motor
     static final double DRIVE_GEAR_REDUCTION = .52; //This is greater than 1 if geared up
 
-    public void setTurretPosition(double turretpostargetdeg, String turretstartside) {
-
+    public boolean setTurretPosition(double turretpostargetdeg, String turretstartside) {
+        // This method will return true for successful turn or false for an error.
         double turretoffset=0;
         //calculate turret target position
         if (turretstartside == "right" ) {
@@ -49,22 +50,30 @@ public class CDTurret {
 
         final double TURRET_THRESHOLD_POS = 5; // counts
         double turretmult = 0.75; // to slow down the turret if needed
-
+        // TODO: Need to change from our turretposcurrent to
         turretstop = false; // initially we want the turret to move for the while loop
+        turretposcurrent = 0; //updates every loop at the end, zero to start while loop for comparison
+        turretposlast = robotHardware.turretmotor.getCurrentPosition(); // Turret error detection, last position to compare to current, no change, no move.
         while (!turretstop) {
             /* This gets the current turret position and sets it to a variable
              */
-            turretposcurrent = robotHardware.turretmotor.getCurrentPosition(); //updates every loop
-            TURRET_CURRENT_THRESHOLD = Math.abs(turretposcurrent - turretpostarget);
+            turretposlast = robotHardware.turretmotor.getCurrentPosition(); //updates every loop for the position going into the move.
+            if (turretposlast == turretposlast) {
+                turretstop = true;
+                return false; // There was an error, the value didn't change.
+            };
+            TURRET_CURRENT_THRESHOLD = Math.abs(turretposlast - turretpostarget);
             if (TURRET_CURRENT_THRESHOLD < TURRET_THRESHOLD_POS) {
                 setTurretPower(0); // need to stop the turret before leaving the loop
                 turretstop = true; // leave the while loop
-            } else if (turretposcurrent > turretpostarget) {
+            } else if (turretposlast > turretpostarget) {
                 setTurretPower(-1*turretmult);
-            } else if (turretposcurrent < turretpostarget) {
+            } else if (turretposlast < turretpostarget) {
                 setTurretPower(1*turretmult);
             }
+            turretposcurrent = robotHardware.turretmotor.getCurrentPosition(); //updates every loop to see where we landed for lockup detection.
         }
+        return true; // Returns true if successfully made the moves.
     }
 // 2/3 Digital control hub
 
