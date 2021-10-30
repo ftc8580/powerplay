@@ -34,11 +34,11 @@ public class CDTeleopMecanum extends LinearOpMode {
     public boolean imuTelemetry = false;
     //For setting elevator position using buttons
     //This is where you can set the values of the positions based off telemetry
-    public double elevatorposground = 3.5;
+    public double elevatorposground = 5;
     public double elevatorposbottom = 12.5;
     public double elevatorposmiddle = 28.0;
-    public double elevatorpostop = 40;
-    public double wheelheightforelevator = 10;
+    public double elevatorpostop = 41;
+    public double wheelheightforelevator = 12.5;
     // Initialize our local variables for use later in telemetry or other methods
     public double currentturretposition;
     public double currentturretthreshold;
@@ -148,10 +148,15 @@ public class CDTeleopMecanum extends LinearOpMode {
                 elevatorupmagnetswitch = true;
             }
             //move elevator + = up - = down
-            if (!elevatorupmagnetswitch && (elevatorposcurrent > elevatorposground)) {
-                double elevatorinput = gamepad2.left_stick_y;
-                myElevator.setElevatorPower(-elevatorinput);
-            }
+            double elevatorinput = gamepad2.left_stick_y;
+            myElevator.setElevatorPower(-elevatorinput);
+            //   Trying to control the elevator range
+//            if  (elevatorposcurrent > elevatorposground && elevatorinput < -0.5) {
+//                myElevator.setElevatorPower(-elevatorinput);
+//            }
+//            if (!elevatorupmagnetswitch && elevatorinput > 0.5) {
+//                myElevator.setElevatorPower(-elevatorinput);
+//            }
 
             //   Values of the elevator position are in the variable init at the beginning
             // Dpad controls the position of the elevator
@@ -327,6 +332,8 @@ public class CDTeleopMecanum extends LinearOpMode {
             telemetry.addData("TurretPotCurrent", "%.2f", turretpotcurrent);
             telemetry.addData("CurrTurretThreshold", "%.2f", currentturretthreshold);
             telemetry.addData("magneticstop", elevatorupmagnetswitch);
+            telemetry.addData("turreterror", turreterror);
+            telemetry.addData("elevatorerror", elevatorerror);
         }
         // Loop and update the dashboard
         telemetry.update();

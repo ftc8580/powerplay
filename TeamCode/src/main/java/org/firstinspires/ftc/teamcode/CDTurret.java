@@ -49,30 +49,32 @@ public class CDTurret {
 //        double turretpostarget = -(turretpostargetdeg)/360 * COUNTS_PER_TURRET_MOTOR_REV / DRIVE_GEAR_REDUCTION;
 
         final double TURRET_THRESHOLD_POS = 5; // counts
-        double turretmult = 0.15; // to slow down the turret if needed
+        double turretmult = 0.75; // to slow down the turret if needed
         // TODO: Need to change from our turretposcurrent to
         turretstop = false; // initially we want the turret to move for the while loop
         turretposcurrent = 0; //updates every loop at the end, zero to start while loop for comparison
         while (!turretstop) {
             /* This gets the current turret position and sets it to a variable
              */
-            turretposlast = robotHardware.turretmotor.getCurrentPosition(); //updates every loop for the position going into the move.
-            if (turretposlast == turretposlast) {
-                turretstop = true;
-                return false; // There was an error, the value didn't change.
-            };
+            turretposlast = getTurretPotDegrees(); //updates every loop for the position going into the move.
+//            if (turretposcurrent == turretposlast) {
+//                turretstop = true;
+//                return true; // There was an error, the value didn't change.
+//            };
             TURRET_CURRENT_THRESHOLD = Math.abs(turretposlast - turretpostarget);
             if (TURRET_CURRENT_THRESHOLD < TURRET_THRESHOLD_POS) {
                 setTurretPower(0); // need to stop the turret before leaving the loop
                 turretstop = true; // leave the while loop
             } else if (turretposlast > turretpostarget) {
                 setTurretPower(-1*turretmult);
+                turretstop = false;
             } else if (turretposlast < turretpostarget) {
                 setTurretPower(1*turretmult);
+                turretstop = false;
             }
-            turretposcurrent = robotHardware.turretmotor.getCurrentPosition(); //updates every loop to see where we landed for lockup detection.
+            turretposcurrent = getTurretPotDegrees(); //updates every loop to see where we landed for lockup detection.
         }
-        return true; // Returns true if successfully made the moves.
+        return false; // Returns false if successfully made the moves, no error.
     }
 // 2/3 Digital control hub
 
