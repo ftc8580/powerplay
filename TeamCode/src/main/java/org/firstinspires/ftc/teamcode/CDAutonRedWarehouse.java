@@ -65,18 +65,30 @@ public class CDAutonRedWarehouse extends LinearOpMode {
 
         if (opModeIsActive()) {
 
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -24, 10.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15);
+            myTurret.setTurretPosition(60, "NONE");
+            myElevator.setElevatorPosition(28);
+            myIntake.setIntakePower(-30);
+            myTurret.setTurretPosition(124, "NONE");
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 15, 15);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,40,10.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -3, 15);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,25,10.0);
+
             //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 30, 20.0); //Move forward 30 inches with 10 second timeout
             //sleep(250); //optional pause after each move in milliseconds
             //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -20, 10.0); //Move back 20 inches with 10 second timeout
             //myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 10, 5); //Move right 10 inches with 5 second timeout
             //myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15); //Move left 15 inches with 15 second timeout
-            //yChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10); //Turn right 90 degrees with 10 second timeout
+            //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10); //Turn right 90 degrees with 10 second timeout
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -180, 20); //Turn left 180 degrees with a 20 second timeout
-            //sleep(250); //optional pause after each move in milliseconds
+            //sleep(30); //optional pause after each move in milliseconds
             //myElevator.setElevatorPosition(28); //Move elevator to middle position. Do not set outside of range 2.5-39.
-            myTurret.setTurretPosition(0, "right"); //Starting on right side - Set turret position to center
-            myTurret.setTurretPosition(-90, "right");  //Starting on right side - Set turret position -90 (right)
-            myTurret.setTurretPosition(90, "right");   //Starting on right side - Set turret position 90 (left)
+           // myTurret.setTurretPosition(0, "right"); //Starting on right side - Set turret position to center
+           // myTurret.setTurretPosition(-90, "right");  //Starting on right side - Set turret position -90 (right)
+            //myTurret.setTurretPosition(90, "right");   //Starting on right side - Set turret position 90 (left)
 
             //  myIntake.setIntakePower(1.0);
             //  myDuckSpinner.setDuckSpinnerPower(.7);
