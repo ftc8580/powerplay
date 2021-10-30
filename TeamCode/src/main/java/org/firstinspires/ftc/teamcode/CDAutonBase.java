@@ -19,7 +19,7 @@ import java.util.List;
 //import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="CDAutonRedDuck", group="Linear Opmode")
+@Autonomous(name="CDAutonBase", group="Linear Opmode")
 //@Disabled
 public class CDAutonBase extends LinearOpMode {
   /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
