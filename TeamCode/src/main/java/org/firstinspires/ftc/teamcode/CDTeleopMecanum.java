@@ -38,7 +38,7 @@ public class CDTeleopMecanum extends LinearOpMode {
     public double elevatorposbottom = 12.5;
     public double elevatorposmiddle = 28.0;
     public double elevatorpostop = 40;
-
+    public double wheelheightforelevator = 10;
     // Initialize our local variables for use later in telemetry or other methods
     public double currentturretposition;
     public double currentturretthreshold;
@@ -53,9 +53,11 @@ public class CDTeleopMecanum extends LinearOpMode {
     public double leftRearPower;
     public double rightFrontPower;
     public double rightRearPower;
-    public boolean magneticstop;
+    public boolean elevatorupmagnetswitch;
     public double robotSpeed;
     public double turretpotcurrent;
+    public boolean turreterror = false;
+    public boolean elevatorerror = false;
     // State used for updating telemetry
     public Orientation angles;
     public Acceleration gravity;
@@ -140,13 +142,18 @@ public class CDTeleopMecanum extends LinearOpMode {
             myChassis.setRightFrontPower(rightFrontPower* robotSpeed);
             myChassis.setRightRearPower(rightRearPower* robotSpeed);
 
+            // magnetic switch
+            elevatorupmagnetswitch = false;
+            if (myHardware.elevatormagneticswitch.isPressed()) {
+                elevatorupmagnetswitch = true;
+            }
             //move elevator + = up - = down
-            double elevatorinput = gamepad2.left_stick_y;
-            // TODO: Need to limit the elevator range with the sensor so drivers don't loosen string. Students to add while not check for elevatorupposition
-            // Insert while not
-            myElevator.setElevatorPower(-elevatorinput);
+            if (!elevatorupmagnetswitch && (elevatorposcurrent > elevatorposground)) {
+                double elevatorinput = gamepad2.left_stick_y;
+                myElevator.setElevatorPower(-elevatorinput);
+            }
 
-//             Values of the elevator position are in the variable init at the beginning
+            //   Values of the elevator position are in the variable init at the beginning
             // Dpad controls the position of the elevator
             if (gamepad2.dpad_down) {
                 myElevator.setElevatorPosition(elevatorposground);
@@ -182,46 +189,46 @@ public class CDTeleopMecanum extends LinearOpMode {
             }
             myDuckSpinner.setDuckSpinnerPower(duckpower);
 
-            // turret code
-            // TODO: Thursday student to make an elevator is up variation of below elevatorisdown
-
+            // TURRET CODE
+            // Handle turret lockup error:
+            if (turreterror) {
+                telemetry.addLine("DANGER: THE TURRET VALUES AREN'T CHANGING!");
+                telemetry.update();
+            }
             // Used to make sure that the elevator is up when we turn the turret past wheels
             elevatorisdown = false;
-            if (elevatorposcurrent < 10) {
+            if (elevatorposcurrent < wheelheightforelevator) {
                 elevatorisdown = true;
             }
             if (!elevatorisdown) {
                 double turretA = gamepad2.right_stick_x;
                 myTurret.setTurretPower(turretA);
             }
+
             // Buttons control the turret position
             if (gamepad2.y) {
-                myTurret.setTurretPosition(0,"right");
-                if (myTurret.turretstop) {
+                turreterror = myTurret.setTurretPosition(0, "right");
+                if (myTurret.turretstop && !turreterror) {
                     myElevator.setElevatorPosition(elevatorposground);
                 }
             } else if (gamepad2.x) {
                 myElevator.setElevatorPosition(elevatorposmiddle);
                 if (myElevator.elevatorstop) {
-                    myTurret.setTurretPosition(90,"right");
+                    turreterror = myTurret.setTurretPosition(90,"right");
                 }
             } else if (gamepad2.b) {
                 myElevator.setElevatorPosition(elevatorposmiddle);
                 if (myElevator.elevatorstop) {
-                    myTurret.setTurretPosition(-90, "right");
+                    turreterror =  myTurret.setTurretPosition(-90, "right");
                 }
             } else if (gamepad2.a) {
-                myTurret.calibrateZeroTurret();
+                myTurret.calibrateZeroTurret(); // TODO: We will remove the need to calibrate the turret if we can rely on the pot
             }
             // Refresh the turret position and reported threshold
-            currentturretposition = myTurret.getTurrentPos();
-            turretpotcurrent = myTurret.getTurretPotDegrees();
+            currentturretposition = myTurret.getTurrentPos(); // Variable Based
+            turretpotcurrent = myTurret.getTurretPotDegrees(); // Potentiometer voltage based
             currentturretthreshold = myTurret.getTurretCurrentThreshold();
-            // magnetic switch
-            magneticstop = false;
-            if (myHardware.elevatormagneticswitch.isPressed()) {
-                magneticstop = true;
-            }
+
 
             // Set up our telemetry dashboard, everything is now in this method
             // Use the imuTelemetry bool to toggle IMU feedback on driver station
@@ -319,7 +326,7 @@ public class CDTeleopMecanum extends LinearOpMode {
             telemetry.addData("TurretPosition", "%.2f", currentturretposition);
             telemetry.addData("TurretPotCurrent", "%.2f", turretpotcurrent);
             telemetry.addData("CurrTurretThreshold", "%.2f", currentturretthreshold);
-            telemetry.addData("magneticstop", magneticstop );
+            telemetry.addData("magneticstop", elevatorupmagnetswitch);
         }
         // Loop and update the dashboard
         telemetry.update();
