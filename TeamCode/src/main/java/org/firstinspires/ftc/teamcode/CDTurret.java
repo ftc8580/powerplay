@@ -25,8 +25,9 @@ public class CDTurret {
         robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robotHardware.turretmotor.setPower(pow * Turretslow);
     }
-    public double getTurretPotPosition() {
-        return turretpot.getVoltage();
+    public double getTurretPotDegrees() {
+        // Reference https://docs.revrobotics.com/potentiometer/untitled-1#calculating-the-relationship-between-voltage-and-angle
+        return (turretpot.getVoltage()*81.8);
     }
     // create variable for counts per motor rev for the turret
     static final double COUNTS_PER_TURRET_MOTOR_REV = 288; //Core Hex Motor

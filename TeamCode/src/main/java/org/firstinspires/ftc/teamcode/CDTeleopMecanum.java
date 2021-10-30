@@ -215,7 +215,7 @@ public class CDTeleopMecanum extends LinearOpMode {
             }
             // Refresh the turret position and reported threshold
             currentturretposition = myTurret.getTurrentPos();
-            turretpotcurrent = myTurret.getTurretPotPosition();
+            turretpotcurrent = myTurret.getTurretPotDegrees();
             currentturretthreshold = myTurret.getTurretCurrentThreshold();
             // magnetic switch
             magneticstop = false;
