@@ -67,10 +67,10 @@ public class CDAutonRedWarehouse extends LinearOpMode {
 
             myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -24, 10.0);
             myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15);
-            myTurret.setTurretPosition(60, "NONE");
+            myTurret.setTurretDirection("left");
             myElevator.setElevatorPosition(28);
             myIntake.setIntakePower(-30);
-            myTurret.setTurretPosition(124, "NONE");
+            myTurret.setTurretDirection("center");
             myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 15, 15);
             myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,40,10.0);
             myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -3, 15);
