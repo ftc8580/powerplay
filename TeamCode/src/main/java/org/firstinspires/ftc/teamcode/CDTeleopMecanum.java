@@ -26,7 +26,7 @@ public class CDTeleopMecanum extends LinearOpMode {
 
     // Initialize our local variables with values
     // These "slow" variable is used to control the overall speed of the robot
-    // TODO: Change the drive speed to be a base speed not
+    // TODO: Work with Drive Team to determine proper baseSpeed, duckmulti
     public double baseSpeed = 0.60;
     public double intakemult = 1.5;
     public double delivermult = 1.5;
@@ -34,6 +34,7 @@ public class CDTeleopMecanum extends LinearOpMode {
     public boolean imuTelemetry = false;
     //For setting elevator position using buttons
     //This is where you can set the values of the positions based off telemetry
+    //TODO Check that these values are updated for the latest elevator so that freight can be put in proper level of alliance hub
     public double elevatorposground = 5;
     public double elevatorposbottom = 12.5;
     public double elevatorposmiddle = 28.0;
@@ -148,15 +149,25 @@ public class CDTeleopMecanum extends LinearOpMode {
                 elevatorupmagnetswitch = true;
             }
             //move elevator + = up - = down
-            float elevatorinput = gamepad2.left_stick_y;
-            myElevator.setElevatorPower(-elevatorinput);
-            //   Trying to control the elevator range
+            // Multiple by -1 since y input is reversed
+            double elevatorinput = (gamepad2.left_stick_y * 1);
+            if  (elevatorposcurrent <= elevatorposground && elevatorinput > 0) {
+                myElevator.setElevatorPower(0);
+            } else if (elevatorupmagnetswitch && elevatorinput < 0) {
+                myElevator.setElevatorPower(0);
+            } else {
+                myElevator.setElevatorPower(-elevatorinput);
+            }
+
+            // Trying to control the elevator range
 //            if  (elevatorposcurrent > elevatorposground && elevatorinput < -0.5) {
 //                myElevator.setElevatorPower(-elevatorinput);
 //            }
 //            if (!elevatorupmagnetswitch && elevatorinput > 0.5) {
 //                myElevator.setElevatorPower(-elevatorinput);
 //            }
+
+
 
             //   Values of the elevator position are in the variable init at the beginning
             // Dpad controls the position of the elevator
@@ -210,7 +221,7 @@ public class CDTeleopMecanum extends LinearOpMode {
                 myTurret.setTurretPower(turretA);
             }
 
-            // Buttons control the turret position
+            // Buttons control the turret and elevator position
             if (gamepad2.y) {
                 turreterror = myTurret.setTurretDirection("center");
                 if (myTurret.turretstop && !turreterror) {
@@ -229,7 +240,7 @@ public class CDTeleopMecanum extends LinearOpMode {
             }
             // Refresh the turret position and reported threshold
             currentturretposition = myTurret.getTurrentPos(); // Variable Based
-            turretpotcurrent = myTurret.getTurretPotDegrees(); // Potentiometer voltage based
+            turretpotcurrent = myTurret.getTurretPotVolts(); // Potentiometer voltage based
             currentturretthreshold = myTurret.getTurretCurrentThreshold();
 
 
