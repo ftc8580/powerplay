@@ -174,9 +174,9 @@ public class CDAutonRedDuck extends LinearOpMode {
                 //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -180, 20); //Turn left 180 degrees with a 20 second timeout
                 //sleep(250); //optional pause after each move in milliseconds
                 //myElevator.setElevatorPosition(28); //Move elevator to middle position. Do not set outside of range 2.5-39.
-                myTurret.setTurretDirection("center"); //Starting on right side - Set turret position to center
-                myTurret.setTurretDirection("right");  //Starting on right side - Set turret position -90 (right)
-                //myTurret.setTurretDirection("left");   //Starting on right side - Set turret position 90 (left)
+                myTurret.setTurretDirection("center"); //SSet turret position to center
+                myTurret.setTurretDirection("right");  //Set turret position -90 (right)
+                //myTurret.setTurretDirection("left");   //Set turret position 90 (left)
 
                 //  myIntake.setIntakePower(1.0);
                 //  myDuckSpinner.setDuckSpinnerPower(.7);
