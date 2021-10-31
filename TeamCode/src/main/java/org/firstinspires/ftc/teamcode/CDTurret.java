@@ -26,29 +26,30 @@ public class CDTurret {
         robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robotHardware.turretmotor.setPower(pow * Turretslow);
     }
-    public double getTurretPotDegrees() {
+    public double getTurretPotVolts() {
         // Reference https://docs.revrobotics.com/potentiometer/untitled-1#calculating-the-relationship-between-voltage-and-angle
-        return (turretpot.getVoltage()*81.8);
+        return (turretpot.getVoltage());
     }
+
     // create variable for counts per motor rev for the turret
-    static final double COUNTS_PER_TURRET_MOTOR_REV = 288; //Core Hex Motor
-    static final double DRIVE_GEAR_REDUCTION = .52; //This is greater than 1 if geared up
+    //static final double COUNTS_PER_TURRET_MOTOR_REV = 288; //Core Hex Motor
+    //static final double DRIVE_GEAR_REDUCTION = .52; //This is greater than 1 if geared up
 
     public boolean setTurretDirection(String turretlocationtarget) {
         // This method will return false for successful turn or true for an error.
         boolean turreterror = false;
         if (turretlocationtarget == "center") {
-            turreterror = setTurretPosition(122);
+            turreterror = setTurretPosition(1.5);
         } else if (turretlocationtarget == "left") {
-            turreterror = setTurretPosition(60);
+            turreterror = setTurretPosition(0.74);
         } else if (turretlocationtarget == "right") {
-            turreterror =  setTurretPosition(236);
+            turreterror =  setTurretPosition(2.95);
         }
         return turreterror;
     }
     public boolean setTurretPosition(double turretpostarget) {
         // This method will return false for successful turn or true for an error.
-        final double TURRET_THRESHOLD_POS = 5; // counts
+        final double TURRET_THRESHOLD_POS = 0.01; // volts
         double turretmult = 0.75; // to slow down the turret if needed
         // TODO: Need to change from our turretposcurrent to
         turretstop = false; // initially we want the turret to move for the while loop
@@ -56,7 +57,7 @@ public class CDTurret {
         while (!turretstop) {
             /* This gets the current turret position and sets it to a variable
              */
-            turretposlast = getTurretPotDegrees(); //updates every loop for the position going into the move.
+            turretposlast = getTurretPotVolts(); //updates every loop for the position going into the move.
 //            if (turretposcurrent == turretposlast) {
 //                turretstop = true;
 //                return true; // There was an error, the value didn't change.
@@ -72,7 +73,7 @@ public class CDTurret {
                 setTurretPower(1*turretmult);
                 turretstop = false;
             }
-            turretposcurrent = getTurretPotDegrees(); //updates every loop to see where we landed for lockup detection.
+            turretposcurrent = getTurretPotVolts(); //updates every loop to see where we landed for lockup detection.
         }
         return false; // Returns false if successfully made the moves, no error.
     }
