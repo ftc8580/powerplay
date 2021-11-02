@@ -167,15 +167,21 @@ public class CDAutonBlueDuck extends LinearOpMode {
          * 3. encodeDriveTurn (speed, turnDeg, turnTimeout)
          */
         if (opModeIsActive()) {
-            //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -55, 15); //Move back 55 inches with 15 second timeout
-//            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 30, 10); //Move right 30 inches with 10 second timeout
-//            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -30, 10); //Move foward 10 inches with 10 second timeout
-//            myDuckSpinner.setDuckSpinnerPower(.7);
-//            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 36, 13); //Move right 10 inches with 5 second timeout
-//            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 84, 22); //Move forward 30 inches with 10 second timeout
-//            myIntake.setIntakePower(-1.0);
-//            sleep (5000);
-
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
+            myTurret.setTurretDirection("center");
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2, 5);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -17, 8);
+            myDuckSpinner.setDuckSpinnerPower(.7);
+            sleep(2500);
+            myDuckSpinner.setDuckSpinnerPower(0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 35, 10.0);
+            myElevator.setElevatorPosition(28);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 25, 10.0);
+            myIntake.setIntakePower(.4);
+            sleep(1000);
+            myIntake.setIntakePower(0);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -25, 10.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -9, 5);
 
             //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 30, 20.0); //Move forward 30 inches with 10 second timeout
             //sleep(250); //optional pause after each move in milliseconds
@@ -197,16 +203,20 @@ public class CDAutonBlueDuck extends LinearOpMode {
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90.0, 3);
             //myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -34.0, 3);
 
-            myElevator.setElevatorPosition(12);
-            myElevator.setElevatorPosition(28);
-            myTurret.setTurretDirection("right");
-            myTurret.setTurretDirection("center");
-            myIntake.setIntakePower(1.0);
-            sleep(2000);
-            myIntake.setIntakePower(0);
-            myDuckSpinner.setDuckSpinnerPower(.7);
-            sleep(3000);
-            myDuckSpinner.setDuckSpinnerPower(0);
+
+
+
+
+//            myElevator.setElevatorPosition(12);
+//            myElevator.setElevatorPosition(28);
+//            myTurret.setTurretDirection("right");
+//            myTurret.setTurretDirection("center");
+//            myIntake.setIntakePower(1.0);
+//            sleep(2000);
+//            myIntake.setIntakePower(0);
+//            myDuckSpinner.setDuckSpinnerPower(.7);
+//            sleep(3000);
+//            myDuckSpinner.setDuckSpinnerPower(0);
 
             //Run until the end of the match (Driver presses STOP)
             //telemetry.addData("MotorCurrentPos (RR, RF, LR, LF)", " %7d %7d %7d %7d", myChassis.robotHardware.rightrearmotor.getCurrentPosition(), myChassis.robotHardware.rightfrontmotor.getCurrentPosition(), myChassis.robotHardware.leftrearmotor.getCurrentPosition(), myChassis.robotHardware.leftfrontmotor.getCurrentPosition());
