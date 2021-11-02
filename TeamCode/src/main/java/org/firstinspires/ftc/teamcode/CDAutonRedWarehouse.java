@@ -77,6 +77,7 @@ public class CDAutonRedWarehouse extends LinearOpMode {
             myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
             myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,25,10.0);
 
+
             //THIS MESSAGE IS ONLY SO I CA PUSH IT ONTO DEVELOP AN D TEST
 
             //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 30, 20.0); //Move forward 30 inches with 10 second timeout
