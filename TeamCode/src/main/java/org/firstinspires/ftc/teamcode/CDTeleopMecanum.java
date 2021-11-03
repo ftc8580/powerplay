@@ -35,10 +35,10 @@ public class CDTeleopMecanum extends LinearOpMode {
     //For setting elevator position using buttons
     //This is where you can set the values of the positions based off telemetry
     //TODO Check that these values are updated for the latest elevator so that freight can be put in proper level of alliance hub
-    public double elevatorposground = 5;
-    public double elevatorposbottom = 12.5;
-    public double elevatorposmiddle = 28.0;
-    public double elevatorpostop = 41;
+    public double elevatorposground = 7;
+    public double elevatorposbottom = 14.0;
+    public double elevatorposmiddle = 26.0;
+    public double elevatorpostop = 41.0;
     public double wheelheightforelevator = 12.5;
     // Initialize our local variables for use later in telemetry or other methods
     public double currentturretposition;
