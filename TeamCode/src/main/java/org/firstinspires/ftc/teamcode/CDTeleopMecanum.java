@@ -126,7 +126,7 @@ public class CDTeleopMecanum extends LinearOpMode {
             // We cubed the inputs to make the inputs more responsive
             y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
             x = Math.pow(gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
-            rx = Math.pow(gamepad1.right_stick_x,3);
+            rx = Math.pow(gamepad1.right_stick_x,3)*0.5;  //Reduced turn speed to make it easier to control
 
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio, but only when
