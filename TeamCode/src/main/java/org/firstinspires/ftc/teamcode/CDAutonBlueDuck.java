@@ -175,13 +175,17 @@ public class CDAutonBlueDuck extends LinearOpMode {
             sleep(2500);
             myDuckSpinner.setDuckSpinnerPower(0);
             myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 35, 10.0);
-            myElevator.setElevatorPosition(28);
+            myElevator.setElevatorPosition(26);
             myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 25, 10.0);
             myIntake.setIntakePower(.4);
             sleep(1000);
             myIntake.setIntakePower(0);
             myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -25, 10.0);
-            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -9, 5);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -11, 5);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -8, 10.0);
+            myElevator.setElevatorPosition(7);
+
+
 
             //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 30, 20.0); //Move forward 30 inches with 10 second timeout
             //sleep(250); //optional pause after each move in milliseconds
