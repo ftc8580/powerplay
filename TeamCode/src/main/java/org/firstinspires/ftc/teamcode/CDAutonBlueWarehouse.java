@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="CDAutonRedWarehouse", group="Linear Opmode")
+@Autonomous(name="CDAutonBlueWarehouse", group="Linear Opmode")
 //@Disabled
-public class CDAutonRedWarehouse extends LinearOpMode {
+public class CDAutonBlueWarehouse extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -66,16 +66,16 @@ public class CDAutonRedWarehouse extends LinearOpMode {
         if (opModeIsActive()) {
 
             myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -24, 10.0);
-            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15);
-            myTurret.setTurretDirection("left");
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 15, 15);
+            myTurret.setTurretDirection("right");
             myElevator.setElevatorPosition(28);
             myIntake.setIntakePower(-30);
             myTurret.setTurretDirection("center");
-            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 15, 15);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15);
             myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,40,10.0);
-            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -3, 15);
-            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
-            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,25,10.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 3, 15);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 10);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,-25,10.0);
 //            myElevator.setElevatorPosition(7);
 //            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,6,10);
 //            myIntake.setIntakePower(30);

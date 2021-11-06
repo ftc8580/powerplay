@@ -95,6 +95,7 @@ public class CDAutonRedDuck extends LinearOpMode {
         myChassis.robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         myTurret.robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+
         //Send telemetry to indicate successful Encoder reset
         telemetry.addData("MotorStartPos (RR, RF, LR, LF)", " %7d %7d %7d %7d", myChassis.robotHardware.rightrearmotor.getCurrentPosition(), myChassis.robotHardware.rightfrontmotor.getCurrentPosition(), myChassis.robotHardware.leftrearmotor.getCurrentPosition(), myChassis.robotHardware.leftfrontmotor.getCurrentPosition());
         telemetry.addData("Status", "Initialized");
@@ -164,26 +165,50 @@ public class CDAutonRedDuck extends LinearOpMode {
          * 3. encodeDriveTurn (speed, turnDeg, turnTimeout)
          */
         if (opModeIsActive()) {
-                // THIS IS WHERE YOU CHANGE THINGS FOR AUTON
-                //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 30, 20.0); //Move forward 30 inches with 10 second timeout
+
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -3, 5);
+            myTurret.setTurretDirection("center");
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 10);
+            //myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -1, 5);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -30, 8);
+            sleep(200);
+            myDuckSpinner.setDuckSpinnerPower(-.6);
+            sleep(2500);
+            myDuckSpinner.setDuckSpinnerPower(0);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 32, 10.0);
+            myElevator.setElevatorPosition(26);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -5, 10.0);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 33, 10.0);
+            myTurret.setTurretDirection("center");
+            myIntake.setIntakePower(.4);
+            sleep(1000);
+            myIntake.setIntakePower(0);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -29, 10.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 11, 5);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -6, 10.0);
+            myElevator.setElevatorPosition(7);
+
+
+            //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 30, 20.0); //Move forward 30 inches with 10 second timeout
                 //sleep(250); //optional pause after each move in milliseconds
                 //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -20, 10.0); //Move back 20 inches with 10 second timeout
                 //myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 10, 5); //Move right 10 inches with 5 second timeout
                 //myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15); //Move left 15 inches with 15 second timeout
-                //yChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10); //Turn right 90 degrees with 10 second timeout
+                //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10); //Turn right 90 degrees with 10 second timeout
                 //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -180, 20); //Turn left 180 degrees with a 20 second timeout
                 //sleep(250); //optional pause after each move in milliseconds
                 //myElevator.setElevatorPosition(28); //Move elevator to middle position. Do not set outside of range 2.5-39.
-                myTurret.setTurretPosition(0, "right"); //Starting on right side - Set turret position to center
-                myTurret.setTurretPosition(-90, "right");  //Starting on right side - Set turret position -90 (right)
-                //myTurret.setTurretPosition(90, "right");   //Starting on right side - Set turret position 90 (left)
+                //myTurret.setTurretDirection("center"); //SSet turret position to center
+                //myTurret.setTurretDirection("right");  //Set turret position -90 (right)
+                //myTurret.setTurretDirection("left");   //Set turret position 90 (left)
 
                 //  myIntake.setIntakePower(1.0);
                 //  myDuckSpinner.setDuckSpinnerPower(.7);
 
-                myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -4.5, 3);
-                myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90.0, 3);
-                myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -34.0, 3);
+//                myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -4.5, 3);
+//                myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90.0, 3);
+//                myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -34.0, 3);
 
 
                 //Run until the end of the match (Driver presses STOP)

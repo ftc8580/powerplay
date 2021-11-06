@@ -39,6 +39,11 @@ public class CDDriveChassisAuton {
         robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        robotHardware.rightrearmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robotHardware.rightfrontmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robotHardware.leftrearmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robotHardware.leftfrontmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     //Create methods to drive using encoder
@@ -46,8 +51,8 @@ public class CDDriveChassisAuton {
     static final double DRIVE_GEAR_REDUCTION = 1.0; //This is greater than 1 if geared up
     static final double WHEEL_DIAMETER_INCHES = 4.0; //Used for circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double DRIVE_SPEED = 0.2;
-    static final double TURN_SPEED = 0.1;
+    static final double DRIVE_SPEED = 0.4;
+    static final double TURN_SPEED = 0.3;
 
     //Method to drive straight move based on encoder counts.
     //Encoders are not reset as the move is based on the current position.
@@ -164,7 +169,7 @@ public class CDDriveChassisAuton {
 
         //Calculate turn inches with a 9.75" wheel base
         //TODO test accuracy on mats. it is slightly overturning right now.
-        double turnInches = turnDeg/360 * (2*3.1415*9.75);
+        double turnInches = turnDeg/360 * (2*3.1415*9);
 
         //Determine new target position and pass to motor controller
         newTurnTargetRR = robotHardware.rightrearmotor.getCurrentPosition() - (int)(turnInches * COUNTS_PER_INCH);
