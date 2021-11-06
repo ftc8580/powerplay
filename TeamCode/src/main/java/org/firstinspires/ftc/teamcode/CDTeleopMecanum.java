@@ -38,7 +38,7 @@ public class CDTeleopMecanum extends LinearOpMode {
     public double elevatorposground = 7;
     public double elevatorposbottom = 14.0;
     public double elevatorposmiddle = 26.0;
-    public double elevatorpostop = 41.0;
+    public double elevatorpostop = 38.0;
     public double wheelheightforelevator = 12.5;
     // Initialize our local variables for use later in telemetry or other methods
     public double currentturretposition;
