@@ -35,7 +35,7 @@ public class CDTeleopMecanum extends LinearOpMode {
     //For setting elevator position using buttons
     //This is where you can set the values of the positions based off telemetry
     //TODO Check that these values are updated for the latest elevator so that freight can be put in proper level of alliance hub
-    public double elevatorposground =3;
+    public double elevatorposground =3.5;
     public double elevatorposbottom = 14.0;
     public double elevatorposmiddle = 26.0;
     public double elevatorpostop = 35.0;
