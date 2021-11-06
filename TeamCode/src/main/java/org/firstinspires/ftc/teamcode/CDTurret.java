@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.*;
 //import com.qualcomm.robotcore.util.Hardware;
 
 public class CDTurret {
-    double Turretslow = .33;
+    double Turretslow = .60;
     CDHardware robotHardware;
     public boolean turretstop;
     public double turretposcurrent;
@@ -12,18 +12,15 @@ public class CDTurret {
     public double TURRET_CURRENT_THRESHOLD;
     public AnalogInput turretpot;
     public  CDTurret(CDHardware theHardware){
-
         robotHardware = theHardware;
-
         robotHardware.turretmotor.setDirection(DcMotorSimple.Direction.FORWARD);
         // Added to make sure that the turret defaults to brake mode
+        robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robotHardware.turretmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         turretpot = robotHardware.turretpot;
-
     }
 
     public void setTurretPower(double pow) {
-        robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robotHardware.turretmotor.setPower(pow * Turretslow);
     }
     public double getTurretPotVolts() {
@@ -39,7 +36,7 @@ public class CDTurret {
         // This method will return false for successful turn or true for an error.
         boolean turreterror = false;
         if (turretlocationtarget == "center") {
-            turreterror = setTurretPosition(1.66);
+            turreterror = setTurretPosition(1.63);
         } else if (turretlocationtarget == "left") {
             turreterror = setTurretPosition(0.84);
         } else if (turretlocationtarget == "right") {
@@ -50,7 +47,7 @@ public class CDTurret {
     public boolean setTurretPosition(double turretpostarget) {
         // This method will return false for successful turn or true for an error.
         final double TURRET_THRESHOLD_POS = 0.01; // volts
-        double turretmult = 0.75; // to slow down the turret if needed
+        double turretmult; // to set the  speed of the turret
         // TODO: Need to change from our turretposcurrent to
         turretstop = false; // initially we want the turret to move for the while loop
         turretposcurrent = 0; //updates every loop at the end, zero to start while loop for comparison
@@ -63,8 +60,13 @@ public class CDTurret {
 //                return true; // There was an error, the value didn't change.
 //            };
             TURRET_CURRENT_THRESHOLD = Math.abs(turretposlast - turretpostarget);
+            if (TURRET_CURRENT_THRESHOLD < .5) {
+                turretmult = .3;
+            } else {
+                turretmult = .6;
+            }
             if (TURRET_CURRENT_THRESHOLD < TURRET_THRESHOLD_POS) {
-                setTurretPower(0); // need to stop the turret before leaving the loop
+                setTurretPower(0.0); // need to stop the turret before leaving the loop
                 turretstop = true; // leave the while loop
             } else if (turretposlast > turretpostarget) {
                 setTurretPower(-1*turretmult);
