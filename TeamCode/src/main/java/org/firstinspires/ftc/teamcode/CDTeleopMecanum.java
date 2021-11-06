@@ -35,11 +35,11 @@ public class CDTeleopMecanum extends LinearOpMode {
     //For setting elevator position using buttons
     //This is where you can set the values of the positions based off telemetry
     //TODO Check that these values are updated for the latest elevator so that freight can be put in proper level of alliance hub
-    public double elevatorposground =3.5;
+    public double elevatorposground = 4.5;
     public double elevatorposbottom = 14.0;
     public double elevatorposmiddle = 26.0;
-    public double elevatorpostop = 35.0;
-    public double wheelheightforelevator = 12.5;
+    public double elevatorpostop = 33.0;
+    public double wheelheightforelevator = 15;
     // Initialize our local variables for use later in telemetry or other methods
     public double currentturretposition;
     public double currentturretthreshold;
@@ -150,8 +150,11 @@ public class CDTeleopMecanum extends LinearOpMode {
             }
             //move elevator + = up - = down
             // Multiple by -1 since y input is reversed
-            double elevatorinput = (gamepad2.left_stick_y * 1);
-            if  (elevatorposcurrent <= elevatorposground && elevatorinput > 0) {
+            float elevatorinput = (gamepad2.left_stick_y * 1);
+            double eleDownThresh = Math.abs(elevatorposcurrent - elevatorposground);
+            // Just in case needed: double eleUpThresh = Math.abs(elevatorposcurrent - elevatorposground);
+
+            if (eleDownThresh <= .5 && elevatorinput > 0) {
                 myElevator.setElevatorPower(0);
             } else if (elevatorupmagnetswitch && elevatorinput < 0) {
                 myElevator.setElevatorPower(0);
@@ -213,12 +216,19 @@ public class CDTeleopMecanum extends LinearOpMode {
             }
             // Used to make sure that the elevator is up when we turn the turret past wheels
             elevatorisdown = false;
-            if (elevatorposcurrent < wheelheightforelevator) {
+            double threshWheelsTarget = .5;
+            double threshWheelsCurrent = Math.abs(elevatorposcurrent - wheelheightforelevator);
+            if (threshWheelsTarget >= threshWheelsCurrent) {
                 elevatorisdown = true;
             }
-//            if (elevatorisdown && ((myTurret.getTurretPotVolts() >= 1.60) || (myTurret.getTurrentPos() <=1.78))) {
-           if (!elevatorisdown) {
-                double turretA = gamepad2.right_stick_x;
+            float turretA = gamepad2.right_stick_x;
+            if (elevatorisdown) {
+                if (myTurret.getTurretPotVolts() <= 1.60 && turretA > .1) {
+                    myTurret.setTurretPower(turretA);
+                } else if (myTurret.getTurrentPos() >= 1.78 && turretA < -.1) {
+                    myTurret.setTurretPower(turretA);
+                }
+            } else if (!elevatorisdown) {
                 myTurret.setTurretPower(turretA);
             }
 
