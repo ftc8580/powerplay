@@ -35,7 +35,7 @@ public class CDTeleopMecanum extends LinearOpMode {
     //For setting elevator position using buttons
     //This is where you can set the values of the positions based off telemetry
     //TODO Check that these values are updated for the latest elevator so that freight can be put in proper level of alliance hub
-    public double elevatorposground = 7;
+    public double elevatorposground =10;
     public double elevatorposbottom = 14.0;
     public double elevatorposmiddle = 26.0;
     public double elevatorpostop = 38.0;
@@ -216,7 +216,7 @@ public class CDTeleopMecanum extends LinearOpMode {
             if (elevatorposcurrent < wheelheightforelevator) {
                 elevatorisdown = true;
             }
-            if (!elevatorisdown) {
+            if (elevatorisdown && ((myTurret.getTurretPotVolts() >= 1.60) || (myTurret.getTurrentPos() <=1.78))) {
                 double turretA = gamepad2.right_stick_x;
                 myTurret.setTurretPower(turretA);
             }
