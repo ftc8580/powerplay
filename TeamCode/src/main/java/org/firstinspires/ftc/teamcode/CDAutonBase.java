@@ -78,7 +78,7 @@ public class CDAutonBase extends LinearOpMode {
     }
 
     // Public variables for use in executeautons method
-    public CDHardware myHardware = new CDHardware(hardwareMap);
+    public CDHardware myHardware;
     public CDDriveChassisAuton myChassis;
     public CDDuckSpinner myDuckSpinner;
     public CDElevator myElevator;
@@ -90,11 +90,12 @@ public class CDAutonBase extends LinearOpMode {
     public void runOpMode() {
         ElapsedTime myTimer = new ElapsedTime();
         //double moveBackTimer = -1;
-        CDDriveChassisAuton myChassis = new CDDriveChassisAuton(myHardware);
-        CDDuckSpinner myDuckSpinner = new CDDuckSpinner(myHardware);
-        CDElevator myElevator = new CDElevator(myHardware);
-        CDIntake myIntake = new CDIntake(myHardware);
-        CDTurret myTurret = new CDTurret(myHardware);
+        myHardware = new CDHardware(hardwareMap);
+        myChassis = new CDDriveChassisAuton(myHardware);
+        myDuckSpinner = new CDDuckSpinner(myHardware);
+        myElevator = new CDElevator(myHardware);
+        myIntake = new CDIntake(myHardware);
+        myTurret = new CDTurret(myHardware);
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");
@@ -209,17 +210,9 @@ public class CDAutonBase extends LinearOpMode {
     }
 
     public void executeAuton() {
-        myTurret.setTurretDirection("center");
-        sleep(200);
         myDuckSpinner.setDuckSpinnerPower(-.6);
         sleep(2500);
         myDuckSpinner.setDuckSpinnerPower(0);
-        myTurret.setTurretDirection("center");
-        myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
-        myIntake.setIntakePower(.4);
-        sleep(1000);
-        myIntake.setIntakePower(0);
-        myElevator.setElevatorPosition(7);
     }
     /**
      * Initialize the Vuforia localization engine.
