@@ -6,6 +6,14 @@ import com.qualcomm.robotcore.hardware.*;
 
 public class CDElevator {
 
+   // This is where we set the values for our distance sensor
+    public double defaultelevatorposition = 26.0;
+    public double elevatorposground = 4.0;
+    public double elevatorposbottom = 14.0;
+    public double elevatorposmiddle = 26.0;
+    public double elevatorpostop = 35.0;
+    public double wheelheightforelevator = 12;
+
     CDHardware robotHardware;
     CDDistanceSensor myDistanceSensor;
     public boolean elevatorstop;
@@ -15,7 +23,6 @@ public class CDElevator {
     public double elevatorposcurrent;
     public double elevatorlastpos;
     public TouchSensor upelevatormagnetswitch;
-
 
     public CDElevator(CDHardware theHardware){
 

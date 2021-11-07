@@ -31,11 +31,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
     //For setting elevator position using buttons
     //This is where you can set the values of the positions based off telemetry
     //TODO Check that these values are updated for the latest elevator so that freight can be put in proper level of alliance hub
-    public double elevatorposground = 4.0;
-    public double elevatorposbottom = 14.0;
-    public double elevatorposmiddle = 26.0;
-    public double elevatorpostop = 35.0;
-    public double wheelheightforelevator = 12;
+
     // Initialize our local variables for use later in telemetry or other methods
     public double currentturretposition;
     public double currentturretthreshold;
@@ -121,12 +117,12 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             }
             // Used to make sure that the elevator is up when we turn the turret past wheels
             elevatorisdown = false;
-            if (elevatorposcurrent <= wheelheightforelevator) {
+            if (elevatorposcurrent <= myElevator.wheelheightforelevator) {
                 elevatorisdown = true;
             }
             double elevatorinput = (gamepad2.left_stick_y * 1.0);
             double elevatorEaseOut = 1.0;
-            if ((elevatorposcurrent <= elevatorposground && elevatorinput > .01) || ((elevatorupmagnetswitch || elevatorposcurrent >= elevatorpostop) && elevatorinput < -.01)) {
+            if ((elevatorposcurrent <= myElevator.elevatorposground && elevatorinput > .01) || ((elevatorupmagnetswitch || elevatorposcurrent >= myElevator.elevatorpostop) && elevatorinput < -.01)) {
                 myElevator.setElevatorPower(0);
             } else {
                 if ((elevatorinput > .01 && elevatorposcurrent < 10) || (elevatorinput < -.01 && elevatorposcurrent > 30)) {
@@ -139,27 +135,27 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             //  Values of the elevator position are defined in the variable init at the beginning
             // Dpad controls the position of the elevator
             if (gamepad2.dpad_down) {
-                myElevator.setElevatorPosition(elevatorposground);
+                myElevator.setElevatorPosition(myElevator.elevatorposground);
             } else if (gamepad2.dpad_left) {
-                myElevator.setElevatorPosition(elevatorposbottom);
+                myElevator.setElevatorPosition(myElevator.elevatorposbottom);
             } else if (gamepad2.dpad_right) {
-                myElevator.setElevatorPosition(elevatorposmiddle);
+                myElevator.setElevatorPosition(myElevator.elevatorposmiddle);
             } else if (gamepad2.dpad_up) {
-                myElevator.setElevatorPosition(elevatorpostop);
+                myElevator.setElevatorPosition(myElevator.elevatorpostop);
             }
             // Buttons control the turret and elevator position
             if (gamepad2.y) {
                 turreterror = myTurret.setTurretDirection("center");
                 if (myTurret.turretstop && !turreterror) {
-                    myElevator.setElevatorPosition(elevatorposground);
+                    myElevator.setElevatorPosition(myElevator.elevatorposground);
                 }
             } else if (gamepad2.x) {
-                myElevator.setElevatorPosition(elevatorposmiddle);
+                myElevator.setElevatorPosition(myElevator.elevatorposmiddle);
                 if (myElevator.elevatorstop) {
                     turreterror = myTurret.setTurretDirection("left");
                 }
             } else if (gamepad2.b) {
-                myElevator.setElevatorPosition(elevatorposmiddle);
+                myElevator.setElevatorPosition(myElevator.elevatorposmiddle);
                 if (myElevator.elevatorstop) {
                     turreterror = myTurret.setTurretDirection("right");
                 }
