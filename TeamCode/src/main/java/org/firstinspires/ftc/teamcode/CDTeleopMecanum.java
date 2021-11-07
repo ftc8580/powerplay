@@ -8,15 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //Libraries for imu
 //import com.qualcomm.hardware.bosch.BNO055IMU;
 
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.util.Locale;
 
@@ -25,7 +19,7 @@ import java.util.Locale;
 public class CDTeleopMecanum extends LinearOpMode implements Runnable {
 
     // Initialize our teleopThread
-    private Thread teleopThread;
+    private Thread teleopGamepad1Thread;
     // Initialize our local variables with values
     // These "slow" variable is used to control the overall speed of the robot
     // TODO: Work with Drive Team to determine proper baseSpeed, duckmulti
@@ -74,19 +68,14 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
 
     @Override
     public void runOpMode() {
-
         // Initialize our classes to variables
         myHardware = new CDHardware(hardwareMap);
-//        imu = myHardware.cdimu;
-        CDDriveChassis myChassis = new CDDriveChassis(myHardware);
-        CDDuckSpinner myDuckSpinner = new CDDuckSpinner(myHardware);
         CDElevator myElevator = new CDElevator(myHardware);
         CDIntake myIntake = new CDIntake(myHardware);
         CDTurret myTurret = new CDTurret(myHardware);
         CDDistanceSensor myDistanceSensor = new CDDistanceSensor(myHardware);
-
-
         // IMU Is commented out as we don't use it
+//        imu = myHardware.cdimu;
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
@@ -99,14 +88,13 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
 //        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 //        imu.initialize(parameters);
 
-        telemetry.addData("Status", "Fully Initialized");
-        telemetry.update();
-
         //Wait for the driver to press PLAY on the driver station phone
         // make a new thread
-        teleopThread = new Thread(this);
+        telemetry.addData("Status", "Fully Initialized");
+        telemetry.update();
+        teleopGamepad1Thread = new Thread(this);
         waitForStart();
-        teleopThread.start(); // Start the teleopThread
+        teleopGamepad1Thread.start(); // Start the teleopThread
 
         //Run until the end (Driver presses STOP)
 
@@ -118,38 +106,13 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             // Disabling IMU as it is not in use Uncomment here to use in opmode
 //            imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
-            // User controls for the robot speed overall
-            if (gamepad1.left_bumper) {
-                robotSpeed=baseSpeed*0.5;
-            } else if (gamepad1.right_bumper) {
-                robotSpeed = baseSpeed*1.5;
-            } else {
-                robotSpeed=baseSpeed;
-            }
+            // Everything Gamepad 2
+
           /* This gets the current distance off the floor from the Elevator Distance Sensor
-          and sets it to a variable
+          and sets it to a variable. The following lines of code are focused on keeping track of the elevator
            */
-            elevatorposcurrent = myDistanceSensor.getElevatorDistance();
+            elevatorposcurrent = myElevator.getElevatorPosition();
             elevatorcurrentthreshold = myElevator.ELEVATORCURRENTTHRESHOLD;
-            // We cubed the inputs to make the inputs more responsive
-            y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
-            x = Math.pow(gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
-            rx = Math.pow(gamepad1.right_stick_x,3)*0.5;  //Reduced turn speed to make it easier to control
-
-            // Denominator is the largest motor power (absolute value) or 1
-            // This ensures all the powers maintain the same ratio, but only when
-            // at least one is out of the range [-1, 1]
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            leftFrontPower = (y + x - rx) / denominator;
-            leftRearPower = (y - x - rx) / denominator;
-            rightFrontPower = (y - x + rx) / denominator;
-            rightRearPower = (y + x + rx) / denominator;
-
-            //move robot - drive chassis
-            myChassis.setLeftFrontPower(leftFrontPower* robotSpeed);
-            myChassis.setLeftRearPower(leftRearPower* robotSpeed);
-            myChassis.setRightFrontPower(rightFrontPower* robotSpeed);
-            myChassis.setRightRearPower(rightRearPower* robotSpeed);
 
             // magnetic switch
             elevatorupmagnetswitch = false;
@@ -158,12 +121,9 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             }
             // Used to make sure that the elevator is up when we turn the turret past wheels
             elevatorisdown = false;
-            elevatorposcurrent = myElevator.getElevatorPosition();
             if (elevatorposcurrent <= wheelheightforelevator) {
                 elevatorisdown = true;
             }
-            //move elevator + = up - = down
-            // Multiple by -1 since y input is reversed
             double elevatorinput = (gamepad2.left_stick_y * 1.0);
             double elevatorEaseOut = 1.0;
             if ((elevatorposcurrent <= elevatorposground && elevatorinput > .01) || ((elevatorupmagnetswitch || elevatorposcurrent >= elevatorpostop) && elevatorinput < -.01)) {
@@ -176,8 +136,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 }
                 myElevator.setElevatorPower(-elevatorinput*elevatorEaseOut);
             }
-
-            //   Values of the elevator position are in the variable init at the beginning
+            //  Values of the elevator position are defined in the variable init at the beginning
             // Dpad controls the position of the elevator
             if (gamepad2.dpad_down) {
                 myElevator.setElevatorPosition(elevatorposground);
@@ -205,20 +164,11 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                     turreterror = myTurret.setTurretDirection("right");
                 }
             }
-            // Trying to control the elevator range
-//            if  (elevatorposcurrent > elevatorposground && elevatorinput < -0.5) {
-//                myElevator.setElevatorPower(-elevatorinput);
-//            }
-//            if (!elevatorupmagnetswitch && elevatorinput > 0.5) {
-//                myElevator.setElevatorPower(-elevatorinput);
-//            }
 
             //intake ( left trigger), deliver(right trigger)
             // Convert the analog trigger to a button push
             double intake = gamepad2.left_trigger;
             double deliver = gamepad2.right_trigger;
-
-
             if (intake> 0.2) {
                 myIntake.setIntakePower(intake*intakemult);
             } else if (deliver > 0.2) {
@@ -227,15 +177,6 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 myIntake.setIntakePower(0.0);
             }
 
-            //duck input is a boolean - it is on or off - if do not see option try boolean
-            if (gamepad1.a) {
-                duckpower = 1*duckmulti;
-            } else if (gamepad1.b) {
-                duckpower = -1*duckmulti;
-            } else  {
-                duckpower = 0;
-            }
-            myDuckSpinner.setDuckSpinnerPower(duckpower);
 
             // TURRET CODE
             // Handle turret lockup error:
@@ -257,14 +198,9 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 myTurret.setTurretPower(0.0);
             }
 
-            // Set up our telemetry dashboard, everything is now in this method
-            // Use the imuTelemetry bool to toggle IMU feedback on driver station
-            if (gamepad1.dpad_left) {
-                imuTelemetry = false;
-            }
-//            else if (gamepad1.dpad_right) {
-//                imuTelemetry = true;
-//            } // Diabled IMU telemetry for now
+            // End gamepad 2
+
+            // Telemetry Stuff -
             // need to slow down the logging
             if (i == 10) {
                 composeTelemetry(imuTelemetry);
@@ -275,6 +211,58 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
         }
     }
 
+    // Threaded gamepad 1
+    @SuppressWarnings("BusyWait")
+    public void run() {
+        try {
+            CDDriveChassis myChassis = new CDDriveChassis(myHardware);
+            CDDuckSpinner myDuckSpinner = new CDDuckSpinner(myHardware);
+            while (opModeIsActive()) {
+
+                // Everything gamepad 1:
+                // User controls for the robot speed overall
+                if (gamepad1.left_bumper) {
+                    robotSpeed=baseSpeed*0.5;
+                } else if (gamepad1.right_bumper) {
+                    robotSpeed = baseSpeed*1.5;
+                } else {
+                    robotSpeed=baseSpeed;
+                }
+                // We cubed the inputs to make the inputs more responsive
+                y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
+                x = Math.pow(gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
+                rx = Math.pow(gamepad1.right_stick_x,3)*0.5;  //Reduced turn speed to make it easier to control
+
+                // Denominator is the largest motor power (absolute value) or 1
+                // This ensures all the powers maintain the same ratio, but only when
+                // at least one is out of the range [-1, 1]
+                double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+                leftFrontPower = (y + x - rx) / denominator;
+                leftRearPower = (y - x - rx) / denominator;
+                rightFrontPower = (y - x + rx) / denominator;
+                rightRearPower = (y + x + rx) / denominator;
+
+                //move robot - drive chassis
+                myChassis.setLeftFrontPower(leftFrontPower* robotSpeed);
+                myChassis.setLeftRearPower(leftRearPower* robotSpeed);
+                myChassis.setRightFrontPower(rightFrontPower* robotSpeed);
+                myChassis.setRightRearPower(rightRearPower* robotSpeed);
+
+                //duck input is a boolean - it is on or off - if do not see option try boolean
+                if (gamepad1.a) {
+                    duckpower = 1*duckmulti;
+                } else if (gamepad1.b) {
+                    duckpower = -1*duckmulti;
+                } else  {
+                    duckpower = 0;
+                }
+                myDuckSpinner.setDuckSpinnerPower(duckpower);
+                // End gamepad 1
+            }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
     //----------------------------------------------------------------------------------------------
     // Telemetry Configuration
     //----------------------------------------------------------------------------------------------
@@ -295,7 +283,6 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
 //                    gravity = imu.getGravity();
 //                }
 //            });
-//            //TODO: Add telemetry for IMU Gyro need to be tested
 //            //telemetry.addData("heading ", heading);
 //            telemetry.addLine()
 //                    .addData("status", new Func<String>() {
@@ -362,18 +349,6 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
         }
         // Loop and update the dashboard
         telemetry.update();
-    }
-    @Override
-    @SuppressWarnings("BusyWait")
-    public void run() {
-        while (opModeIsActive()) {
-            try {
-                continue;
-                // boolean success = myElevator.setElevatorPosition(elevatorposmiddle);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
     //----------------------------------------------------------------------------------------------
     // Formatting
