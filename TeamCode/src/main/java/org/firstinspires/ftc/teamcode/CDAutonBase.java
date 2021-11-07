@@ -1,44 +1,36 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+// Vuforia TensorFlow imports
+import org.firstinspires.ftc.robotcore.external.*;
+import org.firstinspires.ftc.robotcore.external.navigation.*;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.*;
+import org.firstinspires.ftc.robotcore.external.tfod.*;
+import java.util.*;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Parameters;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-
-import java.util.List;
-
-//import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-//import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//import com.qualcomm.robotcore.hardware.DcMotorSimple;
-//import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name="CDAutonBase", group="Linear Opmode")
 //@Disabled
 public class CDAutonBase extends LinearOpMode {
-  /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
-   * the following 4 detectable objects
-   *  0: Ball,
-   *  1: Cube,
-   *  2: Duck,
-   *  3: Marker (duck location tape marker)
-   *
-   *  Two additional model assets are available which only contain a subset of the objects:
-   *  FreightFrenzy_BC.tflite  0: Ball,  1: Cube
-   *  FreightFrenzy_DM.tflite  0: Duck,  1: Marker
-   */
+    /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
+     * the following 4 detectable objects
+     *  0: Ball,
+     *  1: Cube,
+     *  2: Duck,
+     *  3: Marker (duck location tape marker)
+     *
+     *  Two additional model assets are available which only contain a subset of the objects:
+     *  FreightFrenzy_BC.tflite  0: Ball,  1: Cube
+     *  FreightFrenzy_DM.tflite  0: Duck,  1: Marker
+     */
     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
     private static final String[] LABELS = {
-      "Ball",
-      "Cube",
-      "Duck",
-      "Marker"
+            "Ball",
+            "Cube",
+            "Duck",
+            "Marker"
     };
 
     /*
@@ -68,24 +60,46 @@ public class CDAutonBase extends LinearOpMode {
      */
     private TFObjectDetector tfod;
 
+    public static int findClosest(int[] arr, int target) {
+        int idx = 0;
+        int dist = Math.abs(arr[0] - target);
+
+        for (int i = 1; i < arr.length; i++) {
+            int cdist = Math.abs(arr[i] - target);
+
+            if (cdist < dist) {
+                idx = i;
+                dist = cdist;
+            }
+        }
+
+//        return arr[idx];// In case we want the value someday
+        return idx;
+    }
+
+    // Public variables for use in executeautons method
+    public CDHardware myHardware = new CDHardware(hardwareMap);
+    public CDDriveChassisAuton myChassis;
+    public CDDuckSpinner myDuckSpinner;
+    public CDElevator myElevator;
+    public CDIntake myIntake;
+    public CDTurret myTurret;
+    public int duckLocation;
+
     @Override
     public void runOpMode() {
         ElapsedTime myTimer = new ElapsedTime();
         //double moveBackTimer = -1;
-
-        CDHardware myHardware = new CDHardware(hardwareMap);
         CDDriveChassisAuton myChassis = new CDDriveChassisAuton(myHardware);
         CDDuckSpinner myDuckSpinner = new CDDuckSpinner(myHardware);
         CDElevator myElevator = new CDElevator(myHardware);
         CDIntake myIntake = new CDIntake(myHardware);
         CDTurret myTurret = new CDTurret(myHardware);
-        // CDGyroscope myGyro = new CDGyroscope();
-        CDDistanceSensor myDistanceSensor = new CDDistanceSensor(myHardware);
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");
 //        telemetry.update();
-// Setting the Modes, Do not need to change
+        // Setting the Modes, Do not need to change
         myChassis.robotHardware.rightrearmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         myChassis.robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         myChassis.robotHardware.leftrearmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -121,42 +135,59 @@ public class CDAutonBase extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(2.5, 16.0/9.0);
+            tfod.setZoom(1.2, 16.0/9.0);
         }
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
 //        telemetry.update();
 
-
+        // CD 8580 Use a variable to catch last location of the duck
+        duckLocation = 0; // If we find a duck and relocate it, then it will not be -1
+        // Key (left, top, right, bottom)
+        // LEFT (115, 160, 340, 395)
+        // CENTER (600, 255, 720, 385)
+        // RIGHT (975, 290, 1080, 390)
+        int zeroThreshold = 0;
+        int leftThreshold = 115;
+        int centerThreshold = 600;
+        int rightThreshold = 975;
+        int[] arr = new int[] {zeroThreshold, leftThreshold, centerThreshold, rightThreshold};
         // Logic below is that we want it to start recognizing when we init but not after we start
-           while (!opModeIsActive()) {
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-
-                        // step through the list of recognitions and display boundary info.
-                        int i = 0;
-                        for (Recognition recognition : updatedRecognitions) {
-                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                    recognition.getLeft(), recognition.getTop());
-                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                    recognition.getRight(), recognition.getBottom());
-                            i++;
+        while (!opModeIsActive()) {
+            if (tfod != null) {
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
+                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+                    int i = 0;
+                    // step through the list of recognitions and display boundary info.
+                    for (Recognition recognition : updatedRecognitions) {
+                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                recognition.getLeft(), recognition.getTop());
+//                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+//                                recognition.getRight(), recognition.getBottom());
+                        // CD 8580 Captures a duck for the object, if we train our own, we would relabel it here for capture
+                        if (recognition.getLabel().equals("Duck")) {
+                            duckLocation = findClosest(arr, Math.round(recognition.getLeft()));
+                            telemetry.addData("Duck Location:", duckLocation );
+                            if (duckLocation != 0) {
+                                telemetry.addData("Found A Duck Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
+                            } else {
+                                telemetry.addData("No Duck Delivery Location Determined Defaulting:", duckLocation);
+                            }
                         }
-                        telemetry.update();
+                        i++;
                     }
                 }
+                telemetry.update();
             }
-                   //Wait fo the game to start (driver presses PLAY)
-            waitForStart();
-            myTimer.reset();
-        // TODO: Need to use the timer to program the robot in Auton competition
-
+        }
+        //Wait fo the game to start (driver presses PLAY)
+        waitForStart();
+        myTimer.reset();
         //Step through each leg of path
         //Note: Reverse movement is obtained by selling a negative distance not speed
         /*Drive code is written using 3 methods
@@ -166,45 +197,38 @@ public class CDAutonBase extends LinearOpMode {
          * 2. encoderDriveStrafe (speed, strafeInches, strafeTimeout)
          * 3. encodeDriveTurn (speed, turnDeg, turnTimeout)
          */
+
         if (opModeIsActive()) {
-                // THIS IS WHERE YOU CHANGE THINGS FOR AUTON
-                //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 30, 20.0); //Move forward 30 inches with 10 second timeout
-                //sleep(250); //optional pause after each move in milliseconds
-                //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -20, 10.0); //Move back 20 inches with 10 second timeout
-                //myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 10, 5); //Move right 10 inches with 5 second timeout
-                //myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15); //Move left 15 inches with 15 second timeout
-                //yChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10); //Turn right 90 degrees with 10 second timeout
-                //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -180, 20); //Turn left 180 degrees with a 20 second timeout
-                //sleep(250); //optional pause after each move in milliseconds
-                //myElevator.setElevatorPosition(28); //Move elevator to middle position. Do not set outside of range 2.5-39.
-                //myTurret.setTurretDirection("center"); //SSet turret position to center
-                //myTurret.setTurretDirection("right");  //Set turret position -90 (right)
-                //myTurret.setTurretDirection("left");   //Set turret position 90 (left)
-                //  myIntake.setIntakePower(1.0);
-                //  myDuckSpinner.setDuckSpinnerPower(.7);
-
-                myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -4.5, 3);
-                myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90.0, 3);
-                myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -34.0, 3);
-
-
-                //Run until the end of the match (Driver presses STOP)
-                //telemetry.addData("MotorCurrentPos (RR, RF, LR, LF)", " %7d %7d %7d %7d", myChassis.robotHardware.rightrearmotor.getCurrentPosition(), myChassis.robotHardware.rightfrontmotor.getCurrentPosition(), myChassis.robotHardware.leftrearmotor.getCurrentPosition(), myChassis.robotHardware.leftfrontmotor.getCurrentPosition());
-                //telemetry.update();
-                //sleep (5000);
-                //TODO figure out how to show target position. 3 lines above will give final position.
-                //TODO: Add telemetry for IMU Gyro
+            executeAuton();
         }
     }
 
-       /**
+    public static double getDuckDeliveryLocation(int duckLocation, CDElevator myElevator){
+        double[] duckDeliveryPositions = new double[] {myElevator.defaultelevatorposition, myElevator.elevatorposbottom, myElevator.elevatorposmiddle, myElevator.elevatorpostop};
+        return duckDeliveryPositions[duckLocation];
+    }
+
+    public void executeAuton() {
+        myTurret.setTurretDirection("center");
+        sleep(200);
+        myDuckSpinner.setDuckSpinnerPower(-.6);
+        sleep(2500);
+        myDuckSpinner.setDuckSpinnerPower(0);
+        myTurret.setTurretDirection("center");
+        myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
+        myIntake.setIntakePower(.4);
+        sleep(1000);
+        myIntake.setIntakePower(0);
+        myElevator.setElevatorPosition(7);
+    }
+    /**
      * Initialize the Vuforia localization engine.
      */
     private void initVuforia() {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
-        Parameters parameters = new Parameters();
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = CameraDirection.BACK;
@@ -220,7 +244,7 @@ public class CDAutonBase extends LinearOpMode {
      */
     private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-            "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfodParameters.minResultConfidence = 0.8f;
         tfodParameters.isModelTensorFlow2 = true;
