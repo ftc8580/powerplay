@@ -11,7 +11,7 @@ public class CDElevator {
     public double elevatorposground = 4.0;
     public double elevatorposbottom = 14.0;
     public double elevatorposmiddle = 26.0;
-    public double elevatorpostop = 35.0;
+    public double elevatorpostop = 38.0;
     public double wheelheightforelevator = 12;
 
     CDHardware robotHardware;
