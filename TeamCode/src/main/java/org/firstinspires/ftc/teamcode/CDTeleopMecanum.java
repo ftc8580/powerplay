@@ -27,6 +27,11 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
     public double intakemult = 1.5;
     public double delivermult = 1.5;
     public double duckmulti = 0.6;
+    public final double DuckIncrement = 0.01; // amount to ramp motor each CYCLE_MS cycle
+    public final int DuckCycleIncrement = 50; // period of each cycle
+    public final double Duck_Max_Fwd = 0.6; // Maximum FWD power applied to motor
+    public final double Duck_Max_Rev = -0.6; // Maximum REV power applied to motor
+
     public boolean imuTelemetry = false;
     //For setting elevator position using buttons
     //This is where you can set the values of the positions based off telemetry
@@ -218,16 +223,16 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 // Everything gamepad 1:
                 // User controls for the robot speed overall
                 if (gamepad1.left_trigger != 0) {
-                    robotSpeed=baseSpeed*0.5;
+                    robotSpeed = baseSpeed * 0.5;
                 } else if (gamepad1.right_trigger != 0) {
-                    robotSpeed = baseSpeed*1.5;
+                    robotSpeed = baseSpeed * 1.5;
                 } else {
-                    robotSpeed=baseSpeed;
+                    robotSpeed = baseSpeed;
                 }
                 // We cubed the inputs to make the inputs more responsive
-                y = Math.pow(gamepad1.left_stick_y,3); // Remember, this is reversed!
-                x = Math.pow(gamepad1.left_stick_x * -1.1,3); // Counteract imperfect strafing
-                rx = Math.pow(gamepad1.right_stick_x,3)*0.5;  //Reduced turn speed to make it easier to control
+                y = Math.pow(gamepad1.left_stick_y, 3); // Remember, this is reversed!
+                x = Math.pow(gamepad1.left_stick_x * -1.1, 3); // Counteract imperfect strafing
+                rx = Math.pow(gamepad1.right_stick_x, 3) * 0.5;  //Reduced turn speed to make it easier to control
 
                 // Denominator is the largest motor power (absolute value) or 1
                 // This ensures all the powers maintain the same ratio, but only when
@@ -239,26 +244,47 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 rightRearPower = (y + x + rx) / denominator;
 
                 //move robot - drive chassis
-                myChassis.setLeftFrontPower(leftFrontPower* robotSpeed);
-                myChassis.setLeftRearPower(leftRearPower* robotSpeed);
-                myChassis.setRightFrontPower(rightFrontPower* robotSpeed);
-                myChassis.setRightRearPower(rightRearPower* robotSpeed);
+                myChassis.setLeftFrontPower(leftFrontPower * robotSpeed);
+                myChassis.setLeftRearPower(leftRearPower * robotSpeed);
+                myChassis.setRightFrontPower(rightFrontPower * robotSpeed);
+                myChassis.setRightRearPower(rightRearPower * robotSpeed);
 
                 //duck input is a boolean - it is on or off - if do not see option try boolean
-                if (gamepad1.a) {
-                    duckpower = 1*duckmulti;
-                } else if (gamepad1.b) {
-                    duckpower = -1*duckmulti;
-                } else  {
+                if (!gamepad1.x && !gamepad1.y && !gamepad1.a && !gamepad1.b) {
                     duckpower = 0;
+                    myDuckSpinner.setDuckSpinnerPower(duckpower);
+                } else {
+                    while (gamepad1.x) {
+                        duckpower += DuckIncrement;
+                        if (duckpower >= Duck_Max_Fwd) {
+                            duckpower = Duck_Max_Fwd;
+                        }
+                        myDuckSpinner.setDuckSpinnerPower(duckpower);
+                        sleep(DuckCycleIncrement);
+                    }
+                    while (gamepad1.y) {
+                        duckpower -= DuckIncrement;
+                        if (duckpower >= Duck_Max_Rev) {
+                            duckpower = Duck_Max_Rev;
+                        }
+                        myDuckSpinner.setDuckSpinnerPower(duckpower);
+                        sleep(DuckCycleIncrement);
+                    }
+                    while (gamepad1.a) {
+                        duckpower = 0.6;
+                        myDuckSpinner.setDuckSpinnerPower(duckpower);
+                    }
+                    while (gamepad1.b) {
+                        duckpower = -0.6;
+                        myDuckSpinner.setDuckSpinnerPower(duckpower);
+                    }
                 }
-                myDuckSpinner.setDuckSpinnerPower(duckpower);
-                // End gamepad 1
             }
-    } catch (Exception e) {
-        e.printStackTrace();
+            // End gamepad 1
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
     //----------------------------------------------------------------------------------------------
     // Telemetry Configuration
     //----------------------------------------------------------------------------------------------
