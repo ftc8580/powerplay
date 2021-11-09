@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name="CDAutonBlueDuck", group="Linear Opmode")
+@Autonomous(name="CDAutonBlueDuck_LONG", group="Linear Opmode")
 //@Disabled
 public class CDAutonBlueDuck_LONG extends CDAutonBase {
     @Override
