@@ -217,9 +217,9 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
 
                 // Everything gamepad 1:
                 // User controls for the robot speed overall
-                if (gamepad1.left_bumper) {
+                if (gamepad1.left_trigger != 0) {
                     robotSpeed=baseSpeed*0.5;
-                } else if (gamepad1.right_bumper) {
+                } else if (gamepad1.right_trigger != 0) {
                     robotSpeed = baseSpeed*1.5;
                 } else {
                     robotSpeed=baseSpeed;
