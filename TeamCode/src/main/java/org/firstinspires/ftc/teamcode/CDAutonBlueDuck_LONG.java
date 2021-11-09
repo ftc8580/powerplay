@@ -1,26 +1,29 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.*;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name="CDAutonBlueWarehouse", group="Linear Opmode")
+@Autonomous(name="CDAutonBlueDuck", group="Linear Opmode")
 //@Disabled
-public class CDAutonBlueWarehouse extends CDAutonBase {
+public class CDAutonBlueDuck_LONG extends CDAutonBase {
     @Override
     public void executeAuton() {
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -24, 10.0);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 13, 15);
-        myTurret.setTurretDirection("right");
+        myTurret.setTurretDirection("center");
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2, 5);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -17, 8);
+        myDuckSpinner.setDuckSpinnerPower(.7);
+        sleep(2500);
+        myDuckSpinner.setDuckSpinnerPower(0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 45, 10.0);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 18, 10.0);
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
+        myTurret.setTurretDirection("right");
         myIntake.setIntakePower(.4);
         sleep(1000);
         myIntake.setIntakePower(0);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -21, 5);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 45, 10.0);
         myTurret.setTurretDirection("center");
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,40,10.0);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 36, 15);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 10);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,25,10.0);
         myElevator.setElevatorPosition(7);
     }
 }

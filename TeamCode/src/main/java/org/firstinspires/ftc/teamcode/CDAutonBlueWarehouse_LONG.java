@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.*;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name="CDAutonBlueWarehouse", group="Linear Opmode")
 //@Disabled
-public class CDAutonBlueWarehouse extends CDAutonBase {
+public class CDAutonBlueWarehouse_LONG extends CDAutonBase {
     @Override
     public void executeAuton() {
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
@@ -17,9 +17,25 @@ public class CDAutonBlueWarehouse extends CDAutonBase {
         myIntake.setIntakePower(0);
         myTurret.setTurretDirection("center");
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15);
+        myElevator.setElevatorPosition(14);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,40,10.0);
+        myElevator.setElevatorPosition(7);
+        myIntake.setIntakePower(-.6);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,8,10.0);
+        myIntake.setIntakePower(0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-48,10.0);
+        myElevator.setElevatorPosition(39);
+        myTurret.setTurretDirection("right");
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 15, 15);
+        myIntake.setIntakePower(.4);
+        sleep(1000);
+        myIntake.setIntakePower(0);
+        myTurret.setTurretDirection("center");
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15);
+        myElevator.setElevatorPosition(14);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,40,10.0);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 36, 15);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 10);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,25,10.0);
         myElevator.setElevatorPosition(7);
     }
