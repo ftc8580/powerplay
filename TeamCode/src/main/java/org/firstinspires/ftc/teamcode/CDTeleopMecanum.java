@@ -28,7 +28,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
     public double delivermult = 1.5;
     public double duckmulti = 0.6;
     public final double DuckIncrement = 0.01; // amount to ramp motor each CYCLE_MS cycle
-    public final int DuckCycleIncrement = 50; // period of each cycle
+    public final int DuckCycleIncrement = 10; // period of each cycle in ms (.0001 sec)
     public final double Duck_Max_Fwd = 0.6; // Maximum FWD power applied to motor
     public final double Duck_Max_Rev = -0.6; // Maximum REV power applied to motor
 
@@ -264,7 +264,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                     }
                     while (gamepad1.y) {
                         duckpower -= DuckIncrement;
-                        if (duckpower >= Duck_Max_Rev) {
+                        if (duckpower <= Duck_Max_Rev) {
                             duckpower = Duck_Max_Rev;
                         }
                         myDuckSpinner.setDuckSpinnerPower(duckpower);
