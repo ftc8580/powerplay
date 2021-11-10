@@ -150,19 +150,19 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             }
             // Buttons control the turret and elevator position
             if (gamepad2.y) {
-                turreterror = myTurret.setTurretDirection("center");
+                turreterror = myTurret.setTurretDirection("center", false);
                 if (myTurret.turretstop && !turreterror) {
                     myElevator.setElevatorPosition(myElevator.elevatorposground);
                 }
             } else if (gamepad2.x) {
                 myElevator.setElevatorPosition(myElevator.elevatorposmiddle);
                 if (myElevator.elevatorstop) {
-                    turreterror = myTurret.setTurretDirection("left");
+                    turreterror = myTurret.setTurretDirection("left", false);
                 }
             } else if (gamepad2.b) {
                 myElevator.setElevatorPosition(myElevator.elevatorposmiddle);
                 if (myElevator.elevatorstop) {
-                    turreterror = myTurret.setTurretDirection("right");
+                    turreterror = myTurret.setTurretDirection("right", false);
                 }
             }
 
@@ -250,34 +250,30 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 myChassis.setRightRearPower(rightRearPower * robotSpeed);
 
                 //duck input is a boolean - it is on or off - if do not see option try boolean
-                if (!gamepad1.x && !gamepad1.y && !gamepad1.a && !gamepad1.b) {
-                    duckpower = 0;
+
+                if (gamepad1.x) {
+                    duckpower += DuckIncrement;
+                    if (duckpower >= Duck_Max_Fwd) {
+                        duckpower = Duck_Max_Fwd;
+                    }
+                    myDuckSpinner.setDuckSpinnerPower(duckpower);
+                    sleep(DuckCycleIncrement);
+                } else if (gamepad1.y) {
+                    duckpower -= DuckIncrement;
+                    if (duckpower <= Duck_Max_Rev) {
+                        duckpower = Duck_Max_Rev;
+                    }
+                    myDuckSpinner.setDuckSpinnerPower(duckpower);
+                    sleep(DuckCycleIncrement);
+                } else if (gamepad1.a) {
+                    duckpower = 0.6;
+                    myDuckSpinner.setDuckSpinnerPower(duckpower);
+                } else if (gamepad1.b) {
+                    duckpower = -0.6;
                     myDuckSpinner.setDuckSpinnerPower(duckpower);
                 } else {
-                    while (gamepad1.x) {
-                        duckpower += DuckIncrement;
-                        if (duckpower >= Duck_Max_Fwd) {
-                            duckpower = Duck_Max_Fwd;
-                        }
-                        myDuckSpinner.setDuckSpinnerPower(duckpower);
-                        sleep(DuckCycleIncrement);
-                    }
-                    while (gamepad1.y) {
-                        duckpower -= DuckIncrement;
-                        if (duckpower <= Duck_Max_Rev) {
-                            duckpower = Duck_Max_Rev;
-                        }
-                        myDuckSpinner.setDuckSpinnerPower(duckpower);
-                        sleep(DuckCycleIncrement);
-                    }
-                    while (gamepad1.a) {
-                        duckpower = 0.6;
-                        myDuckSpinner.setDuckSpinnerPower(duckpower);
-                    }
-                    while (gamepad1.b) {
-                        duckpower = -0.6;
-                        myDuckSpinner.setDuckSpinnerPower(duckpower);
-                    }
+                    duckpower = 0;
+                    myDuckSpinner.setDuckSpinnerPower(duckpower);
                 }
             }
             // End gamepad 1

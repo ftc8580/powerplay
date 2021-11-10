@@ -105,13 +105,14 @@ public class CDAutonBase extends LinearOpMode {
         myChassis.robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         myChassis.robotHardware.leftrearmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         myChassis.robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        myTurret.robotHardware.turretmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        myTurret.robotHardware.turretmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         myChassis.robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         myChassis.robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         myChassis.robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         myChassis.robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        myTurret.robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        myTurret.robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         //Send telemetry to indicate successful Encoder reset
         telemetry.addData("MotorStartPos (RR, RF, LR, LF)", " %7d %7d %7d %7d", myChassis.robotHardware.rightrearmotor.getCurrentPosition(), myChassis.robotHardware.rightfrontmotor.getCurrentPosition(), myChassis.robotHardware.leftrearmotor.getCurrentPosition(), myChassis.robotHardware.leftfrontmotor.getCurrentPosition());
@@ -136,7 +137,7 @@ public class CDAutonBase extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(1.6, 16.0/9.0);
+            tfod.setZoom(1.4, 16.0/9.0);
         }
 
         /** Wait for the game to begin */
@@ -150,8 +151,8 @@ public class CDAutonBase extends LinearOpMode {
         // CENTER (600, 255, 720, 385)
         // RIGHT (975, 290, 1080, 390)
         int zeroThreshold = 0;
-        int leftThreshold = 300; // Setup for only 2 ducks
-        int centerThreshold = 700; // Setup for only 2 ducks
+        int leftThreshold = 200; // Setup for only 2 ducks
+        int centerThreshold = 800; // Setup for only 2 ducks
         int rightThreshold = 1500; // Not used
         int[] arr = new int[] {zeroThreshold, leftThreshold, centerThreshold, rightThreshold};
         // Logic below is that we want it to start recognizing when we init but not after we start
@@ -168,24 +169,25 @@ public class CDAutonBase extends LinearOpMode {
                         telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                         telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                 recognition.getLeft(), recognition.getTop());
-//                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-//                                recognition.getRight(), recognition.getBottom());
+                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                recognition.getRight(), recognition.getBottom());
                         // CD 8580 Captures a duck for the object, if we train our own, we would relabel it here for capture
                         if (recognition.getLabel().equals("Duck")) {
                             duckLocation = findClosest(arr, Math.round(recognition.getLeft()));
                             telemetry.addData("Duck Location:", duckLocation);
                             if (duckLocation != 3) {
                                 telemetry.addData("Found A Duck Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
-                            } else {
-                                telemetry.addData("No Duck Delivery Location Determined So Using:", duckLocation);
                             }
+                        }else {
+                            telemetry.addData("No Duck Delivery Location Determined So Using:", duckLocation);
                         }
                     }
                     i++;
-                } else {
-                    duckLocation = 3; // If we find a duck and relocate it, then it will not be IN THE RIGHT!
-                    telemetry.addData("No Duck Delivery Location Determined Defaulting:", duckLocation);
                 }
+//                } else {
+//                    duckLocation = 3; // If we find a duck and relocate it, then it will not be IN THE RIGHT!
+//                    telemetry.addData("No Duck Delivery Location Determined Defaulting:", duckLocation);
+//                }
                 telemetry.update();
             }
         }

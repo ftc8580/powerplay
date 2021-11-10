@@ -8,7 +8,7 @@ public class CDAutonBlueDuck extends CDAutonBase {
     @Override
     public void executeAuton() {
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
-        myTurret.setTurretDirection("center");
+        myTurret.setTurretDirection("center", true);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2, 5);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -17, 8);
         myDuckSpinner.setDuckSpinnerPower(.7);

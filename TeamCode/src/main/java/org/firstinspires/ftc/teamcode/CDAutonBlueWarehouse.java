@@ -10,12 +10,12 @@ public class CDAutonBlueWarehouse extends CDAutonBase {
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -24, 10.0);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 13, 15);
-        myTurret.setTurretDirection("right");
+        myTurret.setTurretDirection("right", true);
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
         myIntake.setIntakePower(.4);
         sleep(1000);
         myIntake.setIntakePower(0);
-        myTurret.setTurretDirection("center");
+        myTurret.setTurretDirection("center", true);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 15);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,40,10.0);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 36, 15);

@@ -17,6 +17,7 @@ public class CDTurret {
         // Added to make sure that the turret defaults to brake mode
         robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robotHardware.turretmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         turretpot = robotHardware.turretpot;
     }
 
@@ -32,19 +33,19 @@ public class CDTurret {
     //static final double COUNTS_PER_TURRET_MOTOR_REV = 288; //Core Hex Motor
     //static final double DRIVE_GEAR_REDUCTION = .52; //This is greater than 1 if geared up
 
-    public boolean setTurretDirection(String turretlocationtarget) {
+    public boolean setTurretDirection(String turretlocationtarget, boolean autonMode) {
         // This method will return false for successful turn or true for an error.
         boolean turreterror = false;
         if (turretlocationtarget == "center") {
-            turreterror = setTurretPosition(1.63);
+            turreterror = setTurretPosition(1.85, autonMode);
         } else if (turretlocationtarget == "left") {
-            turreterror = setTurretPosition(0.84);
+            turreterror = setTurretPosition(0.92, autonMode);
         } else if (turretlocationtarget == "right") {
-            turreterror =  setTurretPosition(3.3);
+            turreterror =  setTurretPosition(3.32, autonMode);
         }
         return turreterror;
     }
-    public boolean setTurretPosition(double turretpostarget) {
+    public boolean setTurretPosition(double turretpostarget, boolean autonMode) {
         // This method will return false for successful turn or true for an error.
         final double TURRET_THRESHOLD_POS = 0.01; // volts
         double turretmult; // to set the  speed of the turret

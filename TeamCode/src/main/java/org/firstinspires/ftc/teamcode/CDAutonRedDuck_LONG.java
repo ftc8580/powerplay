@@ -8,9 +8,9 @@ public class CDAutonRedDuck_LONG extends CDAutonBase {
     @Override
     public void executeAuton() {
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -3, 5);
-        myTurret.setTurretDirection("center");
+        myTurret.setTurretDirection("center", true);
         myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 10);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -30, 8);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -19, 8);
         sleep(200);
         myDuckSpinner.setDuckSpinnerPower(-.6);
         sleep(2500);
@@ -25,7 +25,7 @@ public class CDAutonRedDuck_LONG extends CDAutonBase {
         myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 18, 10.0);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 40, 10.0);
-        myTurret.setTurretDirection("center");
+        myTurret.setTurretDirection("center", true);
         myElevator.setElevatorPosition(7);
     }
 }
