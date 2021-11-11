@@ -3,8 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.*;
 
 @Autonomous(name="CDAutonBaseTest", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class CDAutonBaseTest extends CDAutonBase {
+    @Override
+    public void initTokenWeDoNotSee() {
+        duckWeDoNotSee = 1;
+    }
+
     @Override
     public void executeAuton() {
         myTurret.setTurretDirection("center", true);

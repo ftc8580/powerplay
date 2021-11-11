@@ -6,6 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.*;
 //@Disabled
 public class CDAutonRedWarehouse extends CDAutonBase {
     @Override
+    public void initTokenWeDoNotSee() {
+        duckWeDoNotSee = 3;
+    }
+
+    @Override
     public void executeAuton() {
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 3, 5);
         sleep(250);

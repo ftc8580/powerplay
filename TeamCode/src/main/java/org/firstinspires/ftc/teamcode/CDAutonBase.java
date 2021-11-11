@@ -12,7 +12,7 @@ import java.util.*;
 
 
 @Autonomous(name="CDAutonBase", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class CDAutonBase extends LinearOpMode {
     /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
      * the following 4 detectable objects
@@ -60,7 +60,7 @@ public class CDAutonBase extends LinearOpMode {
      */
     private TFObjectDetector tfod;
 
-    public static int findClosest(int[] arr, int target) {
+    public static int findClosest(int[] arr, int target, int duckWeDoNotSee) {
         int idx = 0;
         int dist = Math.abs(arr[0] - target);
 
@@ -74,7 +74,11 @@ public class CDAutonBase extends LinearOpMode {
         }
 
 //        return arr[idx];// In case we want the value someday
-        return idx;
+        if (duckWeDoNotSee == 1) {
+            return idx + 1;
+        } else {
+            return idx;
+        }
     }
 
     // Public variables for use in executeautons method
@@ -85,6 +89,7 @@ public class CDAutonBase extends LinearOpMode {
     public CDIntake myIntake;
     public CDTurret myTurret;
     public int duckLocation;
+    public int duckWeDoNotSee;
 
     @Override
     public void runOpMode() {
@@ -143,18 +148,14 @@ public class CDAutonBase extends LinearOpMode {
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
 //        telemetry.update();
-
+        initTokenWeDoNotSee();
         // CD 8580 Use a variable to catch last location of the duck
-        duckLocation = 3; // If we find a duck and relocate it, then it will not be IN THE RIGHT!
-        // Key (left, top, right, bottom)
-        // LEFT (115, 160, 340, 395)
-        // CENTER (600, 255, 720, 385)
-        // RIGHT (975, 290, 1080, 390)
-        int zeroThreshold = 0;
-        int leftThreshold = 200; // Setup for only 2 ducks
-        int centerThreshold = 800; // Setup for only 2 ducks
-        int rightThreshold = 1500; // Not used
-        int[] arr = new int[] {zeroThreshold, leftThreshold, centerThreshold, rightThreshold};
+        duckLocation = duckWeDoNotSee; // If we find a duck and relocate it, then it will not be IN THE RIGHT!
+
+        int zeroThreshold = 0; // Null
+        int leftThreshold = 300; // Setup for only 2 ducks
+        int rightThreshold = 800; // Setup for only 2 ducks
+        int[] arr = new int[] {zeroThreshold, leftThreshold, rightThreshold};
         // Logic below is that we want it to start recognizing when we init but not after we start
         while (!opModeIsActive()) {
             if (tfod != null) {
@@ -163,31 +164,28 @@ public class CDAutonBase extends LinearOpMode {
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
+                    telemetry.addData("Token We Do Not See Location:", duckWeDoNotSee);
+
                     int i = 0;
                     // step through the list of recognitions and display boundary info.
                     for (Recognition recognition : updatedRecognitions) {
                         telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                         telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                 recognition.getLeft(), recognition.getTop());
-                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                recognition.getRight(), recognition.getBottom());
+//                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+//                                recognition.getRight(), recognition.getBottom());
                         // CD 8580 Captures a duck for the object, if we train our own, we would relabel it here for capture
-                        if (recognition.getLabel().equals("Duck")) {
-                            duckLocation = findClosest(arr, Math.round(recognition.getLeft()));
-                            telemetry.addData("Duck Location:", duckLocation);
-                            if (duckLocation != 3) {
-                                telemetry.addData("Found A Duck Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
+                        if ((recognition.getLabel().equals("Duck")) || (recognition.getLabel().equals("Cube"))) {
+
+                            duckLocation = findClosest(arr, Math.round(recognition.getLeft()), duckWeDoNotSee);
+                            telemetry.addData("Token Location:", duckLocation);
+                            if (duckLocation != duckWeDoNotSee) {
+                                telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
                             }
-                        }else {
-                            telemetry.addData("No Duck Delivery Location Determined So Using:", duckLocation);
                         }
                     }
                     i++;
                 }
-//                } else {
-//                    duckLocation = 3; // If we find a duck and relocate it, then it will not be IN THE RIGHT!
-//                    telemetry.addData("No Duck Delivery Location Determined Defaulting:", duckLocation);
-//                }
                 telemetry.update();
             }
         }
@@ -214,6 +212,10 @@ public class CDAutonBase extends LinearOpMode {
         return duckDeliveryPositions[duckLocation];
     }
 
+    public void initTokenWeDoNotSee() {
+        // Intends to be overridden
+        duckWeDoNotSee = 1;
+    }
     public void executeAuton() {
         myDuckSpinner.setDuckSpinnerPower(-.6);
         sleep(2500);

@@ -6,13 +6,20 @@ import com.qualcomm.robotcore.eventloop.opmode.*;
 //@Disabled
 public class CDAutonBlueDuck extends CDAutonBase {
     @Override
+    public void initTokenWeDoNotSee() {
+        duckWeDoNotSee = 1;
+    }
+
+    @Override
     public void executeAuton() {
+        // Setup location
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
+        sleep(2500);
         myTurret.setTurretDirection("center", true);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2, 5);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -17, 8);
-        myDuckSpinner.setDuckSpinnerPower(.7);
-        sleep(2500);
+        myDuckSpinner.setDuckSpinnerPower(.5);
+        sleep(3500);
         myDuckSpinner.setDuckSpinnerPower(0);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 35, 10.0);
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));

@@ -6,24 +6,50 @@ import com.qualcomm.robotcore.eventloop.opmode.*;
 //@Disabled
 public class CDAutonBlueWarehouse extends CDAutonBase {
     @Override
-    public void executeAuton() {
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -3, 5);
-        sleep(250);
-        myTurret.setTurretDirection("center", false);
+    public void initTokenWeDoNotSee() {
+        duckWeDoNotSee = 3;
+    }
 
+    @Override
+    public void executeAuton() {
+        // Start 5 inches right side
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -3, 5);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-3,10.0);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 45, 10);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -5, 18);
+
+        sleep(100);
+        myTurret.setTurretDirection("left", false);
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -37, 15);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-5,10.0);
+        // go to elevator
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -20, 18);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -35, 10);
         myIntake.setIntakePower(.4);
         sleep(1000);
         myIntake.setIntakePower(0);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,10,10.0);
-        myElevator.setElevatorPosition(7);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,45,10.0);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,28,10.0);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,-24,10.0);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,24,10.0);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 35, 10);
+        // Return
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 32, 18);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -45, 10);
+        // Enter warehouse
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-28,10.0);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,-25,10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-22,10.0);
         myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
+        myTurret.setTurretDirection("center", false);
+        myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
+        myElevator.setElevatorPosition(myElevator.elevatorposground);
+
+
+
+
+//        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-5,10.0);
+//        myElevator.setElevatorPosition(7);
+//        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,45,10.0);
+//        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,28,10.0);
+//        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,-24,10.0);
+//        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,24,10.0);
+//        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
     }
 }
 

@@ -1,10 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.*;
 
 @Autonomous(name="CDAutonBlueWarehouse_LONG", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class CDAutonBlueWarehouse_LONG extends CDAutonBase {
+    @Override
+    public void initTokenWeDoNotSee() {
+        duckWeDoNotSee = 1;
+    }
+
     @Override
     public void executeAuton() {
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
