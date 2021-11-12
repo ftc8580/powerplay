@@ -29,8 +29,8 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
     public double duckmulti = 0.6;
     public final double DuckIncrement = 0.01; // amount to ramp motor each CYCLE_MS cycle
     public final int DuckCycleIncrement = 10; // period of each cycle in ms (.0001 sec)
-    public final double Duck_Max_Fwd = 0.6; // Maximum FWD power applied to motor
-    public final double Duck_Max_Rev = -0.6; // Maximum REV power applied to motor
+    public final double Duck_Max_Fwd = 0.8; // Maximum FWD power applied to motor
+    public final double Duck_Max_Rev = -0.8; // Maximum REV power applied to motor
 
     public boolean imuTelemetry = false;
     //For setting elevator position using buttons
@@ -358,7 +358,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             telemetry.addData("CurrElevatorThresh", "%.2f", elevatorcurrentthreshold);
             telemetry.addData("CurrElevatorDownThresh", "%.2f", eleDownThresh);
             telemetry.addData("TurretLockedElevatorDown", elevatorisdown);
-            telemetry.addData("TurretPosition", "%.2f", currentturretposition);
+//            telemetry.addData("TurretPosition", "%.2f", currentturretposition);
             telemetry.addData("TurretPotCurrent", "%.2f", turretpotcurrent);
             telemetry.addData("CurrTurretThreshold", "%.2f", currentturretthreshold);
             telemetry.addData("magneticstop", elevatorupmagnetswitch);
