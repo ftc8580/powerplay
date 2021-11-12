@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import android.text.method.*;
 
 import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.util.*;
 
 public class CDElevator {
 
@@ -13,6 +14,8 @@ public class CDElevator {
     public double elevatorposmiddle = 26.0;
     public double elevatorpostop = 38.0;
     public double wheelheightforelevator = 12;
+
+    private ElapsedTime runtime = new ElapsedTime();
 
     CDHardware robotHardware;
     CDDistanceSensor myDistanceSensor;
@@ -48,12 +51,14 @@ public class CDElevator {
     public double getElevatorPosition() { return myDistanceSensor.getElevatorDistance(); }
 
     public boolean setElevatorPosition(double elevatorpostarget) {
+        runtime.reset();
+        double elevatorPositionTimeoutSec = 4.0;
         final double THRESHOLD_POS = 1.0; // CM or whatever the Distance sensor is configured
         double elevatormult = 1.0; // to slow down the elevator if needed
         elevatorstop = false; // initially we want the elevator to move for the while loop
         magneticstop = false;
         elevatorerror = false;
-        while (!elevatorstop && !magneticstop && !elevatorerror) {
+        while ((runtime.seconds() < elevatorPositionTimeoutSec) && !elevatorstop && !magneticstop && !elevatorerror) {
             // Simple check to see if the magnetic switch is contacted
             if (upelevatormagnetswitch.isPressed()) {
                 magneticstop = true;
@@ -68,7 +73,6 @@ public class CDElevator {
             // TODO: Need to use the turret potentiometer to determine if we are over the wheels to make sure we don't drop the elevator in auton on wheels and bind.
             elevatorlastpos = myDistanceSensor.getElevatorDistance(); // updates every loop to say where we are in the beginning.
             ELEVATORCURRENTTHRESHOLD = Math.abs(elevatorlastpos - elevatorpostarget);
-
             if (elevatorlastpos < 10 || elevatorlastpos > 28) {
                 elevatormult = .60;
             } else {
