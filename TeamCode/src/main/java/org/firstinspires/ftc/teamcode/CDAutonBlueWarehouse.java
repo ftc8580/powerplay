@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.*;
 public class CDAutonBlueWarehouse extends CDAutonBase {
     @Override
     public void initTokenWeDoNotSee() {
-        duckWeDoNotSee = 3;
+        duckWeDoNotSee = 1;
     }
 
     @Override
@@ -23,17 +23,18 @@ public class CDAutonBlueWarehouse extends CDAutonBase {
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
         // go to elevator
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -20, 18);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -35, 10);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -55, 10);
         myIntake.setIntakePower(.4);
         sleep(1000);
         myIntake.setIntakePower(0);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 35, 10);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 55, 10);
         // Return
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 32, 18);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -45, 10);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 25, 18);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 45, 10);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 15, 18);
         // Enter warehouse
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-28,10.0);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,-25,10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-32,10.0);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,-30,10.0);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-22,10.0);
         myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
         myTurret.setTurretDirection("center", false);
