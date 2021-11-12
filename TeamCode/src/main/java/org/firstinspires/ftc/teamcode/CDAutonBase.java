@@ -164,8 +164,8 @@ public class CDAutonBase extends LinearOpMode {
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    telemetry.addData("Token We Do Not See Location:", duckWeDoNotSee);
-
+//                    telemetry.addData("Token Location:", duckLocation);
+//                    telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
                     int i = 0;
                     // step through the list of recognitions and display boundary info.
                     for (Recognition recognition : updatedRecognitions) {
@@ -176,12 +176,13 @@ public class CDAutonBase extends LinearOpMode {
 //                                recognition.getRight(), recognition.getBottom());
                         // CD 8580 Captures a duck for the object, if we train our own, we would relabel it here for capture
                         if ((recognition.getLabel().equals("Duck")) || (recognition.getLabel().equals("Cube"))) {
-
                             duckLocation = findClosest(arr, Math.round(recognition.getLeft()), duckWeDoNotSee);
                             telemetry.addData("Token Location:", duckLocation);
-                            if (duckLocation != duckWeDoNotSee) {
-                                telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
-                            }
+                            telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
+                        } else {
+                            duckLocation = duckWeDoNotSee;
+                            telemetry.addData("Token Location:", duckLocation);
+                            telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
                         }
                     }
                     i++;
