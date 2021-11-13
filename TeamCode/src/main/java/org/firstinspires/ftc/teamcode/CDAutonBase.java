@@ -164,6 +164,12 @@ public class CDAutonBase extends LinearOpMode {
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
+                    if (updatedRecognitions.size() == 0) {
+                        duckLocation = duckWeDoNotSee;
+                        telemetry.addData("Token Location:", duckLocation);
+                        telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
+
+                    }
 //                    telemetry.addData("Token Location:", duckLocation);
 //                    telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
                     int i = 0;
@@ -179,14 +185,11 @@ public class CDAutonBase extends LinearOpMode {
                             duckLocation = findClosest(arr, Math.round(recognition.getLeft()), duckWeDoNotSee);
                             telemetry.addData("Token Location:", duckLocation);
                             telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
-                        } else {
-                            duckLocation = duckWeDoNotSee;
-                            telemetry.addData("Token Location:", duckLocation);
-                            telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
                         }
                     }
                     i++;
                 }
+
                 telemetry.update();
             }
         }
