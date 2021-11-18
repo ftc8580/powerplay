@@ -166,6 +166,33 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 }
             }
 
+            double intakepow =0.0;
+            double outballmax = -1.0;
+            double inballmax = 1.0;
+            int inball_cycle =10;
+            double inballincr =0.01;
+//            boolean intake_full = gamepad2.left_bumper;
+//            boolean deliver_ball = gamepad2.right_bumper;
+
+            if (gamepad2.left_bumper) {
+                if (intakepow < inballmax) {
+                    intakepow = intakepow + inballincr;
+                    sleep(inball_cycle);
+                }
+            } else if (gamepad2.right_bumper) {
+                if (intakepow > outballmax) {
+                    intakepow = intakepow - inballincr;
+                    sleep(inball_cycle);
+                }
+
+            } else {
+                intakepow = 0.0;
+            }
+
+            myIntake.setIntakePower(intakepow);
+
+
+
             //intake ( left trigger), deliver(right trigger)
             // Convert the analog trigger to a button push
             double intake = gamepad2.left_trigger;
