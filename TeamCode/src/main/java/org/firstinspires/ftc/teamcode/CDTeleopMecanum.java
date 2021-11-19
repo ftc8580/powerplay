@@ -31,11 +31,6 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
     public final int DuckCycleIncrement = 5; // period of each cycle in ms (.0001 sec)
     public final double Duck_Max_Fwd = 0.8; // Maximum FWD power applied to motor
     public final double Duck_Max_Rev = -0.6; // Maximum REV power applied to motor
-//    public double intakepow =0.0;
-//    public double outballmax = -1.5;
-//    public double inballmax = 1.5;
-//    public int inball_cycle =5;
-//    public double inballincr =0.2;
 
     public boolean imuTelemetry = false;
     //For setting elevator position using buttons
@@ -171,28 +166,6 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 }
             }
 
-//            if (gamepad2.left_bumper) {
-//                intakepow += inballincr;
-//                if (intakepow >= inballmax) {
-//                    intakepow = inballmax;
-//                }
-//                myIntake.setIntakePower(intakepow);
-//                sleep(inball_cycle);
-//            } else if (gamepad2.right_bumper) {
-//                intakepow -= inballincr;
-//                if (intakepow <= outballmax) {
-//                    intakepow = outballmax;
-//                }
-//                myIntake.setIntakePower(intakepow);
-//                sleep(inball_cycle);
-//            } else {
-//                intakepow = 0.0;
-//                myIntake.setIntakePower(intakepow);
-//
-//            }
-
-
-
             //intake ( left trigger), deliver(right trigger)
             // Convert the analog trigger to a button push
             double intake = gamepad2.left_trigger;
@@ -204,7 +177,6 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             } else {
                 myIntake.setIntakePower(0.0);
             }
-
 
             // TURRET CODE
             // Handle turret lockup error:
