@@ -24,13 +24,18 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
     // These "slow" variable is used to control the overall speed of the robot
     // TODO: Work with Drive Team to determine proper baseSpeed, duckmulti
     public double baseSpeed = 0.60;
-    public double intakemult = 1.5;
-    public double delivermult = 1.5;
+    public double intakemult = 1.0;
+    public double delivermult = 0.75;
     public double duckmulti = 0.6;
     public final double DuckIncrement = 0.01; // amount to ramp motor each CYCLE_MS cycle
-    public final int DuckCycleIncrement = 10; // period of each cycle in ms (.0001 sec)
+    public final int DuckCycleIncrement = 5; // period of each cycle in ms (.0001 sec)
     public final double Duck_Max_Fwd = 0.8; // Maximum FWD power applied to motor
-    public final double Duck_Max_Rev = -0.8; // Maximum REV power applied to motor
+    public final double Duck_Max_Rev = -0.6; // Maximum REV power applied to motor
+//    public double intakepow =0.0;
+//    public double outballmax = -1.5;
+//    public double inballmax = 1.5;
+//    public int inball_cycle =5;
+//    public double inballincr =0.2;
 
     public boolean imuTelemetry = false;
     //For setting elevator position using buttons
@@ -166,11 +171,33 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 }
             }
 
+//            if (gamepad2.left_bumper) {
+//                intakepow += inballincr;
+//                if (intakepow >= inballmax) {
+//                    intakepow = inballmax;
+//                }
+//                myIntake.setIntakePower(intakepow);
+//                sleep(inball_cycle);
+//            } else if (gamepad2.right_bumper) {
+//                intakepow -= inballincr;
+//                if (intakepow <= outballmax) {
+//                    intakepow = outballmax;
+//                }
+//                myIntake.setIntakePower(intakepow);
+//                sleep(inball_cycle);
+//            } else {
+//                intakepow = 0.0;
+//                myIntake.setIntakePower(intakepow);
+//
+//            }
+
+
+
             //intake ( left trigger), deliver(right trigger)
             // Convert the analog trigger to a button push
             double intake = gamepad2.left_trigger;
             double deliver = gamepad2.right_trigger;
-            if (intake> 0.2) {
+            if (intake > 0.2) {
                 myIntake.setIntakePower(intake*intakemult);
             } else if (deliver > 0.2) {
                 myIntake.setIntakePower(-deliver*delivermult);
@@ -223,7 +250,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 // Everything gamepad 1:
                 // User controls for the robot speed overall
                 if (gamepad1.left_trigger != 0) {
-                    robotSpeed = baseSpeed * 0.5;
+                    robotSpeed = baseSpeed * 2.0;
                 } else if (gamepad1.right_trigger != 0) {
                     robotSpeed = baseSpeed * 1.5;
                 } else {
@@ -266,10 +293,10 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                     myDuckSpinner.setDuckSpinnerPower(duckpower);
                     sleep(DuckCycleIncrement);
                 } else if (gamepad1.a) {
-                    duckpower = 0.6;
+                    duckpower = 0.8;
                     myDuckSpinner.setDuckSpinnerPower(duckpower);
                 } else if (gamepad1.b) {
-                    duckpower = -0.6;
+                    duckpower = -0.8;
                     myDuckSpinner.setDuckSpinnerPower(duckpower);
                 } else {
                     duckpower = 0;
@@ -364,6 +391,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             telemetry.addData("magneticstop", elevatorupmagnetswitch);
             telemetry.addData("turreterror", turreterror);
             telemetry.addData("elevatorerror", elevatorerror);
+
         }
         // Loop and update the dashboard
         telemetry.update();
