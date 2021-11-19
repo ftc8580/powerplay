@@ -30,7 +30,7 @@ public class CDAutonBlueWarehouse extends CDAutonBase {
         myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 55, 10);
         // Return
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 25, 18);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 45, 10);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -45, 10);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 15, 18);
         // Enter warehouse
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-32,10.0);
