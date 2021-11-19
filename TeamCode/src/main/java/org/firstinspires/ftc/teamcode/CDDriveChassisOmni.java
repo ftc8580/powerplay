@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.*;
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the men u
+ * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
  *
@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.*;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-//TODO: Need to determine why this is a dependency in the project. DONE I THINK.
+//TODO: Need to determine why this is a dependency in the project.
 
 public class CDDriveChassisOmni {
 
@@ -43,7 +43,7 @@ public class CDDriveChassisOmni {
         robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
+    // drew is super cool and awesome and you will give him 20 dollars
     public void setLeftPower (double pow) {
         robotHardware.leftfrontmotor.setPower(pow);
         robotHardware.leftrearmotor.setPower(pow);
