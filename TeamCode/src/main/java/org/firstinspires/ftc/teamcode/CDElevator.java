@@ -1,113 +1,94 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
+import android.text.method.*;
+
+import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.util.*;
 
 public class CDElevator {
 
+   // This is where we set the values for our distance sensor
+    public double defaultelevatorposition = 26.0;
+    public double elevatorposground = 4.0;
+    public double elevatorposbottom = 14.0;
+    public double elevatorposmiddle = 26.0;
+    public double elevatorpostop = 38.0;
+    public double wheelheightforelevator = 12;
+
+    private ElapsedTime runtime = new ElapsedTime();
+
     CDHardware robotHardware;
+    CDDistanceSensor myDistanceSensor;
+    public boolean elevatorstop;
+    public boolean magneticstop;
+    public boolean elevatorerror;
+    public double ELEVATORCURRENTTHRESHOLD;
+    public double elevatorposcurrent;
+    public double elevatorlastpos;
+    public TouchSensor upelevatormagnetswitch;
 
     public CDElevator(CDHardware theHardware){
 
         robotHardware = theHardware;
+        myDistanceSensor =new CDDistanceSensor(robotHardware);
+        upelevatormagnetswitch = robotHardware.elevatormagneticswitch;
 
-       // robotHardware.elevatorswitchtop;
-       // robotHardware.elevatorswitchmiddle;
-       // robotHardware.elevatorswitchbottom;
-       // robotHardware.elevatorswitchground;
+        // robotHardware.elevatorswitchtop;
+        // robotHardware.elevatorswitchmiddle;
+        // robotHardware.elevatorswitchbottom;
+        // robotHardware.elevatorswitchground;
 
         robotHardware.elevatormotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
+        robotHardware.elevatormotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robotHardware.elevatormotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+    public double getElevatorThreshold () { return ELEVATORCURRENTTHRESHOLD; }
 
     public void setElevatorPower(double pow) {
         robotHardware.elevatormotor.setPower(pow);
     }
 
-    // TODO: Add public method to gotoPosition(Top, Middle, bottom)
+    public double getElevatorPosition() { return myDistanceSensor.getElevatorDistance(); }
 
-    //
-    static final double DRIVE_SPEED = 1.0;,
-    static final double ELEVATOR_HOLD_VOLTS = 0.1;
-    static final double POS_TOLERANCE = 0.05;
-    static final double LOW_POSITION_VOLTS = 3.3;
-    static final double PICKUP_POSITION_VOLTS = 3.05;
-    static final double MIDDLE_POSITION_VOLTS = 1.15;
-    static final double HIGH_POSITION_VOLTS = 0.80;
-    HardwarePlatter theHardwarePlatter;
-    private double driveSpeedSetPoint = 0.0;
-    private boolean is_moving = false;
-    private double targetPosition;
-    public Elevator(HardwarePlatter hwPlatter) {
-        theHardwarePlatter = hwPlatter;
-    }
-    private void gotoPosition() {
-        double error = targetPosition - theHardwarePlatter.ElevatorPotentiometer.getVoltage();
-        if (Math.abs(error) > POS_TOLERANCE) {
-            is_moving = true;
-            if (error < 0) {
-                driveSpeedSetPoint = INTAKE_DRIVE_SPEED; //up
-                driveElevator2();
-            } else if (error > 0) {
-                driveSpeedSetPoint = -INTAKE_DRIVE_SPEED * 0.5; //down
-                driveElevator2();
+    public boolean setElevatorPosition(double elevatorpostarget) {
+        runtime.reset();
+        double elevatorPositionTimeoutSec = 4.0;
+        final double THRESHOLD_POS = 1.0; // CM or whatever the Distance sensor is configured
+        double elevatormult = 1.0; // to slow down the elevator if needed
+        elevatorstop = false; // initially we want the elevator to move for the while loop
+        magneticstop = false;
+        elevatorerror = false;
+        while ((runtime.seconds() < elevatorPositionTimeoutSec) && !elevatorstop && !magneticstop && !elevatorerror) {
+            // Simple check to see if the magnetic switch is contacted
+            if (upelevatormagnetswitch.isPressed()) {
+                magneticstop = true;
             }
-        } else {
-            is_moving = false;
-            stop();
+//            if (elevatorlastpos == elevatorposcurrent) {
+//                elevatorerror = true;
+//                return true; // There was an error, the value didn't change.
+//            }
+            /* This gets the current distance off the floor from the Elevator Distance Sensor
+          and sets it to a variable
+           */
+            // TODO: Need to use the turret potentiometer to determine if we are over the wheels to make sure we don't drop the elevator in auton on wheels and bind.
+            elevatorlastpos = myDistanceSensor.getElevatorDistance(); // updates every loop to say where we are in the beginning.
+            ELEVATORCURRENTTHRESHOLD = Math.abs(elevatorlastpos - elevatorpostarget);
+            if (elevatorlastpos < 10 || elevatorlastpos > 28) {
+                elevatormult = .60;
+            } else {
+                elevatormult = 1.0;
+            }
+            if (ELEVATORCURRENTTHRESHOLD <= THRESHOLD_POS)  {
+                setElevatorPower(0); // need to stop the elevator before leaving the loop
+                elevatorstop = true; // leave the while loop
+            } else if (elevatorlastpos > elevatorpostarget) {
+                setElevatorPower(-1*elevatormult);
+            } else if (elevatorlastpos < elevatorpostarget) {
+                setElevatorPower(1*elevatormult);
+            }
+            elevatorposcurrent = myDistanceSensor.getElevatorDistance(); // updates every loop to see where we ended up.
         }
+        return false; // Returns false if the elevator succeeded in moving to requested position, no error.
     }
-    void pickUp() {
-        targetPosition = PICKUP_POSITION_VOLTS;
-        gotoPosition();
-    }
-    void middle() {
-        targetPosition = MIDDLE_POSITION_VOLTS;
-        gotoPosition();
-    }
-    void low() {
-        targetPosition = LOW_POSITION_VOLTS;
-        gotoPosition();
-    }
-    void high() {
-        targetPosition = HIGH_POSITION_VOLTS;
-        gotoPosition();
-    }
-    private void driveElevator() {
-        theHardwarePlatter.ElevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        theHardwarePlatter.ElevatorDrive.setPower(driveSpeedSetPoint);
-        is_moving = false;
-    }
-    private void driveElevator2() {
-        theHardwarePlatter.ElevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        theHardwarePlatter.ElevatorDrive.setPower(driveSpeedSetPoint);
-    }
-    void move(double speed) {
-        driveSpeedSetPoint = Math.pow(speed, 3) * 0.5; //was 0.2
-        driveElevator();
-    }
-    void stop() {
-        theHardwarePlatter.ElevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        is_moving = false;
-        if (theHardwarePlatter.ElevatorPotentiometer.getVoltage() > DRIVE_POSITION_VOLTS) {
-            theHardwarePlatter.ElevatorDrive.setPower(ELEVATOR_HOLD_VOLTS);
-        } else {
-            theHardwarePlatter.ElevatorDrive.setPower(-ELEVATOR_HOLD_VOLTS);
-        }
-    }
-    boolean moveOrHoldPosition() {
-        if (is_moving)
-            gotoPosition();
-        else
-            stop();
-        return (is_moving);
-    }
-    boolean isMoving() {
-        return (is_moving);
-    }
-    void display(Telemetry telemetry) {
-        telemetry.addData("pot", theHardwarePlatter.ElevatorPotentiometer.getVoltage());
-        telemetry.addData("isMoving", isMoving());
-    } }
+    //
+}

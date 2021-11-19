@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 // import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-// import com.qualcomm.robotcore.util.ElapsedTime;
 // import com.qualcomm.robotcore.util.Range;
 
 
@@ -24,7 +24,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class CDDriveChassis {
 
     CDHardware robotHardware;
-    
+    private ElapsedTime   runtime=new ElapsedTime();
+
     public CDDriveChassis(CDHardware theHardware) {
         
         robotHardware = theHardware;
