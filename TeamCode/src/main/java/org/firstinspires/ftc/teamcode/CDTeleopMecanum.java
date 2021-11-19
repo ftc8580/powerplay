@@ -24,13 +24,18 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
     // These "slow" variable is used to control the overall speed of the robot
     // TODO: Work with Drive Team to determine proper baseSpeed, duckmulti
     public double baseSpeed = 0.60;
-    public double intakemult = 1.5;
-    public double delivermult = 1.5;
+    public double intakemult = 1.0;
+    public double delivermult = 0.75;
     public double duckmulti = 0.6;
     public final double DuckIncrement = 0.01; // amount to ramp motor each CYCLE_MS cycle
     public final int DuckCycleIncrement = 5; // period of each cycle in ms (.0001 sec)
     public final double Duck_Max_Fwd = 0.8; // Maximum FWD power applied to motor
-    public final double Duck_Max_Rev = -0.8; // Maximum REV power applied to motor
+    public final double Duck_Max_Rev = -0.6; // Maximum REV power applied to motor
+//    public double intakepow =0.0;
+//    public double outballmax = -1.5;
+//    public double inballmax = 1.5;
+//    public int inball_cycle =5;
+//    public double inballincr =0.2;
 
     public boolean imuTelemetry = false;
     //For setting elevator position using buttons
@@ -166,30 +171,25 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 }
             }
 
-            double intakepow =0.0;
-            double outballmax = -1.0;
-            double inballmax = 1.0;
-            int inball_cycle =10;
-            double inballincr =0.01;
-//            boolean intake_full = gamepad2.left_bumper;
-//            boolean deliver_ball = gamepad2.right_bumper;
-
-            if (gamepad2.left_bumper) {
-                if (intakepow < inballmax) {
-                    intakepow = intakepow + inballincr;
-                    sleep(inball_cycle);
-                }
-            } else if (gamepad2.right_bumper) {
-                if (intakepow > outballmax) {
-                    intakepow = intakepow - inballincr;
-                    sleep(inball_cycle);
-                }
-
-            } else {
-                intakepow = 0.0;
-            }
-
-            myIntake.setIntakePower(intakepow);
+//            if (gamepad2.left_bumper) {
+//                intakepow += inballincr;
+//                if (intakepow >= inballmax) {
+//                    intakepow = inballmax;
+//                }
+//                myIntake.setIntakePower(intakepow);
+//                sleep(inball_cycle);
+//            } else if (gamepad2.right_bumper) {
+//                intakepow -= inballincr;
+//                if (intakepow <= outballmax) {
+//                    intakepow = outballmax;
+//                }
+//                myIntake.setIntakePower(intakepow);
+//                sleep(inball_cycle);
+//            } else {
+//                intakepow = 0.0;
+//                myIntake.setIntakePower(intakepow);
+//
+//            }
 
 
 
@@ -197,7 +197,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             // Convert the analog trigger to a button push
             double intake = gamepad2.left_trigger;
             double deliver = gamepad2.right_trigger;
-            if (intake> 0.2) {
+            if (intake > 0.2) {
                 myIntake.setIntakePower(intake*intakemult);
             } else if (deliver > 0.2) {
                 myIntake.setIntakePower(-deliver*delivermult);
@@ -391,6 +391,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             telemetry.addData("magneticstop", elevatorupmagnetswitch);
             telemetry.addData("turreterror", turreterror);
             telemetry.addData("elevatorerror", elevatorerror);
+
         }
         // Loop and update the dashboard
         telemetry.update();
