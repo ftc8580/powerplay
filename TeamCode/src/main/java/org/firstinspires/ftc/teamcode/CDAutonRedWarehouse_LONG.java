@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="CDAutonRedWarehouse_LONG", group="Linear Opmode")
-@Disabled
+//@Disabled
 public class CDAutonRedWarehouse_LONG extends CDAutonBase {
     @Override
     public void initTokenWeDoNotSee() {
@@ -12,8 +12,8 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
     }
 
     public double intakepos;
-    static final double AUTON_LONG_SPEED = 0.8;
-    static final double AUTON_LONG_TURN = 0.6;
+    static final double AUTON_LONG_SPEED = 0.6;
+    static final double AUTON_LONG_TURN = 0.5;
 
     @Override
     public void executeAuton() {
