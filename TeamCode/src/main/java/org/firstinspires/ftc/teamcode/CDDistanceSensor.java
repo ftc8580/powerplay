@@ -14,6 +14,9 @@ public class CDDistanceSensor {
     public double getElevatorDistance() {
       return robotHardware.elevatordistancesensor.getDistance(DistanceUnit.CM);
     }
+    public double getIntakeDistance() {
+        return robotHardware.intakedistancesensor.getDistance(DistanceUnit.CM);
+    }
 }
 
 

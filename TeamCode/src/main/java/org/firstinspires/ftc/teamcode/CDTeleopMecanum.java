@@ -66,6 +66,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
     //    public BNO055IMU imu;
     public CDElevator myElevator;
     public CDTurret myTurret;
+    public CDDistanceSensor myDistanceSensor;
 
     @Override
     public void runOpMode() {
@@ -74,7 +75,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
         CDElevator myElevator = new CDElevator(myHardware);
         CDIntake myIntake = new CDIntake(myHardware);
         CDTurret myTurret = new CDTurret(myHardware);
-        CDDistanceSensor myDistanceSensor = new CDDistanceSensor(myHardware);
+        myDistanceSensor = new CDDistanceSensor(myHardware);
         // IMU Is commented out as we don't use it
 //        imu = myHardware.cdimu;
         // Set up the parameters with which we will use our IMU. Note that integration
@@ -130,8 +131,8 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             if ((elevatorposcurrent <= myElevator.elevatorposground && elevatorinput > .01) || ((elevatorupmagnetswitch || elevatorposcurrent >= myElevator.elevatorpostop) && elevatorinput < -.01)) {
                 myElevator.setElevatorPower(0);
             } else {
-                if ((elevatorinput > .01 && elevatorposcurrent < 10) || (elevatorinput < -.01 && elevatorposcurrent > 30)) {
-                    elevatorEaseOut = .50;
+                if ((elevatorinput > .01 && elevatorposcurrent < 10) || (elevatorinput < -.01 && elevatorposcurrent > 35)) {
+                    elevatorEaseOut = .85;
                 } else if (elevatorinput < .1 ) {
                     elevatorEaseOut = 1.0;
                 }
@@ -354,6 +355,8 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             telemetry.addData("motorLR ", "%.2f", leftRearPower);
             telemetry.addData("motorRR ", "%.2f", rightRearPower);
             telemetry.addData("ElevatorDist", "%.2f", elevatorposcurrent);
+ //           intakepos = myDistanceSensor.getIntakeDistance();
+            telemetry.addData("IntakeDist", "%.2f", myDistanceSensor.getIntakeDistance());
             telemetry.addData("CurrElevatorThresh", "%.2f", elevatorcurrentthreshold);
             telemetry.addData("CurrElevatorDownThresh", "%.2f", eleDownThresh);
             telemetry.addData("TurretLockedElevatorDown", elevatorisdown);

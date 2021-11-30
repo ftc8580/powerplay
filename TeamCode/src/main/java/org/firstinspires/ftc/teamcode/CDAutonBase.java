@@ -88,6 +88,7 @@ public class CDAutonBase extends LinearOpMode {
     public CDElevator myElevator;
     public CDIntake myIntake;
     public CDTurret myTurret;
+    public CDDistanceSensor myDistanceSensor;
     public int duckLocation;
     public int duckWeDoNotSee;
 
@@ -101,6 +102,7 @@ public class CDAutonBase extends LinearOpMode {
         myElevator = new CDElevator(myHardware);
         myIntake = new CDIntake(myHardware);
         myTurret = new CDTurret(myHardware);
+        myDistanceSensor = new CDDistanceSensor(myHardware);
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");

@@ -19,6 +19,7 @@ public class CDHardware {
     public DcMotor turretmotor;
     public DcMotor elevatormotor;
     public DcMotor intakemotor;
+    public DistanceSensor intakedistancesensor;
     public DcMotor duckspinnermotor;
     public DistanceSensor elevatordistancesensor;
     public TouchSensor elevatormagneticswitch;
@@ -41,6 +42,7 @@ public class CDHardware {
         elevatormotor = hwMap.get(DcMotor.class, "motorElevator");
         duckspinnermotor = hwMap.get(DcMotor.class, "motorDuckSpinner");
         intakemotor = hwMap.get(DcMotor.class, "motorIntake");
+        intakedistancesensor = hwMap.get(DistanceSensor.class, "distanceIntake");
         turretmotor = hwMap.get(DcMotor.class, "motorTurret");
         elevatordistancesensor = hwMap.get(DistanceSensor.class, "distanceElev");
         elevatormagneticswitch = hwMap.get(TouchSensor.class,"ElvStop");
