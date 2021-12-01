@@ -29,11 +29,11 @@ public class CDAutonRedDuck extends CDAutonBase {
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -13, 15.0);
         // Prepare to deliver
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
+        // Approach
         myTurret.setTurretDirection("center", true);
-        // approach
         myTurret.setTurretDirection("center", true);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 34, 10.0);
-        //deliver
+        // Deliver
         myIntake.setIntakePower(.4);
         sleep(1000);
         myIntake.setIntakePower(0);

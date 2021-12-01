@@ -34,7 +34,7 @@ public class CDAutonBlueWarehouse_LONG extends CDAutonBase {
         myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 19, 18);
         //myChassis.encoderDriveTurn(AUTON_LONG_TURN, -55, 10);
         myIntake.setIntakePower(.4);
-        sleep(1000);
+        sleep(800);
         myIntake.setIntakePower(0);
         //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 55, 10);
 
@@ -44,14 +44,14 @@ public class CDAutonBlueWarehouse_LONG extends CDAutonBase {
         myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -15, 18);
 
         // Enter warehouse
-        myChassis.encoderDriveStraight(AUTON_LONG_SPEED,26,10.0);
         myTurret.setTurretDirection("center", false);
+        myChassis.encoderDriveStraight(AUTON_LONG_SPEED,26,10.0);
         myElevator.setElevatorPosition(myElevator.elevatorposground);
         myChassis.encoderDriveStraight(AUTON_LONG_SPEED,6,10.0);
         //position above is just inside warehouse
 
         //turn on intake move forward then back
-        myIntake.setIntakePower(-.4);
+        myIntake.setIntakePower(-1.0);
         myChassis.encoderDriveStraight(0.4,12,10.0);
         myIntake.setIntakePower(0);
         myChassis.encoderDriveStraight(AUTON_LONG_SPEED,-12,10.0);
@@ -71,7 +71,7 @@ public class CDAutonBlueWarehouse_LONG extends CDAutonBase {
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 24, 18);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -55, 10);
             myIntake.setIntakePower(.4);
-            sleep(1000);
+            sleep(800);
             myIntake.setIntakePower(0);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 55, 10);
             // Return
@@ -101,7 +101,7 @@ public class CDAutonBlueWarehouse_LONG extends CDAutonBase {
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 24, 18);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -55, 10);
             myIntake.setIntakePower(.4);
-            sleep(1000);
+            sleep(800);
             myIntake.setIntakePower(0);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 55, 10);
             // Return
@@ -121,7 +121,7 @@ public class CDAutonBlueWarehouse_LONG extends CDAutonBase {
         myTurret.setTurretDirection("center", false);
         if (intakepos > 6) {
             myElevator.setElevatorPosition(myElevator.elevatorposground);
-            myIntake.setIntakePower(-.4);
+            myIntake.setIntakePower(-1.0);
             myChassis.encoderDriveStraight(0.4, 12, 10.0);
             myIntake.setIntakePower(0);
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED, -12, 10.0);
