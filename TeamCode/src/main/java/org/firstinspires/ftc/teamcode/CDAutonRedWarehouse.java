@@ -23,11 +23,11 @@ public class CDAutonRedWarehouse extends CDAutonBase {
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
         // go to elevator
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 20, 18);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 55, 10);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 30, 10);
         myIntake.setIntakePower(.4);
-        sleep(1000);
+        sleep(800);
         myIntake.setIntakePower(0);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -55, 10);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -30, 10);
         // Return
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -25, 18);
         myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 45, 10);
@@ -35,12 +35,15 @@ public class CDAutonRedWarehouse extends CDAutonBase {
         // Enter warehouse
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-32,10.0);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,30,10.0);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-22,10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-20,10.0);
         myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 10);
         myTurret.setTurretDirection("center", false);
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
         myElevator.setElevatorPosition(myElevator.elevatorposground);
-
+        // Pick up block
+        myIntake.setIntakePower(-1);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,12,10.0);
+        myIntake.setIntakePower(0);
     }
 }
 

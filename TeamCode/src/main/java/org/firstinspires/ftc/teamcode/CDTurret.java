@@ -37,11 +37,11 @@ public class CDTurret {
         // This method will return false for successful turn or true for an error.
         boolean turreterror = false;
         if (turretlocationtarget == "center") {
-            turreterror = setTurretPosition(1.56, autonMode);
+            turreterror = setTurretPosition(1.79, autonMode);
         } else if (turretlocationtarget == "left") {
-            turreterror = setTurretPosition(0.8, autonMode);
+            turreterror = setTurretPosition(0.93, autonMode);
         } else if (turretlocationtarget == "right") {
-            turreterror =  setTurretPosition(3.3, autonMode);
+            turreterror =  setTurretPosition(3.32, autonMode);
         }
         return turreterror;
     }

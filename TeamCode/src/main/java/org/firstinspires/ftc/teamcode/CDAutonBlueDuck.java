@@ -18,15 +18,20 @@ public class CDAutonBlueDuck extends CDAutonBase {
         myTurret.setTurretDirection("center", true);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2, 5);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -17, 8);
+        // Spin Ducks
         myDuckSpinner.setDuckSpinnerPower(.5);
         sleep(3000);
         myDuckSpinner.setDuckSpinnerPower(0);
+        // Drive to approach hub
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 35, 10.0);
+        // Prepare to deliver
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 25, 10.0);
+        // Deliver
         myIntake.setIntakePower(.4);
         sleep(3500);
         myIntake.setIntakePower(0);
+        // Return
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -25, 10.0);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -11, 5);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -8, 10.0);
