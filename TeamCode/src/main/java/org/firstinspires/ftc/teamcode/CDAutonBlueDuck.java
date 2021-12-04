@@ -29,12 +29,12 @@ public class CDAutonBlueDuck extends CDAutonBase {
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 25, 10.0);
         // Deliver
         myIntake.setIntakePower(.4);
-        sleep(3500);
+        sleep(1000);
         myIntake.setIntakePower(0);
         // Return
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -25, 10.0);
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -11, 5);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -8, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -12, 10.0);
         myElevator.setElevatorPosition(7);
     }
 }
