@@ -16,6 +16,8 @@ public class CDAutonBlueDuck extends CDAutonBase {
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
         sleep(500);
         myTurret.setTurretDirection("center", true);
+        myTurret.setTurretDirection("center", false);
+
         myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2, 5);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -17, 8);
         // Spin Ducks

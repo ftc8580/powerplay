@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.*;
 //import com.qualcomm.robotcore.util.Hardware;
 
 public class CDTurret {
-    double Turretslow = .60;
+    double Turretslow = .70;
     CDHardware robotHardware;
     public boolean turretstop;
     public double turretposcurrent;
@@ -37,11 +37,11 @@ public class CDTurret {
         // This method will return false for successful turn or true for an error.
         boolean turreterror = false;
         if (turretlocationtarget == "center") {
-            turreterror = setTurretPosition(1.79, autonMode);
+            turreterror = setTurretPosition(1.62, autonMode);
         } else if (turretlocationtarget == "left") {
-            turreterror = setTurretPosition(0.93, autonMode);
+            turreterror = setTurretPosition(0.83, autonMode);
         } else if (turretlocationtarget == "right") {
-            turreterror =  setTurretPosition(3.32, autonMode);
+            turreterror =  setTurretPosition(3.30, autonMode);
         }
         return turreterror;
     }
@@ -62,7 +62,7 @@ public class CDTurret {
 //            };
             TURRET_CURRENT_THRESHOLD = Math.abs(turretposlast - turretpostarget);
             if (TURRET_CURRENT_THRESHOLD < .5) {
-                turretmult = .3;
+                turretmult = .4;
             } else {
                 turretmult = .6;
             }

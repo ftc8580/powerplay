@@ -37,6 +37,8 @@ public class CDAutonBlueWarehouse extends CDAutonBase {
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-20,10.0);
         myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
         myTurret.setTurretDirection("center", false);
+        myTurret.setTurretDirection("center", false);
+
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
         myElevator.setElevatorPosition(myElevator.elevatorposground);
         // Pick up block
