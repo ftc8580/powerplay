@@ -37,17 +37,17 @@ public class CDTurret {
         // This method will return false for successful turn or true for an error.
         boolean turreterror = false;
         if (turretlocationtarget == "center") {
-            turreterror = setTurretPosition(1.8, autonMode);
+            turreterror = setTurretPosition(.85, autonMode);
         } else if (turretlocationtarget == "left") {
-            turreterror = setTurretPosition(0.94, autonMode);
+            turreterror = setTurretPosition(.25, autonMode);
         } else if (turretlocationtarget == "right") {
-            turreterror =  setTurretPosition(3.32, autonMode);
+            turreterror =  setTurretPosition(1.69, autonMode);
         }
         return turreterror;
     }
     public boolean setTurretPosition(double turretpostarget, boolean autonMode) {
         // This method will return false for successful turn or true for an error.
-        final double TURRET_THRESHOLD_POS = 0.02; // volts
+        final double TURRET_THRESHOLD_POS = 0.1; // volts
         double turretmult; // to set the  speed of the turret
         // TODO: Need to change from our turretposcurrent to
         turretstop = false; // initially we want the turret to move for the while loop
@@ -61,14 +61,18 @@ public class CDTurret {
 //                return true; // There was an error, the value didn't change.
 //            };
             TURRET_CURRENT_THRESHOLD = Math.abs(turretposlast - turretpostarget);
-            if (TURRET_CURRENT_THRESHOLD < .5) {
-                turretmult = .3;
+            if (TURRET_CURRENT_THRESHOLD < .05) {
+                turretmult = .8;
             } else {
-                turretmult = .65;
+                turretmult = 1.0;
             }
-            if (TURRET_CURRENT_THRESHOLD < TURRET_THRESHOLD_POS) {
-                setTurretPower(0.0); // need to stop the turret before leaving the loop
-                turretstop = true; // leave the while loop
+            if (TURRET_CURRENT_THRESHOLD <= .03) {
+                if (TURRET_CURRENT_THRESHOLD < .01) {
+                    turretmult = .65;
+                } else {
+                    setTurretPower(0.0); // need to stop the turret before leaving the loop
+                    turretstop = true; // leave the while loop
+                }
             } else if (turretposlast > turretpostarget) {
                 setTurretPower(-1*turretmult);
                 turretstop = false;
