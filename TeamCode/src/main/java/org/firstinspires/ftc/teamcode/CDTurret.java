@@ -37,11 +37,11 @@ public class CDTurret {
         // This method will return false for successful turn or true for an error.
         boolean turreterror = false;
         if (turretlocationtarget == "center") {
-            turreterror = setTurretPosition(.85, autonMode);
+            turreterror = setTurretPosition(.98, autonMode);
         } else if (turretlocationtarget == "left") {
-            turreterror = setTurretPosition(.25, autonMode);
+            turreterror = setTurretPosition(.36, autonMode);
         } else if (turretlocationtarget == "right") {
-            turreterror =  setTurretPosition(1.69, autonMode);
+            turreterror =  setTurretPosition(1.92, autonMode);
         }
         return turreterror;
     }
@@ -60,21 +60,22 @@ public class CDTurret {
 //                turretstop = true;
 //                return true; // There was an error, the value didn't change.
 //            };
-            TURRET_CURRENT_THRESHOLD = Math.abs(turretposlast - turretpostarget);
-            if (TURRET_CURRENT_THRESHOLD < .05) {
-                turretmult = .8;
-            } else {
-                turretmult = 1.0;
+            TURRET_CURRENT_THRESHOLD = Math.abs(turretposlast - turretpostarget); // Check the current gap between target and current position
+            if (TURRET_CURRENT_THRESHOLD <= .06) { // Stop tolerance
+                setTurretPower(0.0); // need to stop the turret before leaving the loop
+                turretstop = true; // leave the while loop
+                return false;
             }
-            if (TURRET_CURRENT_THRESHOLD <= .03) {
-                if (TURRET_CURRENT_THRESHOLD < .01) {
-                    turretmult = .65;
-                } else {
-                    setTurretPower(0.0); // need to stop the turret before leaving the loop
-                    turretstop = true; // leave the while loop
-                }
-            } else if (turretposlast > turretpostarget) {
-                setTurretPower(-1*turretmult);
+            turretmult = .8; // Run full speed or do the ifs
+            if (TURRET_CURRENT_THRESHOLD <= .03) { // Prepare to slow tolerance
+                turretmult = .6; // Prepare to slow
+            } else if (TURRET_CURRENT_THRESHOLD <= .01) { // Prepare to stop tolerance
+                // Do this before we stop
+                turretmult = .3; // Prepare to stop
+            }
+
+            if (turretposlast > turretpostarget) {
+                setTurretPower(-1 * turretmult);
                 turretstop = false;
             } else if (turretposlast < turretpostarget) {
                 setTurretPower(1*turretmult);
