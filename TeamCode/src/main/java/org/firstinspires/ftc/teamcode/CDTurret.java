@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.util.*;
 //import com.qualcomm.robotcore.util.Hardware;
 
 public class CDTurret {
@@ -11,6 +12,10 @@ public class CDTurret {
     public double turretposlast;
     public double TURRET_CURRENT_THRESHOLD;
     public AnalogInput turretpot;
+    private ElapsedTime turrettimer = new ElapsedTime();
+    private int turrettimeout = 2; // timeout for turret moves
+
+
     public  CDTurret(CDHardware theHardware){
         robotHardware = theHardware;
         robotHardware.turretmotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -50,9 +55,10 @@ public class CDTurret {
         final double TURRET_THRESHOLD_POS = 0.1; // volts
         double turretmult; // to set the  speed of the turret
         // TODO: Need to change from our turretposcurrent to
+        turrettimer.reset();
         turretstop = false; // initially we want the turret to move for the while loop
         turretposcurrent = 0; //updates every loop at the end, zero to start while loop for comparison
-        while (!turretstop) {
+        while (!turretstop || (turrettimer.seconds() > turrettimeout)) {
             /* This gets the current turret position and sets it to a variable
              */
             turretposlast = getTurretPotVolts(); //updates every loop for the position going into the move.
