@@ -23,7 +23,7 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
         // Start back at right edge
         myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -3, 5);
         myChassis.encoderDriveStraight(AUTON_LONG_SPEED,3,10.0);
-        myChassis.encoderDriveTurn(AUTON_LONG_TURN, -45, 10);
+        myChassis.encoderDriveTurn(AUTON_LONG_TURN, -35, 10);
         myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -5, 18);
 
         sleep(100);
@@ -31,17 +31,18 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
 
         // go to elevator
-        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -19, 18);
+        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -17, 18);
         //myChassis.encoderDriveTurn(AUTON_LONG_TURN, -55, 10);
         myIntake.setIntakePower(.4);
         sleep(800);
         myIntake.setIntakePower(0);
         //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 55, 10);
 
+        sleep (30000);
         // Return
-        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 24, 18);
+        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 22, 18);
         myChassis.encoderDriveTurn(AUTON_LONG_TURN, 45, 10);
-        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 15, 18);
+        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 12, 18);
 
         // Enter warehouse
         myTurret.setTurretDirection("center", false);
@@ -66,18 +67,18 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
             myTurret.setTurretDirection("left", false);
             //go to hub
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,-32,10.0);
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -15, 18);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -12, 18);
             myChassis.encoderDriveTurn(AUTON_LONG_TURN, -45, 10);
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -24, 18);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -22, 18);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -55, 10);
             myIntake.setIntakePower(.4);
             sleep(800);
             myIntake.setIntakePower(0);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 55, 10);
             // Return
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 24, 18);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 22, 18);
             myChassis.encoderDriveTurn(AUTON_LONG_TURN, 45, 10);
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 15, 18);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 12, 18);
             // Enter warehouse
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,32,10.0);
         }
@@ -96,18 +97,18 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
             myTurret.setTurretDirection("left", false);
             //go to hub
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,-32,10.0);
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -15, 18);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -12, 18);
             myChassis.encoderDriveTurn(AUTON_LONG_TURN, -45, 10);
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -24, 18);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -22, 18);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -55, 10);
             myIntake.setIntakePower(.4);
             sleep(800);
             myIntake.setIntakePower(0);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 55, 10);
             // Return
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 24, 18);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 22, 18);
             myChassis.encoderDriveTurn(AUTON_LONG_TURN, 45, 10);
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 15, 18);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 12, 18);
             // Enter warehouse
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,32,10.0);
         }

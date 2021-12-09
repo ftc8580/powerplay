@@ -73,8 +73,8 @@ public class CDElevator {
             // TODO: Need to use the turret potentiometer to determine if we are over the wheels to make sure we don't drop the elevator in auton on wheels and bind.
             elevatorlastpos = myDistanceSensor.getElevatorDistance(); // updates every loop to say where we are in the beginning.
             ELEVATORCURRENTTHRESHOLD = Math.abs(elevatorlastpos - elevatorpostarget);
-            if (elevatorlastpos < 10 || elevatorlastpos > 28) {
-                elevatormult = .60;
+            if (elevatorlastpos < 10 || elevatorlastpos > 35) {
+                elevatormult = .85;
             } else {
                 elevatormult = 1.0;
             }

@@ -37,11 +37,11 @@ public class CDTurret {
         // This method will return false for successful turn or true for an error.
         boolean turreterror = false;
         if (turretlocationtarget == "center") {
-            turreterror = setTurretPosition(.98, autonMode);
+            turreterror = setTurretPosition(1.27, autonMode);
         } else if (turretlocationtarget == "left") {
-            turreterror = setTurretPosition(.36, autonMode);
+            turreterror = setTurretPosition(.58, autonMode);
         } else if (turretlocationtarget == "right") {
-            turreterror =  setTurretPosition(1.92, autonMode);
+            turreterror =  setTurretPosition(2.46, autonMode);
         }
         return turreterror;
     }
@@ -66,12 +66,24 @@ public class CDTurret {
                 turretstop = true; // leave the while loop
                 return false;
             }
-            turretmult = .8; // Run full speed or do the ifs
+            if (autonMode) {
+                turretmult = 1.0; // Run full speed or do the ifs
+            } else {
+                turretmult = 0.8;
+            }
             if (TURRET_CURRENT_THRESHOLD <= .03) { // Prepare to slow tolerance
-                turretmult = .6; // Prepare to slow
+                if (autonMode) {
+                    turretmult = .8; // Prepare to slow
+                } else {
+                    turretmult = .6; // Prepare to slow
+                }
             } else if (TURRET_CURRENT_THRESHOLD <= .01) { // Prepare to stop tolerance
                 // Do this before we stop
-                turretmult = .3; // Prepare to stop
+                if (autonMode) {
+                    turretmult = .3; // Prepare to stop
+                } else {
+                    turretmult = .3;
+                }
             }
 
             if (turretposlast > turretpostarget) {
