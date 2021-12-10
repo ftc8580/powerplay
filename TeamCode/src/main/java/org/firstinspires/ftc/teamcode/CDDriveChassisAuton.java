@@ -169,18 +169,33 @@ public class CDDriveChassisAuton {
         int newStrafeTargetLF;
         double strafemult = 1.25;
 
+        newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition();
+        newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition();
+        newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition();
+        newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition();
         //Determine new target position and pass to motor controller
-        if (direction == "left") {
-            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int) (diagInches * COUNTS_PER_INCH * strafemult);
+        if ((direction == "right") && (diagInches > 0)) { // Forward Right
             newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int) (diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int) (diagInches * COUNTS_PER_INCH * strafemult);
             newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition();
             newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition();
-        } else {
+        } else if ((direction == "left") && (diagInches > 0)) { // Forward Left
+            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition();
+            newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition();
+            newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int) (diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() - (int) (diagInches * COUNTS_PER_INCH * strafemult);
+        } else if ((direction == "left") && (diagInches < 0)) { // Backwards Left
+            newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int) (diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int) (diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition();
+            newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition();
+        } else if ((direction == "right") && (diagInches < 0)) { // Backwards Right
             newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition();
             newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition();
             newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int) (diagInches * COUNTS_PER_INCH * strafemult);
             newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() - (int) (diagInches * COUNTS_PER_INCH * strafemult);
         }
+
         robotHardware.rightrearmotor.setTargetPosition(newStrafeTargetRR);
         robotHardware.rightfrontmotor.setTargetPosition(newStrafeTargetRF);
         robotHardware.leftrearmotor.setTargetPosition(newStrafeTargetLR);
