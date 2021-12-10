@@ -58,9 +58,12 @@ public class CDTurret {
         turrettimer.reset();
         turretstop = false; // initially we want the turret to move for the while loop
         turretposcurrent = 0; //updates every loop at the end, zero to start while loop for comparison
-        while (!turretstop || (turrettimer.seconds() > turrettimeout)) {
+        while (!turretstop) {
             /* This gets the current turret position and sets it to a variable
              */
+            if (turrettimer.seconds() > turrettimeout) {
+                return false;
+            }
             turretposlast = getTurretPotVolts(); //updates every loop for the position going into the move.
 //            if (turretposcurrent == turretposlast) {
 //                turretstop = true;
