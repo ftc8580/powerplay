@@ -62,12 +62,19 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
         //position above is just inside warehouse
 
         //turn on intake move forward then back
-        //while (intakepos > 6) {
-        myIntake.setIntakePower(regularintake);
-        myChassis.encoderDriveStraight(AUTON_LONG_APPROACH_SPEED, 12, 10.0);
-        myIntake.setIntakePower(0);
-        myChassis.encoderDriveStraight(AUTON_LONG_SPEED, -12, 10.0);
-        //}
+        int driveincr = 2;
+        int drivecyclecount = 0;
+        while (intakepos > 6) {
+            //check block there (less than 6 then block is there)
+            intakepos = myDistanceSensor.getIntakeDistance();
+            telemetry.addData("IntakeDist", "%.2f", intakepos);
+            telemetry.update();
+            myIntake.setIntakePower(regularintake);
+            myChassis.encoderDriveStraight(AUTON_LONG_APPROACH_SPEED, driveincr, 2.0);
+            myIntake.setIntakePower(0);
+            drivecyclecount=drivecyclecount+1;
+        }
+        myChassis.encoderDriveStraight(AUTON_LONG_SPEED, -drivecyclecount*driveincr, 10.0);
 
         //check block there (less than 6 then block is there)
         intakepos = myDistanceSensor.getIntakeDistance();
