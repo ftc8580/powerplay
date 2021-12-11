@@ -18,23 +18,28 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
     static final double AUTON_LONG_TURN = 0.5;
     static final double AUTON_LONG_APPROACH_SPEED = 0.4;
 
-    static final double capturedobjintakedist = 6.65;
+    static final double capturedobjintakedist = 6.5;
     static final double slowerintake = -0.4;
     static final double regularintake = -0.8;
     static final double deliverintake = 0.5;
 
     public void HuntForBlockReturnToBegin() {
-        int driveincr = 3;
+        sleep(1000);
+        double driveincr = 2.0;
         int drivecyclecount = 0;
         while (intakepos > capturedobjintakedist) {
             //check block there (less than 6 then block is there)
             intakepos = myDistanceSensor.getIntakeDistance();
             telemetry.addData("IntakeDist", "%.2f", intakepos);
             telemetry.update();
+            sleep(1000);
             myIntake.setIntakePower(regularintake);
-            myChassis.encoderDriveStraight(AUTON_LONG_APPROACH_SPEED, driveincr, 2.0);
+            sleep(1000);
+            myChassis.encoderDriveStraight(AUTON_LONG_APPROACH_SPEED, driveincr, 10.0);
+            sleep(1000);
+            myIntake.setIntakePower(0);
+            sleep(1000);
             intakepos = myDistanceSensor.getIntakeDistance();
-            //myIntake.setIntakePower(0);
             drivecyclecount=drivecyclecount+1;
         }
         myIntake.setIntakePower(0);
