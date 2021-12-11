@@ -23,6 +23,21 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
     static final double regularintake = -0.6;
     static final double deliverintake = 0.5;
 
+    public void HuntForBlockReturnToBegin() {
+        int driveincr = 2;
+        int drivecyclecount = 0;
+        while (intakepos > capturedobjintakedist) {
+            //check block there (less than 6 then block is there)
+            intakepos = myDistanceSensor.getIntakeDistance();
+            telemetry.addData("IntakeDist", "%.2f", intakepos);
+            telemetry.update();
+            myIntake.setIntakePower(regularintake);
+            myChassis.encoderDriveStraight(AUTON_LONG_APPROACH_SPEED, driveincr, 2.0);
+            myIntake.setIntakePower(0);
+            drivecyclecount=drivecyclecount+1;
+        }
+        myChassis.encoderDriveStraight(AUTON_LONG_SPEED, -drivecyclecount*driveincr, 10.0);
+    }
     @Override
     public void executeAuton() {
         ElapsedTime myTimer = new ElapsedTime();
@@ -62,33 +77,24 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
         //position above is just inside warehouse
 
         //turn on intake move forward then back
-        int driveincr = 2;
-        int drivecyclecount = 0;
-        while (intakepos > 6) {
-            //check block there (less than 6 then block is there)
-            intakepos = myDistanceSensor.getIntakeDistance();
-            telemetry.addData("IntakeDist", "%.2f", intakepos);
-            telemetry.update();
-            myIntake.setIntakePower(regularintake);
-            myChassis.encoderDriveStraight(AUTON_LONG_APPROACH_SPEED, driveincr, 2.0);
-            myIntake.setIntakePower(0);
-            drivecyclecount=drivecyclecount+1;
-        }
-        myChassis.encoderDriveStraight(AUTON_LONG_SPEED, -drivecyclecount*driveincr, 10.0);
-
+        HuntForBlockReturnToBegin();
         //check block there (less than 6 then block is there)
         intakepos = myDistanceSensor.getIntakeDistance();
         telemetry.addData("IntakeDist", "%.2f", intakepos);
         telemetry.update();
 
+        //delivery 2 if block
         if ((myTimer.seconds()<endofroundtimevalue) && (intakepos < capturedobjintakedist)) {
             myElevator.setElevatorPosition(myElevator.elevatorpostop);
             myTurret.setTurretDirection("left", false);
             //go to hub
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 2, 5);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 4, 5);
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,-26,10.0);
+            sleep(50);
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -12, 10);
+            sleep(50);
             myChassis.encoderDriveTurn(AUTON_LONG_TURN, -35, 10);
+            sleep(50);
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -18, 18);
             myChassis.encoderDriveStrafe(AUTON_LONG_APPROACH_SPEED, -3, 18);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -55, 10);
@@ -104,6 +110,7 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,26,10.0);
         }
 
+        //if no block try again
         intakepos = myDistanceSensor.getIntakeDistance();
         if ((myTimer.seconds()<endofroundtimevalue) && (intakepos > capturedobjintakedist)) {
             intakepos = myDistanceSensor.getIntakeDistance();
@@ -111,24 +118,26 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
             sleep(100);
             myTurret.setTurretDirection("center", false);
             myElevator.setElevatorPosition(myElevator.elevatorposground);
-            myIntake.setIntakePower(regularintake);
-            myChassis.encoderDriveStraight(AUTON_LONG_APPROACH_SPEED, 18, 10.0);
-            myIntake.setIntakePower(0);
-            myChassis.encoderDriveStraight(AUTON_LONG_SPEED, -18, 10.0);
+            HuntForBlockReturnToBegin();
         }
         intakepos = myDistanceSensor.getIntakeDistance();
+
+        //delivery 2 if block
         if ((myTimer.seconds()<endofroundtimevalue) && (intakepos < capturedobjintakedist)) {
             myElevator.setElevatorPosition(myElevator.elevatorpostop);
             myTurret.setTurretDirection("left", false);
             //go to hub
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 2, 5);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 4, 5);
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,-26,10.0);
+            sleep(50);
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -12, 10);
+            sleep(50);
             myChassis.encoderDriveTurn(AUTON_LONG_TURN, -35, 10);
+            sleep(50);
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -18, 18);
             myChassis.encoderDriveStrafe(AUTON_LONG_APPROACH_SPEED, -3, 18);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -55, 10);
-            myIntake.setIntakePower (deliverintake);
+            myIntake.setIntakePower(deliverintake);
             sleep(1000);
             myIntake.setIntakePower(0);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 55, 10);
