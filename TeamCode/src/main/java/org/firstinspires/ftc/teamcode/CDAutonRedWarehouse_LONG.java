@@ -20,11 +20,11 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
 
     static final double capturedobjintakedist = 6.65;
     static final double slowerintake = -0.4;
-    static final double regularintake = -0.6;
+    static final double regularintake = -0.8;
     static final double deliverintake = 0.5;
 
     public void HuntForBlockReturnToBegin() {
-        int driveincr = 2;
+        int driveincr = 3;
         int drivecyclecount = 0;
         while (intakepos > capturedobjintakedist) {
             //check block there (less than 6 then block is there)
@@ -33,9 +33,11 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
             telemetry.update();
             myIntake.setIntakePower(regularintake);
             myChassis.encoderDriveStraight(AUTON_LONG_APPROACH_SPEED, driveincr, 2.0);
-            myIntake.setIntakePower(0);
+            intakepos = myDistanceSensor.getIntakeDistance();
+            //myIntake.setIntakePower(0);
             drivecyclecount=drivecyclecount+1;
         }
+        myIntake.setIntakePower(0);
         myChassis.encoderDriveStraight(AUTON_LONG_SPEED, -drivecyclecount*driveincr, 10.0);
     }
     @Override
@@ -67,13 +69,12 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
         myChassis.encoderDriveTurn(AUTON_LONG_TURN, 35, 10);
         myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 12, 18);
 
-        // Enter warehouse
+        // Enter warehouse after delivery
         myTurret.setTurretDirection("center", true);
         sleep(100);
         myTurret.setTurretDirection("center", false);
         myElevator.setElevatorPosition(myElevator.elevatorposground);
-        myChassis.encoderDriveStraight(AUTON_LONG_SPEED,20,10.0);
-        myChassis.encoderDriveStraight(AUTON_LONG_SPEED,6,10.0);
+        myChassis.encoderDriveStraight(AUTON_LONG_SPEED,26,10.0);
         //position above is just inside warehouse
 
         //turn on intake move forward then back
@@ -90,11 +91,11 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
             //go to hub
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 4, 5);
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,-26,10.0);
-            sleep(50);
+            sleep(100);
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -12, 10);
-            sleep(50);
+            sleep(100);
             myChassis.encoderDriveTurn(AUTON_LONG_TURN, -35, 10);
-            sleep(50);
+            sleep(100);
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -18, 18);
             myChassis.encoderDriveStrafe(AUTON_LONG_APPROACH_SPEED, -3, 18);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -55, 10);
@@ -105,9 +106,8 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
             // Return
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 21, 18);
             myChassis.encoderDriveTurn(AUTON_LONG_TURN, 35, 10);
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 12, 18);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 18, 18);
             // Enter warehouse
-            myChassis.encoderDriveStraight(AUTON_LONG_SPEED,26,10.0);
         }
 
         //if no block try again
@@ -118,6 +118,7 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
             sleep(100);
             myTurret.setTurretDirection("center", false);
             myElevator.setElevatorPosition(myElevator.elevatorposground);
+            myChassis.encoderDriveStraight(AUTON_LONG_SPEED,26,10.0);
             HuntForBlockReturnToBegin();
         }
         intakepos = myDistanceSensor.getIntakeDistance();
@@ -129,11 +130,11 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
             //go to hub
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 4, 5);
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,-26,10.0);
-            sleep(50);
+            sleep(100);
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -12, 10);
-            sleep(50);
+            sleep(100);
             myChassis.encoderDriveTurn(AUTON_LONG_TURN, -35, 10);
-            sleep(50);
+            sleep(100);
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -18, 18);
             myChassis.encoderDriveStrafe(AUTON_LONG_APPROACH_SPEED, -3, 18);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -55, 10);
@@ -144,7 +145,7 @@ public class CDAutonRedWarehouse_LONG extends CDAutonBase {
             // Return
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 21, 18);
             myChassis.encoderDriveTurn(AUTON_LONG_TURN, 35, 10);
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 12, 18);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 18, 18);
             // Enter warehouse
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,26,10.0);
         }
