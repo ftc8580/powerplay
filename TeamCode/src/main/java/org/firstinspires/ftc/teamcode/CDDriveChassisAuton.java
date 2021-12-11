@@ -145,7 +145,7 @@ public class CDDriveChassisAuton {
 
         //Loop while motors are active. This uses && which means that if any of the motors hit their target the motion will stop.
         //This is safer to ensure the robot will end motion asap.
-        while ((runtime.seconds()<strafeTimeout) && (robotHardware.rightrearmotor.isBusy() && robotHardware.rightfrontmotor.isBusy() && robotHardware.leftrearmotor.isBusy() && robotHardware.leftfrontmotor.isBusy())) {
+        while ((runtime.seconds()<strafeTimeout) && ((robotHardware.rightrearmotor.isBusy() & robotHardware.rightfrontmotor.isBusy() && robotHardware.leftrearmotor.isBusy() && robotHardware.leftfrontmotor.isBusy()))) {
         }
 
         //Stop all motion
@@ -161,7 +161,7 @@ public class CDDriveChassisAuton {
         robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void encoderDriveDiag(double speed, double diagInches, double diagTimeout, String direction) {
+    public void encoderDriveDiag(double speed, double diagInches, double diagTimeout, boolean isLeft) {
 
         int newStrafeTargetRR;
         int newStrafeTargetRF;
@@ -169,32 +169,33 @@ public class CDDriveChassisAuton {
         int newStrafeTargetLF;
         double strafemult = 1.25;
 
-        newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition();
-        newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition();
         newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition();
         newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition();
-        //Determine new target position and pass to motor controller
-        if ((direction == "right") && (diagInches > 0)) { // Forward Right
-            newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int) (diagInches * COUNTS_PER_INCH * strafemult);
-            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int) (diagInches * COUNTS_PER_INCH * strafemult);
+        newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition();
+        newStrafeTargetLF = robotHardware.rightrearmotor.getCurrentPosition();
+
+        if (!isLeft && (diagInches > 0.01)) { // Forward Right
+            newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
             newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition();
             newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition();
-        } else if ((direction == "left") && (diagInches > 0)) { // Forward Left
+        } else if (isLeft && (diagInches > 0.01)) { // Forward Left
             newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition();
             newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition();
-            newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int) (diagInches * COUNTS_PER_INCH * strafemult);
-            newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() - (int) (diagInches * COUNTS_PER_INCH * strafemult);
-        } else if ((direction == "left") && (diagInches < 0)) { // Backwards Left
-            newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int) (diagInches * COUNTS_PER_INCH * strafemult);
-            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int) (diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() - (int)(diagInches * COUNTS_PER_INCH * strafemult);
+        } else if (isLeft && (diagInches < 0.01)) { // Backwards Left
+            newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
             newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition();
             newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition();
-        } else if ((direction == "right") && (diagInches < 0)) { // Backwards Right
+        } else if (!isLeft && (diagInches < 0.01)) { // Backwards Right
             newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition();
             newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition();
-            newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int) (diagInches * COUNTS_PER_INCH * strafemult);
-            newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() - (int) (diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() - (int)(diagInches * COUNTS_PER_INCH * strafemult);
         }
+
 
         robotHardware.rightrearmotor.setTargetPosition(newStrafeTargetRR);
         robotHardware.rightfrontmotor.setTargetPosition(newStrafeTargetRF);
@@ -217,8 +218,23 @@ public class CDDriveChassisAuton {
 
         //Loop while motors are active. This uses && which means that if any of the motors hit their target the motion will stop.
         //This is safer to ensure the robot will end motion asap.
-        while ((runtime.seconds()<diagTimeout) && (robotHardware.rightrearmotor.isBusy() && robotHardware.rightfrontmotor.isBusy() && robotHardware.leftrearmotor.isBusy() && robotHardware.leftfrontmotor.isBusy())) {
+        if (!isLeft && (diagInches > 0.01)) { // Forward Right
+            while ((runtime.seconds()<diagTimeout) && (robotHardware.rightrearmotor.isBusy() && robotHardware.leftfrontmotor.isBusy())) {
+            }
+
+        } else if (isLeft && (diagInches > 0.01)) { // Forward Left
+           while ((runtime.seconds()<diagTimeout) && (robotHardware.rightfrontmotor.isBusy() && robotHardware.leftrearmotor.isBusy())) {
+            }
+
+        } else if (isLeft && (diagInches < 0.01)) { // Backwards Left
+            while ((runtime.seconds()<diagTimeout) && (robotHardware.rightrearmotor.isBusy() && robotHardware.leftfrontmotor.isBusy())) {
+            }
+
+        } else if (!isLeft && (diagInches < 0.01)) { // Backwards Right
+            while ((runtime.seconds()<diagTimeout) && ( robotHardware.rightfrontmotor.isBusy() && robotHardware.leftrearmotor.isBusy())) {
+            }
         }
+
 
         //Stop all motion
         robotHardware.rightrearmotor.setPower(0);
