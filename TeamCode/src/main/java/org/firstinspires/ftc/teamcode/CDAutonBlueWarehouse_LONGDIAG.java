@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="CDAutonRedWarehouse_LONGDIAG", group="Linear Opmode")
+@Autonomous(name="CDAutonBlueWarehouse_LONGDIAG", group="Linear Opmode")
 //@Disabled
-public class CDAutonRedWarehouse_LONGDIAG extends CDAutonBase {
+public class CDAutonBlueWarehouse_LONGDIAG extends CDAutonBase {
     @Override
     public void initTokenWeDoNotSee() {
-        duckWeDoNotSee = 3;
+        duckWeDoNotSee = 1;
     }
 
     public double intakepos;
@@ -47,22 +47,22 @@ public class CDAutonRedWarehouse_LONGDIAG extends CDAutonBase {
         myTimer.reset();
 
         // Start back at right edge
-        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -3, 5);
+        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 3, 5);
 
         sleep(100);
-        myTurret.setTurretDirection("left", true);
+        myTurret.setTurretDirection("right", true);
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
 
         // go to elevator
-        myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -25.0, 20, true);
-        myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -3.0, 20, true);
+        myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -25.0, 20, false);
+        myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -3.0, 20, false);
         myIntake.setIntakePower(deliverintake);
         sleep(1000);
         myIntake.setIntakePower(0);
 
         // Return
-        myChassis.encoderDriveDiag(AUTON_LONG_SPEED, 28, 20, false);
-        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 14, 18);
+        myChassis.encoderDriveDiag(AUTON_LONG_SPEED, 28, 20, true);
+        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -14, 18);
 
         // Enter warehouse after delivery
         myTurret.setTurretDirection("center", true);
@@ -82,27 +82,27 @@ public class CDAutonRedWarehouse_LONGDIAG extends CDAutonBase {
         //delivery 2 if block
         if ((myTimer.seconds()<endofroundtimevalue) && (intakepos < capturedobjintakedist)) {
             myElevator.setElevatorPosition(myElevator.elevatorpostop);
-            myTurret.setTurretDirection("left", false);
+            myTurret.setTurretDirection("right", false);
             //go to hub
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 4, 5);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -4, 5);
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,-33,10.0);
             sleep(200);
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -9, 5);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 9, 5);
 
             sleep(100);
-            myTurret.setTurretDirection("left", true);
+            myTurret.setTurretDirection("right", true);
             myElevator.setElevatorPosition(myElevator.elevatorpostop);
 
             // go to elevator
-            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -25.0, 20, true);
-            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -3.0, 20, true);
+            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -25.0, 20, false);
+            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -3.0, 20, false);
             myIntake.setIntakePower(deliverintake);
             sleep(1000);
             myIntake.setIntakePower(0);
 
             // Return
-            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, 28, 20, false);
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 14, 18);
+            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, 28, 20, true);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -14, 18);
 
             // Enter warehouse after delivery
             myTurret.setTurretDirection("center", true);
@@ -125,28 +125,27 @@ public class CDAutonRedWarehouse_LONGDIAG extends CDAutonBase {
         //delivery 2 if block
         if ((myTimer.seconds()<endofroundtimevalue) && (intakepos < capturedobjintakedist)) {
             myElevator.setElevatorPosition(myElevator.elevatorpostop);
-            myTurret.setTurretDirection("left", false);
+            myTurret.setTurretDirection("right", false);
             //go to hub
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 4, 5);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -4, 5);
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,-33,10.0);
             sleep(200);
-            // Start back at right edge
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -9, 5);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 9, 5);
 
             sleep(100);
-            myTurret.setTurretDirection("left", true);
+            myTurret.setTurretDirection("right", true);
             myElevator.setElevatorPosition(myElevator.elevatorpostop);
 
             // go to elevator
-            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -25.0, 20, true);
-            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -3.0, 20, true);
+            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -25.0, 20, false);
+            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -3.0, 20, false);
             myIntake.setIntakePower(deliverintake);
             sleep(1000);
             myIntake.setIntakePower(0);
 
             // Return
-            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, 28, 20, false);
-            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 14, 18);
+            myChassis.encoderDriveDiag(AUTON_LONG_SPEED, 28, 20, true);
+            myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -14, 18);
 
             // Enter warehouse after delivery
             myTurret.setTurretDirection("center", true);
@@ -160,10 +159,10 @@ public class CDAutonRedWarehouse_LONGDIAG extends CDAutonBase {
 
         //park
         myElevator.setElevatorPosition(myElevator.elevatorposmiddle);
-        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED,-25,10.0);
-        myTurret.setTurretDirection("right", false);
+        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED,25,10.0);
+        myTurret.setTurretDirection("left", false);
         myChassis.encoderDriveStraight(AUTON_LONG_SPEED,26,10.0);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 10);
         myTurret.setTurretDirection("center", false);
         intakepos = myDistanceSensor.getIntakeDistance();
         if (intakepos > capturedobjintakedist) {
