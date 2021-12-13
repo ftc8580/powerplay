@@ -184,12 +184,12 @@ public class CDDriveChassisAuton {
             newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition();
             newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int)(diagInches * COUNTS_PER_INCH * strafemult);
             newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() - (int)(diagInches * COUNTS_PER_INCH * strafemult);
-        } else if (isLeft && (diagInches < 0.01)) { // Backwards Left
+        } else if (!isLeft && (diagInches < 0.01)) { // Backwards Right
             newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
             newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
             newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition();
             newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition();
-        } else if (!isLeft && (diagInches < 0.01)) { // Backwards Right
+        } else if (isLeft && (diagInches < 0.01)) { // Backwards Left
             newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition();
             newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition();
             newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int)(diagInches * COUNTS_PER_INCH * strafemult);
