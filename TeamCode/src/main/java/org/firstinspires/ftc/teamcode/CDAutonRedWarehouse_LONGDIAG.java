@@ -23,8 +23,9 @@ public class CDAutonRedWarehouse_LONGDIAG extends CDAutonBase {
     static final double regularintake = -0.8;
     static final double deliverintake = 0.5;
 
-    public void HuntForBlockReturnToBegin() {
+    public boolean HuntForBlockReturnToBegin() {
         double driveincr = 4.0;
+        double maxdistance = 24.0;
         int drivecyclecount = 0;
         do {
             //check block there (less than 6 then block is there)
@@ -36,10 +37,11 @@ public class CDAutonRedWarehouse_LONGDIAG extends CDAutonBase {
             sleep(150);
             intakepos = myDistanceSensor.getIntakeDistance();
             drivecyclecount = drivecyclecount + 1;
+            if (drivecyclecount == maxdistance/driveincr) {return true;}
         } while (intakepos > capturedobjintakedist);
-
         myIntake.setIntakePower(0);
         myChassis.encoderDriveStraight(AUTON_LONG_SPEED, -drivecyclecount*driveincr, 10.0);
+        return true;
     }
     @Override
     public void executeAuton() {
