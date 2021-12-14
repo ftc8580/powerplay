@@ -132,9 +132,10 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             double elevatorEaseOut = 1.0;
 
             // elevator watchdog
-            if ((elevatorinput > .01) && (Math.abs(elevatorposcurrent-elevatorposlast) < .01)) {
+            double elevatorlockthreshold = .01;
+            if ((elevatorinput > .01) && (Math.abs(elevatorposcurrent-elevatorposlast) < elevatorlockthreshold)) {
                 myElevator.setElevatorPower(-elevatorinput);
-            } else if ((elevatorinput < -.01) && (Math.abs(elevatorposcurrent-elevatorposlast) < .01)){
+            } else if ((elevatorinput < -.01) && (Math.abs(elevatorposcurrent-elevatorposlast) < elevatorlockthreshold)){
                 myElevator.setElevatorPower(-elevatorinput);
             } else {
                 //
