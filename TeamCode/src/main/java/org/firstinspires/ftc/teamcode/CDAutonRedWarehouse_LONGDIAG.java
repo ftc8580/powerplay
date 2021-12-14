@@ -12,10 +12,10 @@ public class CDAutonRedWarehouse_LONGDIAG extends CDAutonBase {
     }
 
     public double intakepos;
-    static final int endofroundtimevalue = 90;
+    static final int endofroundtimevalue = 25;
 
-    static final double AUTON_LONG_SPEED = 0.6;
-    static final double AUTON_LONG_TURN = 0.5;
+    static final double AUTON_LONG_SPEED = 0.8;
+    static final double AUTON_LONG_TURN = 0.6;
     static final double AUTON_LONG_APPROACH_SPEED = 0.4;
 
     static final double capturedobjintakedist = 6.5;
@@ -142,6 +142,7 @@ public class CDAutonRedWarehouse_LONGDIAG extends CDAutonBase {
             // go to elevator
             myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -25.0, 20, true);
             myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -3.0, 20, true);
+            //Deliver
             myIntake.setIntakePower(deliverintake);
             sleep(1000);
             myIntake.setIntakePower(0);
@@ -156,8 +157,8 @@ public class CDAutonRedWarehouse_LONGDIAG extends CDAutonBase {
             myTurret.setTurretDirection("center", false);
             myElevator.setElevatorPosition(myElevator.elevatorposground);
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,30,10.0);
-            //position above is just inside warehouse
 
+            //position above is just inside warehouse
         }
 
         //park
@@ -167,6 +168,7 @@ public class CDAutonRedWarehouse_LONGDIAG extends CDAutonBase {
         myChassis.encoderDriveStraight(AUTON_LONG_SPEED,26,10.0);
         myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
         myTurret.setTurretDirection("center", false);
+
         intakepos = myDistanceSensor.getIntakeDistance();
         if (intakepos > capturedobjintakedist) {
             myElevator.setElevatorPosition(myElevator.elevatorposground);

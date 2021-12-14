@@ -12,10 +12,10 @@ public class CDAutonBlueWarehouse_LONGDIAG extends CDAutonBase {
     }
 
     public double intakepos;
-    static final int endofroundtimevalue = 90;
+    static final int endofroundtimevalue = 25;
 
-    static final double AUTON_LONG_SPEED = 0.6;
-    static final double AUTON_LONG_TURN = 0.5;
+    static final double AUTON_LONG_SPEED = 0.8;
+    static final double AUTON_LONG_TURN = 0.6;
     static final double AUTON_LONG_APPROACH_SPEED = 0.4;
 
     static final double capturedobjintakedist = 6.5;
@@ -132,6 +132,7 @@ public class CDAutonBlueWarehouse_LONGDIAG extends CDAutonBase {
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -4, 5);
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,-33,10.0);
             sleep(200);
+            // Start back at right edge
             myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 9, 5);
 
             sleep(100);
@@ -141,6 +142,7 @@ public class CDAutonBlueWarehouse_LONGDIAG extends CDAutonBase {
             // go to elevator
             myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -25.0, 20, false);
             myChassis.encoderDriveDiag(AUTON_LONG_SPEED, -3.0, 20, false);
+            //Deliver
             myIntake.setIntakePower(deliverintake);
             sleep(1000);
             myIntake.setIntakePower(0);
@@ -155,8 +157,8 @@ public class CDAutonBlueWarehouse_LONGDIAG extends CDAutonBase {
             myTurret.setTurretDirection("center", false);
             myElevator.setElevatorPosition(myElevator.elevatorposground);
             myChassis.encoderDriveStraight(AUTON_LONG_SPEED,30,10.0);
-            //position above is just inside warehouse
 
+            //position above is just inside warehouse
         }
 
         //park
@@ -166,6 +168,7 @@ public class CDAutonBlueWarehouse_LONGDIAG extends CDAutonBase {
         myChassis.encoderDriveStraight(AUTON_LONG_SPEED,26,10.0);
         myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 10);
         myTurret.setTurretDirection("center", false);
+
         intakepos = myDistanceSensor.getIntakeDistance();
         if (intakepos > capturedobjintakedist) {
             myElevator.setElevatorPosition(myElevator.elevatorposground);
