@@ -31,17 +31,17 @@ public class CDAutonBlueWarehouse_LONG extends CDAutonBase {
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
 
         // go to elevator
-        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 19, 18);
+        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, 18, 18);
         //myChassis.encoderDriveTurn(AUTON_LONG_TURN, -55, 10);
         myIntake.setIntakePower(.4);
-        sleep(800);
+        sleep(1000);
         myIntake.setIntakePower(0);
         //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 55, 10);
 
         // Return
         myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -24, 18);
         myChassis.encoderDriveTurn(AUTON_LONG_TURN, -45, 10);
-        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -15, 18);
+        myChassis.encoderDriveStrafe(AUTON_LONG_SPEED, -13, 18);
 
         // Enter warehouse
         myTurret.setTurretDirection("center", false);

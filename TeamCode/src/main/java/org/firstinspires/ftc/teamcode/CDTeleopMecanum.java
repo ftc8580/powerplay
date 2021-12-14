@@ -23,7 +23,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
     // Initialize our local variables with values
     // These "slow" variable is used to control the overall speed of the robot
     // TODO: Work with Drive Team to determine proper baseSpeed, duckmulti
-    public double baseSpeed = 0.60;
+    public double baseSpeed = 0.70;
     public double intakemult = 1.0;
     public double delivermult = 0.75;
     public double duckmulti = 0.6;
@@ -45,6 +45,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
     public double x;
     public double rx;
     public double elevatorposcurrent;
+    public double elevatorposlast = 14.0; // Arbitrary
     public double elevatorcurrentthreshold;
     public boolean elevatorisdown;
     public double eleDownThresh;
@@ -116,6 +117,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             elevatorposcurrent = myElevator.getElevatorPosition();
             elevatorcurrentthreshold = myElevator.ELEVATORCURRENTTHRESHOLD;
 
+
             // magnetic switch
             elevatorupmagnetswitch = false;
             if (myHardware.elevatormagneticswitch.isPressed()) {
@@ -128,16 +130,28 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             }
             double elevatorinput = (gamepad2.left_stick_y * 1.0);
             double elevatorEaseOut = 1.0;
-            if ((elevatorposcurrent <= myElevator.elevatorposground && elevatorinput > .01) || ((elevatorupmagnetswitch || elevatorposcurrent >= myElevator.elevatorpostop) && elevatorinput < -.01)) {
-                myElevator.setElevatorPower(0);
+
+            // elevator watchdog
+            if ((elevatorinput > .01) && (Math.abs(elevatorposcurrent-elevatorposlast) < .01)) {
+                myElevator.setElevatorPower(-elevatorinput);
+            } else if ((elevatorinput < -.01) && (Math.abs(elevatorposcurrent-elevatorposlast) < .01)){
+                myElevator.setElevatorPower(-elevatorinput);
             } else {
-                if ((elevatorinput > .01 && elevatorposcurrent < 10) || (elevatorinput < -.01 && elevatorposcurrent > 35)) {
-                    elevatorEaseOut = .85;
-                } else if (elevatorinput < .1 ) {
-                    elevatorEaseOut = 1.0;
+                //
+                if ((elevatorposcurrent <= myElevator.elevatorposground && elevatorinput > .01) || ((elevatorupmagnetswitch || elevatorposcurrent >= myElevator.elevatorpostop) && elevatorinput < -.01)) {
+                    myElevator.setElevatorPower(0);
+                } else {
+                    if ((elevatorinput > .01 && elevatorposcurrent < 10) || (elevatorinput < -.01 && elevatorposcurrent > 35)) {
+                        elevatorEaseOut = .85;
+                    } else if (elevatorinput < .1) {
+                        elevatorEaseOut = 1.0;
+                    }
+                    myElevator.setElevatorPower(-elevatorinput * elevatorEaseOut);
                 }
-                myElevator.setElevatorPower(-elevatorinput*elevatorEaseOut);
             }
+            // For elevator watchdog
+            elevatorposlast = myElevator.getElevatorPosition();
+
             //  Values of the elevator position are defined in the variable init at the beginning
             // Dpad controls the position of the elevator
             if (gamepad2.dpad_down) {
@@ -223,9 +237,9 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
                 // Everything gamepad 1:
                 // User controls for the robot speed overall
                 if (gamepad1.left_trigger != 0) {
-                    robotSpeed = baseSpeed * 2.0;
+                    robotSpeed = baseSpeed * 1.4;
                 } else if (gamepad1.right_trigger != 0) {
-                    robotSpeed = baseSpeed * 1.5;
+                    robotSpeed = baseSpeed * .4;
                 } else {
                     robotSpeed = baseSpeed;
                 }
@@ -355,7 +369,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
             telemetry.addData("motorLR ", "%.2f", leftRearPower);
             telemetry.addData("motorRR ", "%.2f", rightRearPower);
             telemetry.addData("ElevatorDist", "%.2f", elevatorposcurrent);
- //           intakepos = myDistanceSensor.getIntakeDistance();
+            //           intakepos = myDistanceSensor.getIntakeDistance();
             telemetry.addData("IntakeDist", "%.2f", myDistanceSensor.getIntakeDistance());
             telemetry.addData("CurrElevatorThresh", "%.2f", elevatorcurrentthreshold);
             telemetry.addData("CurrElevatorDownThresh", "%.2f", eleDownThresh);
