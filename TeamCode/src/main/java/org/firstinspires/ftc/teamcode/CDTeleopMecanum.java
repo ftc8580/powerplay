@@ -30,7 +30,7 @@ public class CDTeleopMecanum extends LinearOpMode implements Runnable {
     public final double DuckIncrement = 0.01; // amount to ramp motor each CYCLE_MS cycle
     public final int DuckCycleIncrement = 5; // period of each cycle in ms (.0001 sec)
     public final double Duck_Max_Fwd = 0.8; // Maximum FWD power applied to motor
-    public final double Duck_Max_Rev = -0.6; // Maximum REV power applied to motor
+    public final double Duck_Max_Rev = -0.7; // Maximum REV power applied to motor
 
     public boolean imuTelemetry = false;
     //For setting elevator position using buttons
