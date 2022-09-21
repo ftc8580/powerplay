@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.*;
 
-@Autonomous(name="CDAutonBlueDuck_LONG", group="Linear Opmode")
+@Autonomous(name="CDAutonRedDuck_LONG", group="Linear Opmode")
 @Disabled
-public class CDAutonBlueDuck_LONG extends CDAutonBase {
+public class CDAutonRedDuck_LONG extends CDAutonBase {
     @Override
     public void initTokenWeDoNotSee() {
         duckWeDoNotSee = 1;
@@ -12,26 +12,29 @@ public class CDAutonBlueDuck_LONG extends CDAutonBase {
 
     @Override
     public void executeAuton() {
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -3, 5);
         myTurret.setTurretDirection("center", true);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2, 5);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -17, 8);
-        myDuckSpinner.setDuckSpinnerPower(.7);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 10);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -19, 8);
+        sleep(200);
+        myDuckSpinner.setDuckSpinnerPower(-.6);
         sleep(2500);
         myDuckSpinner.setDuckSpinnerPower(0);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 45, 10.0);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 18, 10.0);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 45, 8);
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
-        myTurret.setTurretDirection("right", true);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 18, 5.0);
         myIntake.setIntakePower(.4);
         sleep(1000);
         myIntake.setIntakePower(0);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -21, 5);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 45, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -6, 10.0);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 18, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 40, 10.0);
         myTurret.setTurretDirection("center", true);
         myElevator.setElevatorPosition(7);
     }
 }
+
 
 
 //Sample Code

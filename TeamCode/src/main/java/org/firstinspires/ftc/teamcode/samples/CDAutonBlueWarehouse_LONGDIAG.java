@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="CDAutonBlueWarehouse_LONGDIAG", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class CDAutonBlueWarehouse_LONGDIAG extends CDAutonBase {
     @Override
     public void initTokenWeDoNotSee() {

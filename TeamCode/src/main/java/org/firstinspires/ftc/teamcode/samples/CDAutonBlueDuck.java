@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.*;
 
-@Autonomous(name="CDAutonRedDuck_LONG", group="Linear Opmode")
+@Autonomous(name="CDAutonBlueDuck", group="Linear Opmode")
 @Disabled
-public class CDAutonRedDuck_LONG extends CDAutonBase {
+public class CDAutonBlueDuck extends CDAutonBase {
     @Override
     public void initTokenWeDoNotSee() {
         duckWeDoNotSee = 1;
@@ -12,29 +12,34 @@ public class CDAutonRedDuck_LONG extends CDAutonBase {
 
     @Override
     public void executeAuton() {
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -3, 5);
+        // Setup location
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
+        sleep(500);
         myTurret.setTurretDirection("center", true);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 10);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -19, 8);
-        sleep(200);
-        myDuckSpinner.setDuckSpinnerPower(-.6);
-        sleep(2500);
+        myTurret.setTurretDirection("center", false);
+
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2, 5);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -17, 8);
+        // Spin Ducks
+        myDuckSpinner.setDuckSpinnerPower(.5);
+        sleep(3000);
         myDuckSpinner.setDuckSpinnerPower(0);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 45, 8);
+        // Drive to approach hub
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 35, 10.0);
+        // Prepare to deliver
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 18, 5.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 25, 10.0);
+        // Deliver
         myIntake.setIntakePower(.4);
         sleep(1000);
         myIntake.setIntakePower(0);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -6, 10.0);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 18, 10.0);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 40, 10.0);
-        myTurret.setTurretDirection("center", true);
+        // Return
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -25, 10.0);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -11, 5);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -12, 10.0);
         myElevator.setElevatorPosition(7);
     }
 }
-
 
 
 //Sample Code

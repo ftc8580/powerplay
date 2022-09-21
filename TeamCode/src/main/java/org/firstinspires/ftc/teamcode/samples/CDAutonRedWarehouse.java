@@ -1,44 +1,43 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.*;
 
-@Autonomous(name="CDAutonBlueWarehouse", group="Linear Opmode")
-//@Disabled
-public class CDAutonBlueWarehouse extends CDAutonBase {
+@Autonomous(name="CDAutonRedWarehouse", group="Linear Opmode")
+@Disabled
+public class CDAutonRedWarehouse extends CDAutonBase {
     @Override
     public void initTokenWeDoNotSee() {
-        duckWeDoNotSee = 1;
+        duckWeDoNotSee = 3;
     }
 
     @Override
     public void executeAuton() {
         // Start 5 inches right side
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -3, 5);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 3, 5);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-3,10.0);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 45, 10);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -5, 18);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -45, 10);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 5, 18);
+
         sleep(100);
-        myTurret.setTurretDirection("left", false);
+        myTurret.setTurretDirection("right", false);
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
         // go to elevator
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -20, 18);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -30, 10);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 20, 18);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 30, 10);
         myIntake.setIntakePower(.4);
         sleep(800);
         myIntake.setIntakePower(0);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 30, 10);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -30, 10);
         // Return
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 25, 18);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -45, 10);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 15, 18);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -25, 18);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 45, 10);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -15, 18);
         // Enter warehouse
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-32,10.0);
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,-30,10.0);
+        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED,30,10.0);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED,-20,10.0);
-        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 10);
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 10);
         myTurret.setTurretDirection("center", false);
-        myTurret.setTurretDirection("center", false);
-
         myElevator.setElevatorPosition(getDuckDeliveryLocation(duckLocation, myElevator));
         myElevator.setElevatorPosition(myElevator.elevatorposground);
         // Pick up block
