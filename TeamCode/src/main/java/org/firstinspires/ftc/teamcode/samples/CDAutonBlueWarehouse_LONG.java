@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="CDAutonBlueWarehouse_LONG", group="Linear Opmode")
 @Disabled
-public class CDAutonBlueWarehouse_LONG extends CDAutonBase {
+public class CDAutonBlueWarehouse_LONG extends CDAutonBaseSample {
     @Override
     public void initTokenWeDoNotSee() {
         duckWeDoNotSee = 1;

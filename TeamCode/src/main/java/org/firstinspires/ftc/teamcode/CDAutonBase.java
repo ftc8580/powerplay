@@ -12,8 +12,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Parameters;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.CDDriveChassisAuton;
-import org.firstinspires.ftc.teamcode.CDHardware;
 
 import java.util.List;
 
@@ -91,11 +89,6 @@ public class CDAutonBase extends LinearOpMode {
     // Public variables for use in executeautons method
     public org.firstinspires.ftc.teamcode.CDHardware myHardware;
     public org.firstinspires.ftc.teamcode.CDDriveChassisAuton myChassis;
-    public CDDuckSpinner myDuckSpinner;
-    public CDElevator myElevator;
-    public CDIntake myIntake;
-    public CDTurret myTurret;
-    public CDDistanceSensor myDistanceSensor;
     public int duckLocation;
     public int duckWeDoNotSee;
 
@@ -105,11 +98,6 @@ public class CDAutonBase extends LinearOpMode {
         //double moveBackTimer = -1;
         myHardware = new CDHardware(hardwareMap);
         myChassis = new CDDriveChassisAuton(myHardware);
-        myDuckSpinner = new CDDuckSpinner(myHardware);
-        myElevator = new CDElevator(myHardware);
-        myIntake = new CDIntake(myHardware);
-        myTurret = new CDTurret(myHardware);
-        myDistanceSensor = new CDDistanceSensor(myHardware);
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");
@@ -176,7 +164,7 @@ public class CDAutonBase extends LinearOpMode {
                     if (updatedRecognitions.size() == 0) {
                         duckLocation = duckWeDoNotSee;
                         telemetry.addData("Token Location:", duckLocation);
-                        telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
+//                        telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
 
                     }
 //                    telemetry.addData("Token Location:", duckLocation);
@@ -193,7 +181,7 @@ public class CDAutonBase extends LinearOpMode {
                         if ((recognition.getLabel().equals("Duck")) || (recognition.getLabel().equals("Cube"))) {
                             duckLocation = findClosest(arr, Math.round(recognition.getLeft()), duckWeDoNotSee);
                             telemetry.addData("Token Location:", duckLocation);
-                            telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
+//                            telemetry.addData("Found A Token For Delivery Location:", getDuckDeliveryLocation(duckLocation, myElevator));
                         }
                     }
                     i++;
@@ -220,19 +208,18 @@ public class CDAutonBase extends LinearOpMode {
         }
     }
 
-    public static double getDuckDeliveryLocation(int duckLocation, CDElevator myElevator){
-        double[] duckDeliveryPositions = new double[] {myElevator.defaultelevatorposition, myElevator.elevatorposbottom, myElevator.elevatorposmiddle, myElevator.elevatorpostop};
-        return duckDeliveryPositions[duckLocation];
-    }
+//    public static double getDuckDeliveryLocation(int duckLocation, CDElevator myElevator){
+//        double[] duckDeliveryPositions = new double[] {myElevator.defaultelevatorposition, myElevator.elevatorposbottom, myElevator.elevatorposmiddle, myElevator.elevatorpostop};
+//        return duckDeliveryPositions[duckLocation];
+//    }
 
     public void initTokenWeDoNotSee() {
         // Intends to be overridden
         duckWeDoNotSee = 1;
     }
     public void executeAuton() {
-        myDuckSpinner.setDuckSpinnerPower(-.6);
+        // This will be overriden by the Auton design class
         sleep(2500);
-        myDuckSpinner.setDuckSpinnerPower(0);
     }
     /**
      * Initialize the Vuforia localization engine.

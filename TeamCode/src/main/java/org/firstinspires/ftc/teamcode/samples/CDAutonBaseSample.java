@@ -11,9 +11,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.*;
 import java.util.*;
 
 
-@Autonomous(name="CDAutonBase", group="Linear Opmode")
+@Autonomous(name="CDAutonBaseSample", group="Linear Opmode")
 @Disabled
-public class CDAutonBase extends LinearOpMode {
+public class CDAutonBaseSample extends LinearOpMode {
     /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
      * the following 4 detectable objects
      *  0: Ball,

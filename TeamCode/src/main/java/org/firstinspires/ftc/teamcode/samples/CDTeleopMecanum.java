@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.samples;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -16,6 +17,7 @@ import java.util.Locale;
 
 
 @TeleOp(name="CDTeleopMecanum", group="Linear Opmode")
+@Disabled
 public class CDTeleopMecanum extends LinearOpMode implements Runnable {
 
     // Initialize our teleopThread

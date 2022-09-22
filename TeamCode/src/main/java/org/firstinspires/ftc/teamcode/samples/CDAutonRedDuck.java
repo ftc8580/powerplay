@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.*;
 
 @Autonomous(name="CDAutonRedDuck", group="Linear Opmode")
 @Disabled
-public class CDAutonRedDuck extends CDAutonBase {
+public class CDAutonRedDuck extends CDAutonBaseSample {
     @Override
     public void initTokenWeDoNotSee() {
         duckWeDoNotSee = 3;
