@@ -1,73 +1,69 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import java.lang.Exception
+import kotlin.math.abs
+import kotlin.math.pow
 
 // There are work in progress / untested IMU elements in this code which we may want to use so they are preserved.
 //import com.qualcomm.hardware.bosch.BNO055IMU;
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 // Telemetry
-
 //import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 //import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 //import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 //import java.util.Locale;
-
-
 @TeleOp(name = "CDTeleop", group = "Linear Opmode")
-public class CDTeleop extends LinearOpMode implements Runnable {
-
+class CDTeleop : LinearOpMode(), Runnable {
     // Initialize our local variables with values
     // These "slow" variable is used to control the overall speed of the robot
     // TODO: Work with Drive Team to determine
-    public double baseSpeed = 0.70;
-    public boolean imuTelemetry = false;
+    private var baseSpeed = 0.70
+    private var imuTelemetry = false
+
     // Initialize our local variables for use later in telemetry or other methods
-    public double y;
+    private var y = 0.0
+
     //For setting elevator position using buttons
     //This is where you can set the values of the positions based off telemetry
     //TODO Check that these values are updated for the latest elevator so that freight can be put in proper level of alliance hub
-    public double x;
-    public double rx;
-    public double leftFrontPower;
-    public double leftRearPower;
-    public double rightFrontPower;
-    public double rightRearPower;
-    public double robotSpeed;
-    public boolean constrainMovement;
-    public org.firstinspires.ftc.teamcode.CDHardware myHardware;
+    private var x = 0.0
+    private var rx = 0.0
+    private var leftFrontPower = 0.0
+    private var leftRearPower = 0.0
+    private var rightFrontPower = 0.0
+    private var rightRearPower = 0.0
+    private var robotSpeed = 0.0
+    private var constrainMovement = false
+    private lateinit var myHardware: CDHardware
+
     // Initialize our teleopThread
-    private Thread teleopGamepad1Thread;
+    private lateinit var teleopGamepad1Thread: Thread
 
     // State used for updating telemetry
-//    public Orientation angles;
-//    public Acceleration gravity;
-//    public BNO055IMU imu;
-
-    @Override
-    public void runOpMode() {
+    //    public Orientation angles;
+    //    public Acceleration gravity;
+    //    public BNO055IMU imu;
+    override fun runOpMode() {
         // Initialize our classes to variables
-        myHardware = new CDHardware(hardwareMap);
+        myHardware = CDHardware(hardwareMap)
 
         // Configure initial variables
-        constrainMovement = false;
+        constrainMovement = false
         //Wait for the driver to press PLAY on the driver station phone
         // make a new thread
-        telemetry.addData("Status", "Fully Initialized");
-        telemetry.update();
-
-        teleopGamepad1Thread = new Thread(this); // Define teleopThread
-        waitForStart();
+        telemetry.addData("Status", "Fully Initialized")
+        telemetry.update()
+        teleopGamepad1Thread = Thread(this) // Define teleopThread
+        waitForStart()
         //Run until the end (Driver presses STOP)
-
-        teleopGamepad1Thread.start(); // Start the teleopThread
+        teleopGamepad1Thread.start() // Start the teleopThread
 
         // Polling rate for logging gets set to zero before the while loop
-        int i = 0;
-
+        var i = 0
         while (opModeIsActive()) {
 
-            // Everything Gamespad 2 will be handled between these two comments
+            // Everything Gamepad 2 will be handled between these two comments
             //
             // GAMEPAD 2 Code!
             //
@@ -76,72 +72,72 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // Telemetry Stuff -
             // need to slow down the logging
             if (i == 10) {
-                composeTelemetry(imuTelemetry);
-                i = 0;
+                composeTelemetry(imuTelemetry)
+                i = 0
             } else {
-                i++;
+                i++
             }
         }
     }
 
     // Threaded Gamepad 1. Everything Gamepad 1 will happen below.
-    public void run() {
+    override fun run() {
         try {
-            CDDriveChassis myChassis = new CDDriveChassis(myHardware);
+            val myChassis = CDDriveChassis(myHardware)
             while (opModeIsActive()) {
                 // Everything gamepad 1:
                 // User controls for the robot speed overall
-                if (gamepad1.left_trigger != 0) {
-                    robotSpeed = baseSpeed * 1.4;
-                } else if (gamepad1.right_trigger != 0) {
-                    robotSpeed = baseSpeed * .4;
+                robotSpeed = if (gamepad1.left_trigger != 0f) {
+                    baseSpeed * 1.4
+                } else if (gamepad1.right_trigger != 0f) {
+                    baseSpeed * .4
                 } else {
-                    robotSpeed = baseSpeed;
+                    baseSpeed
                 }
                 if (gamepad1.a) {
-                    // Flip the boolean to toggle modes for drive contraints
-                    constrainMovement = !constrainMovement;
+                    // Flip the boolean to toggle modes for drive constraints
+                    constrainMovement = !constrainMovement
                 }
                 // We cubed the inputs to make the inputs more responsive
-                y = Math.pow(gamepad1.left_stick_y, 3); // Remember, this is reversed!
-                x = Math.pow(gamepad1.left_stick_x * -1.1, 3); // Counteract imperfect strafing
-                rx = Math.pow(gamepad1.right_stick_x, 3) * 0.5;  //Reduced turn speed to make it easier to control
+                y = gamepad1.left_stick_y.toDouble().pow(3.0) // Remember, this is reversed!
+                x = (gamepad1.left_stick_x * -1.1).pow(3.0) // Counteract imperfect strafing
+                rx = gamepad1.right_stick_x.toDouble().pow(3.0) * 0.5 //Reduced turn speed to make it easier to control
 
                 // Denominator is the largest motor power (absolute value) or 1
                 // This ensures all the powers maintain the same ratio, but only when
                 // at least one is out of the range [-1, 1]
-                double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+                val denominator = (abs(y) + abs(x) + abs(rx)).coerceAtLeast(1.0)
                 if (constrainMovement) {
-                    leftFrontPower = (y + x) / denominator;
-                    leftRearPower = (y - x) / denominator;
-                    rightFrontPower = (y - x) / denominator;
-                    rightRearPower = (y + x) / denominator;
+                    leftFrontPower = (y + x) / denominator
+                    leftRearPower = (y - x) / denominator
+                    rightFrontPower = (y - x) / denominator
+                    rightRearPower = (y + x) / denominator
                 } else {
-                    leftFrontPower = (y + x - rx) / denominator;
-                    leftRearPower = (y - x - rx) / denominator;
-                    rightFrontPower = (y - x + rx) / denominator;
-                    rightRearPower = (y + x + rx) / denominator;
+                    leftFrontPower = (y + x - rx) / denominator
+                    leftRearPower = (y - x - rx) / denominator
+                    rightFrontPower = (y - x + rx) / denominator
+                    rightRearPower = (y + x + rx) / denominator
                 }
                 //move robot - drive chassis
-                myChassis.setLeftFrontPower(leftFrontPower * robotSpeed);
-                myChassis.setLeftRearPower(leftRearPower * robotSpeed);
-                myChassis.setRightFrontPower(rightFrontPower * robotSpeed);
-                myChassis.setRightRearPower(rightRearPower * robotSpeed);
+                myChassis.setLeftFrontPower(leftFrontPower * robotSpeed)
+                myChassis.setLeftRearPower(leftRearPower * robotSpeed)
+                myChassis.setRightFrontPower(rightFrontPower * robotSpeed)
+                myChassis.setRightRearPower(rightRearPower * robotSpeed)
             }
             // End gamepad 1
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
+
     //----------------------------------------------------------------------------------------------
     // Telemetry Configuration
     //----------------------------------------------------------------------------------------------
-
-    void composeTelemetry(boolean imuTelemetry) {
-        telemetry.clearAll();
+    private fun composeTelemetry(imuTelemetry: Boolean) {
+        telemetry.clearAll()
         if (imuTelemetry) {
-            telemetry.clearAll(); // Just doing something to satisfy the placeholder.
-////             At the beginning of each telemetry update, grab a bunch of data
+            telemetry.clearAll() // Just doing something to satisfy the placeholder.
+            ////             At the beginning of each telemetry update, grab a bunch of data
 ////             from the IMU that we will then display in separate lines.
 ////            Comment block disables telemetry reporting!
 //            telemetry.addAction(new Runnable() {
@@ -200,27 +196,24 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 //                    });
             // Loop and update the dashboard
         } else {
-            telemetry.addData("y input", "%.2f", y);
-            telemetry.addData("x input", "%.2f", x);
-            telemetry.addData("rx input", "%.2f", rx);
-            telemetry.addData("motorLF ", "%.2f", leftFrontPower);
-            telemetry.addData("motorRF ", "%.2f", rightFrontPower);
-            telemetry.addData("motorLR ", "%.2f", leftRearPower);
-            telemetry.addData("motorRR ", "%.2f", rightRearPower);
-
+            telemetry.addData("y input", "%.2f", y)
+            telemetry.addData("x input", "%.2f", x)
+            telemetry.addData("rx input", "%.2f", rx)
+            telemetry.addData("motorLF ", "%.2f", leftFrontPower)
+            telemetry.addData("motorRF ", "%.2f", rightFrontPower)
+            telemetry.addData("motorLR ", "%.2f", leftRearPower)
+            telemetry.addData("motorRR ", "%.2f", rightRearPower)
         }
         // Loop and update the dashboard
-        telemetry.update();
-    }
-    //----------------------------------------------------------------------------------------------
+        telemetry.update()
+    } //----------------------------------------------------------------------------------------------
     // Formatting
     //----------------------------------------------------------------------------------------------
-
-//    String formatAngle(AngleUnit angleUnit, double angle) {
-//        return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
-//    }
-//
-//    String formatDegrees(double degrees){
-//        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
-//    }
+    //    String formatAngle(AngleUnit angleUnit, double angle) {
+    //        return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
+    //    }
+    //
+    //    String formatDegrees(double degrees){
+    //        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
+    //    }
 }
