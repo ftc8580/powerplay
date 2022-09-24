@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.hardware.Sensor;
-import com.qualcomm.hardware.bosch.*;
-import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 //Defines the motors and (possible) sensors
 public class CDHardware {
@@ -12,7 +11,7 @@ public class CDHardware {
     public DcMotor leftrearmotor;
     public DcMotor rightrearmotor;
 
-    public CDHardware (HardwareMap hwMap){
+    public CDHardware(HardwareMap hwMap) {
         //Defines Hardware map from Control Hub
         //TODO: Need to double check motor mapping on the driver hub and check orientation
         leftfrontmotor = hwMap.get(DcMotor.class, "motorLF");

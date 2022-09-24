@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 
 
-@Autonomous(name="CDAutonBase", group="Linear Opmode")
+@Autonomous(name = "CDAutonBase", group = "Linear Opmode")
 @Disabled
 public class CDAutonBase extends LinearOpMode {
     /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
@@ -52,13 +52,16 @@ public class CDAutonBase extends LinearOpMode {
      */
     private static final String VUFORIA_KEY =
             "AXXCHEP/////AAABmXaXN8FwREvRjitK+vRPfteLJ/QYssqHKZPw8TG5AIe32q0tfagLtBwY9AVaYhKV6y8cT8QAXoG1wmRjTbMr8SI5SC+zUGqel33vbcZ9t/aL49vYwNip2WpTdueyjRuHGoXjQyeyapmwBLR50nr8+lryLNT0Cp+anlhaVhExK/0Tkzo9BkND71CgEbtQtOfAkPEbg9uUhMb5DeIpjLdjFscgqrfza6b7oztxr5cmiumIKr1pru4GCT0xafq+Tw1BkLoF95QAEa+57DLJJRxPPfw8bUug+1lGTKlLNLPA/waEFtgsGyGDomBxsQgObyGdihPyro0WR6pvM5kvKY2v6mpoBJXQiTpby7CNRiqISXCS";
-
+    // Public variables for use in executeautons method
+    public org.firstinspires.ftc.teamcode.CDHardware myHardware;
+    public org.firstinspires.ftc.teamcode.CDDriveChassisAuton myChassis;
+    public int duckLocation;
+    public int duckWeDoNotSee;
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
     private VuforiaLocalizer vuforia;
-
     /**
      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
      * Detection engine.
@@ -85,12 +88,6 @@ public class CDAutonBase extends LinearOpMode {
             return idx;
         }
     }
-
-    // Public variables for use in executeautons method
-    public org.firstinspires.ftc.teamcode.CDHardware myHardware;
-    public org.firstinspires.ftc.teamcode.CDDriveChassisAuton myChassis;
-    public int duckLocation;
-    public int duckWeDoNotSee;
 
     @Override
     public void runOpMode() {
@@ -139,7 +136,7 @@ public class CDAutonBase extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(1.4, 16.0/9.0);
+            tfod.setZoom(1.4, 16.0 / 9.0);
         }
 
         /** Wait for the game to begin */
@@ -152,7 +149,7 @@ public class CDAutonBase extends LinearOpMode {
         int zeroThreshold = 0; // Null
         int leftThreshold = 300; // Setup for only 2 ducks
         int rightThreshold = 800; // Setup for only 2 ducks
-        int[] arr = new int[] {zeroThreshold, leftThreshold, rightThreshold};
+        int[] arr = new int[]{zeroThreshold, leftThreshold, rightThreshold};
         // Logic below is that we want it to start recognizing when we init but not after we start
         while (!opModeIsActive()) {
             if (tfod != null) {
@@ -217,10 +214,12 @@ public class CDAutonBase extends LinearOpMode {
         // Intends to be overridden
         duckWeDoNotSee = 1;
     }
+
     public void executeAuton() {
         // This will be overriden by the Auton design class
         sleep(2500);
     }
+
     /**
      * Initialize the Vuforia localization engine.
      */

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 // There are work in progress / untested IMU elements in this code which we may want to use so they are preserved.
 //import com.qualcomm.hardware.bosch.BNO055IMU;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,23 +14,19 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import java.util.Locale;
 
 
-@TeleOp(name="CDTeleop", group="Linear Opmode")
+@TeleOp(name = "CDTeleop", group = "Linear Opmode")
 public class CDTeleop extends LinearOpMode implements Runnable {
 
-    // Initialize our teleopThread
-    private Thread teleopGamepad1Thread;
     // Initialize our local variables with values
     // These "slow" variable is used to control the overall speed of the robot
     // TODO: Work with Drive Team to determine
     public double baseSpeed = 0.70;
-
     public boolean imuTelemetry = false;
+    // Initialize our local variables for use later in telemetry or other methods
+    public double y;
     //For setting elevator position using buttons
     //This is where you can set the values of the positions based off telemetry
     //TODO Check that these values are updated for the latest elevator so that freight can be put in proper level of alliance hub
-
-    // Initialize our local variables for use later in telemetry or other methods
-    public double y;
     public double x;
     public double rx;
     public double leftFrontPower;
@@ -38,8 +35,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     public double rightRearPower;
     public double robotSpeed;
     public boolean constrainMovement;
-
     public org.firstinspires.ftc.teamcode.CDHardware myHardware;
+    // Initialize our teleopThread
+    private Thread teleopGamepad1Thread;
 
     // State used for updating telemetry
 //    public Orientation angles;
@@ -69,11 +67,11 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
         while (opModeIsActive()) {
 
-        // Everything Gamespad 2 will be handled between these two comments
+            // Everything Gamespad 2 will be handled between these two comments
             //
             // GAMEPAD 2 Code!
             //
-        // End Gamepad 2
+            // End Gamepad 2
 
             // Telemetry Stuff -
             // need to slow down the logging
@@ -91,7 +89,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         try {
             CDDriveChassis myChassis = new CDDriveChassis(myHardware);
             while (opModeIsActive()) {
-            // Everything gamepad 1:
+                // Everything gamepad 1:
                 // User controls for the robot speed overall
                 if (gamepad1.left_trigger != 0) {
                     robotSpeed = baseSpeed * 1.4;
