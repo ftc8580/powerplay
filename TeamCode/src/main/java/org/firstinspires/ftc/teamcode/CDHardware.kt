@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode
 
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.DcMotor
+import org.firstinspires.ftc.teamcode.models.MotorPositions
 
 //Defines the motors and (possible) sensors
 class CDHardware(hwMap: HardwareMap) {
@@ -18,5 +19,21 @@ class CDHardware(hwMap: HardwareMap) {
         rightFrontMotor = hwMap.get(DcMotor::class.java, "motorRF")
         leftRearMotor = hwMap.get(DcMotor::class.java, "motorLR")
         rightRearMotor = hwMap.get(DcMotor::class.java, "motorRR")
+    }
+
+    fun getPositions(): MotorPositions {
+        return MotorPositions(
+            leftFront = leftFrontMotor.currentPosition,
+            leftRear = leftRearMotor.currentPosition,
+            rightFront = rightFrontMotor.currentPosition,
+            rightRear = rightRearMotor.currentPosition
+        )
+    }
+
+    fun setTargetPositions(motorPositions: MotorPositions) {
+        leftFrontMotor.targetPosition = motorPositions.leftFront
+        leftRearMotor.targetPosition = motorPositions.leftRear
+        rightFrontMotor.targetPosition = motorPositions.rightFront
+        rightRearMotor.targetPosition = motorPositions.rightRear
     }
 }

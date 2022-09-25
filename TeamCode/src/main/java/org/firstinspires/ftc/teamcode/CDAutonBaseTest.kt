@@ -11,9 +11,9 @@ class CDAutonBaseTest : CDAutonBase() {
     }
 
     override fun executeAuton() {
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2.0, 5.0)
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 2.0, 10.0)
-        myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2.0, 5.0)
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 2.0, -10.0)
+        myChassis.encoderDriveStrafe(CDAutonDriveChassis.DRIVE_SPEED, 2.0, 5.0)
+        myChassis.encoderDriveStraight(CDAutonDriveChassis.DRIVE_SPEED, 2.0, 10.0)
+        myChassis.encoderDriveStrafe(CDAutonDriveChassis.DRIVE_SPEED, -2.0, 5.0)
+        myChassis.encoderDriveStraight(CDAutonDriveChassis.DRIVE_SPEED, 2.0, -10.0)
     }
 }

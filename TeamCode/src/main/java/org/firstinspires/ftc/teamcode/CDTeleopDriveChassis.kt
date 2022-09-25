@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode
 
+// import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 // import com.qualcomm.robotcore.util.ElapsedTime
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.DcMotor
-// import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import org.firstinspires.ftc.teamcode.models.DrivePower
 
-class CDDriveChassis(var robotHardware: CDHardware) {
+class CDTeleopDriveChassis(var robotHardware: CDHardware) {
     // private val runtime = ElapsedTime()
 
     init {
@@ -19,19 +20,10 @@ class CDDriveChassis(var robotHardware: CDHardware) {
         robotHardware.rightRearMotor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
     }
 
-    fun setLeftFrontPower(pow: Double) {
-        robotHardware.leftFrontMotor.power = pow
-    }
-
-    fun setLeftRearPower(pow: Double) {
-        robotHardware.leftRearMotor.power = pow
-    }
-
-    fun setRightFrontPower(pow: Double) {
-        robotHardware.rightFrontMotor.power = pow
-    }
-
-    fun setRightRearPower(pow: Double) {
-        robotHardware.rightRearMotor.power = pow
+    fun setDrivePower(drivePower: DrivePower, robotSpeed: Double = 1.0) {
+        robotHardware.leftFrontMotor.power = drivePower.leftFrontPower * robotSpeed
+        robotHardware.leftRearMotor.power = drivePower.leftRearPower * robotSpeed
+        robotHardware.rightFrontMotor.power = drivePower.rightFrontPower * robotSpeed
+        robotHardware.rightRearMotor.power = drivePower.rightRearPower * robotSpeed
     }
 }
