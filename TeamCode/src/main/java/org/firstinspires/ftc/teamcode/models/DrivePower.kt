@@ -22,10 +22,18 @@ class DrivePower(
             .coerceAtLeast(1.0)
 
         if (pacmanMode) {
-            leftFrontPower = (y + x) / denominator
-            leftRearPower = (y - x) / denominator
-            rightFrontPower = (y - x) / denominator
-            rightRearPower = (y + x) / denominator
+            if (x > y) {
+                leftFrontPower = (x - rx) / denominator
+                leftRearPower = (-x - rx) / denominator
+                rightFrontPower = (-x + rx) / denominator
+                rightRearPower = (x + rx) / denominator
+            }
+            if (y > x) {
+                leftFrontPower = (y - rx) / denominator
+                leftRearPower = (y - rx) / denominator
+                rightFrontPower = (y + rx) / denominator
+                rightRearPower = (y + rx) / denominator
+            }
         } else {
             leftFrontPower = (y + x - rx) / denominator
             leftRearPower = (y - x - rx) / denominator
