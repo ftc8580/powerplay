@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.*;
 
 @Autonomous(name="CDAutonBlueWarehouse", group="Linear Opmode")
-//@Disabled
-public class CDAutonBlueWarehouse extends CDAutonBase {
+@Disabled
+public class CDAutonBlueWarehouse extends CDAutonBaseSample {
     @Override
     public void initTokenWeDoNotSee() {
         duckWeDoNotSee = 1;

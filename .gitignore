@@ -8,6 +8,7 @@
 !libs/*.aar
 
 *.DS_Store
+*.hprof
 
 # Files for the ART/Dalvik VM
 *.dex
