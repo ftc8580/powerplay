@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector
 
 @Autonomous(name = "CDAutonBase", group = "Linear Opmode")
-@Disabled
 open class CDAutonBase : LinearOpMode() {
     // Initialize hardware variable
     private lateinit var myHardware: CDHardware
@@ -36,7 +35,7 @@ open class CDAutonBase : LinearOpMode() {
      * [.detector] is the variable we will use to store our instance of the TensorFlow Object
      * Detection engine.
      */
-    private lateinit var detector: TFObjectDetector
+    // private lateinit var detector: TFObjectDetector
     override fun runOpMode() {
         val myTimer = ElapsedTime()
         //double moveBackTimer = -1;
@@ -58,13 +57,13 @@ open class CDAutonBase : LinearOpMode() {
         // This new code is for the object detection
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
-        initVuforia()
-        initDetector()
+        // initVuforia()
+        // initDetector()
         /**
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
          */
-        detector.activate()
+        // detector.activate()
 
         // The TensorFlow software will scale the input images from the camera to a lower resolution.
         // This can result in lower detection accuracy at longer distances (> 55cm or 22").
@@ -72,7 +71,7 @@ open class CDAutonBase : LinearOpMode() {
         // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
         // should be set to the value of the images used to create the TensorFlow Object Detection model
         // (typically 16/9).
-        detector.setZoom(1.4, 16.0 / 9.0)
+        // detector.setZoom(1.4, 16.0 / 9.0)
 
         /** Wait for the game to begin  */
         telemetryService.logStartPrompt()
@@ -90,10 +89,10 @@ open class CDAutonBase : LinearOpMode() {
         while (!opModeIsActive()) {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
-            val updatedRecognitions = detector.updatedRecognitions
+            /* val updatedRecognitions = detector.updatedRecognitions
             if (updatedRecognitions != null) {
                 telemetryService.logRecognitions(updatedRecognitions)
-            }
+            } */
             telemetry.update()
         }
         //Wait fo the game to start (driver presses PLAY)
@@ -107,7 +106,8 @@ open class CDAutonBase : LinearOpMode() {
          * 1. encoderDriveStraight (speed, straightInches, straightTimeout)
          * 2. encoderDriveStrafe (speed, strafeInches, strafeTimeout)
          * 3. encodeDriveTurn (speed, turnDeg, turnTimeout)
-         */if (opModeIsActive()) {
+         */
+        if (opModeIsActive()) {
             executeAuton()
         }
     }
@@ -154,8 +154,8 @@ open class CDAutonBase : LinearOpMode() {
         detectorParameters.minResultConfidence = 0.8f
         detectorParameters.isModelTensorFlow2 = true
         detectorParameters.inputSize = 320
-        detector = ClassFactory.getInstance().createTFObjectDetector(detectorParameters, vuforia)
-        detector.loadModelFromAsset(TFOD_MODEL_ASSET, *LABELS)
+        /* detector = ClassFactory.getInstance().createTFObjectDetector(detectorParameters, vuforia)
+        detector.loadModelFromAsset(TFOD_MODEL_ASSET, *LABELS) */
     }
 
     companion object {

@@ -45,7 +45,7 @@ class CDAutonDriveChassis(var robotHardware: CDHardware) {
         //Loop while motors are active. This uses && which means that if any of the motors hit their target the motion will stop.
         //This is safer to ensure the robot will end motion asap.
         while (shouldContinueLooping(straightTimeout)) {
-            TODO()
+            // Do something?
         }
 
         //Stop all motion
@@ -78,7 +78,7 @@ class CDAutonDriveChassis(var robotHardware: CDHardware) {
         //Loop while motors are active. This uses && which means that if any of the motors hit their target the motion will stop.
         //This is safer to ensure the robot will end motion asap.
         while (shouldContinueLooping(strafeTimeout)) {
-            TODO()
+            // Do something?
         }
 
         //Stop all motion
@@ -134,7 +134,7 @@ class CDAutonDriveChassis(var robotHardware: CDHardware) {
                 robotHardware.rightRearMotor.isBusy &&
                 robotHardware.leftFrontMotor.isBusy
             ) {
-                TODO()
+                // Do something?
             }
         } else if (
             (isLeft && diagInches > 0.01) || (!isLeft && diagInches < 0.01)
@@ -144,7 +144,7 @@ class CDAutonDriveChassis(var robotHardware: CDHardware) {
                 robotHardware.rightFrontMotor.isBusy &&
                 robotHardware.leftRearMotor.isBusy
             ) {
-                TODO()
+                // Do something?
             }
         }
 
@@ -180,7 +180,7 @@ class CDAutonDriveChassis(var robotHardware: CDHardware) {
         //Loop while motors are active. This uses && which means that if any of the motors hit their target the motion will stop.
         //This is safer to ensure the robot will end motion asap.
         while (shouldContinueLooping(strafeTimeout)) {
-            TODO()
+            // Do something?
         }
 
         //Stop all motion

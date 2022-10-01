@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 
 @Autonomous(name = "CDAutonBaseTest", group = "Linear Opmode")
-@Disabled
 class CDAutonBaseTest : CDAutonBase() {
     override fun initTokenWeDoNotSee() {
         duckWeDoNotSee = 1
