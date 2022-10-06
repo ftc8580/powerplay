@@ -1,12 +1,18 @@
 ## Oakview 8580 Branch Strategy
 
-core branches
+# Core branches
+
+
 main is protected. This will be our main branch with the most stable code
+
 coders is for the team members to experiment and solve the next challenge
+
 develop is for the mentors to experiment and support the coders efforts
 
 feature branches:
+
 feat_java is the branch for the java language work done
+
 feat_kotlin is the branch for our testing in kotlin
 
 We will use feature branches as we work on specific functions and merge them in and out of the core branches above. This is essentially the [Git flow methodology](https://www.gitkraken.com/learn/git/git-flow).
