@@ -101,8 +101,14 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                     robotSpeed = baseSpeed;
                 }
                 if (gamepad1.a) {
+                    //Button A = unconstrained movement
+                    constrainMovement = false;
+                }
+                if (gamepad1.b) {
+                    //Button B = constrained movement
+                    constrainMovement = true;
                     // Flip the boolean to toggle modes for drive contraints
-                    constrainMovement = !constrainMovement;
+                    //constrainMovement = !constrainMovement;
                 }
                 // We cubed the inputs to make the inputs more responsive
                 y = Math.pow(gamepad1.left_stick_y, 3); // Remember, this is reversed!
@@ -114,10 +120,18 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 // at least one is out of the range [-1, 1]
                 double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
                 if (constrainMovement) {
-                    leftFrontPower = (y + x) / denominator;
-                    leftRearPower = (y - x) / denominator;
-                    rightFrontPower = (y - x) / denominator;
-                    rightRearPower = (y + x) / denominator;
+                   if (x>y) {
+                       leftFrontPower = (x - rx) / denominator;
+                       leftRearPower = (-x - rx) / denominator;
+                       rightFrontPower = (-x + rx) / denominator;
+                       rightRearPower = (x + rx) / denominator;
+                   }
+                   if (y>x) {
+                       leftFrontPower = (y - rx) / denominator;
+                       leftRearPower = (y - rx) / denominator;
+                       rightFrontPower = (y + rx) / denominator;
+                       rightRearPower = (y + rx) / denominator;
+                   }
                 } else {
                     leftFrontPower = (y + x - rx) / denominator;
                     leftRearPower = (y - x - rx) / denominator;
