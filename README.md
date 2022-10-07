@@ -7,7 +7,7 @@ main is protected. This will be our main branch with the most stable code
 
 coders is for the team members to experiment and solve the next challenge
 
-develop is for the mentors to experiment and support the coders efforts
+mentors branch is for the mentors to experiment and support the coders efforts
 
 feature branches:
 
