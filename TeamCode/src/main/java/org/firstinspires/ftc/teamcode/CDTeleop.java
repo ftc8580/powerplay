@@ -120,13 +120,13 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 // at least one is out of the range [-1, 1]
                 double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
                 if (constrainMovement) {
-                   if (x>y) {
+                   if (Math.abs(x)>Math.abs(y)) {
                        leftFrontPower = (x - rx) / denominator;
                        leftRearPower = (-x - rx) / denominator;
                        rightFrontPower = (-x + rx) / denominator;
                        rightRearPower = (x + rx) / denominator;
                    }
-                   if (y>x) {
+                   if (Math.abs(y)>Math.abs(x)) {
                        leftFrontPower = (y - rx) / denominator;
                        leftRearPower = (y - rx) / denominator;
                        rightFrontPower = (y + rx) / denominator;
