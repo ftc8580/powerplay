@@ -11,11 +11,11 @@ public class CDHardware {
     public DcMotor rightfrontmotor;
     public DcMotor leftrearmotor;
     public DcMotor rightrearmotor;
-    public DcMotor fourbarmotor;
-    public DcMotor armmotor;
-    public Servo armservo;
-    public Servo intakeservo;
-    public AnalogInput fourbarpos;
+    //public DcMotor fourbarmotor;
+    //public DcMotor armmotor;
+    //public Servo armservo;
+    //public Servo intakeservo;
+    //public AnalogInput fourbarpos;
 
 
     public CDHardware (HardwareMap hwMap){
@@ -25,11 +25,11 @@ public class CDHardware {
         rightfrontmotor = hwMap.get(DcMotor.class, "motorRF");
         leftrearmotor = hwMap.get(DcMotor.class, "motorLR");
         rightrearmotor = hwMap.get(DcMotor.class, "motorRR");
-        fourbarmotor = hwMap.get(DcMotor.class, "motorFourBar");
-        armmotor = hwMap.get(DcMotor.class, "motorArm");
-        armservo = hwMap.get(Servo.class, "servoArm");
-        intakeservo = hwMap.get(Servo.class, "servoIntake");
-        fourbarpos = hwMap.get(AnalogInput.class, "analogInputFourBar");
+        //fourbarmotor = hwMap.get(DcMotor.class, "motorFourBar");
+        //armmotor = hwMap.get(DcMotor.class, "motorArm");
+        //armservo = hwMap.get(Servo.class, "servoArm");
+        //intakeservo = hwMap.get(Servo.class, "servoIntake");
+        //fourbarpos = hwMap.get(AnalogInput.class, "analogInputFourBar");
     }
 }
 
