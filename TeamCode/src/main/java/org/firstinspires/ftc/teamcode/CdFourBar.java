@@ -51,32 +51,32 @@ public class CdFourBar {
     public boolean setFourbarPosition(double fourbarpostarget, boolean autonMode) {
         // This method will return false for successful turn or true for an error.
         final double FOURBAR_THRESHOLD_POS = 0.1; // volts
-        double turretmult; // to set the  speed of the turret
+        double fourbarmult; // to set the  speed of the turret
         // TODO: Need to change from our turretposcurrent to
-        turrettimer.reset();
-        turretstop = false; // initially we want the turret to move for the while loop
-        turretposcurrent = 0; //updates every loop at the end, zero to start while loop for comparison
-        while (!turretstop) {
+        fourbartimer.reset();
+        fourbarstop = false; // initially we want the turret to move for the while loop
+        fourbarposcurrent = 0; //updates every loop at the end, zero to start while loop for comparison
+        while (!fourbarstop) {
             /* This gets the current turret position and sets it to a variable
              */
-            if (turrettimer.seconds() > turrettimeout) {
+            if (fourbartimer.seconds() > fourbartimeout) {
                 return false;
             }
-            turretposlast = getTurretPotVolts(); //updates every loop for the position going into the move.
-//            if (turretposcurrent == turretposlast) {
-//                turretstop = true;
+            fourbarposlast = getFourbarPotVolts(); //updates every loop for the position going into the move.
+//            if (fourbarposcurrent == fourbarposlast) {
+//                fourbarstop = true;
 //                return true; // There was an error, the value didn't change.
 //            };
-            TURRET_CURRENT_THRESHOLD = Math.abs(turretposlast - turretpostarget); // Check the current gap between target and current position
-            if (TURRET_CURRENT_THRESHOLD <= .06) { // Stop tolerance
-                setTurretPower(0.0); // need to stop the turret before leaving the loop
-                turretstop = true; // leave the while loop
+            FOURBAR_CURRENT_THRESHOLD = Math.abs(fourbarposlast - fourbarpostarget); // Check the current gap between target and current position
+            if (FOURBAR_THRESHOLD_POS <= .06) { // Stop tolerance
+                setFourbarPower(0.0); // need to stop the turret before leaving the loop
+                fourbarstop = true; // leave the while loop
                 return false;
             }
             if (autonMode) {
-                turretmult = 1.0; // Run full speed or do the ifs
+                fourbarmult = 1.0; // Run full speed or do the ifs
             } else {
-                turretmult = 0.8;
+                fourbarmult = 0.8;
             }
             if (TURRET_CURRENT_THRESHOLD <= .03) { // Prepare to slow tolerance
                 if (autonMode) {
