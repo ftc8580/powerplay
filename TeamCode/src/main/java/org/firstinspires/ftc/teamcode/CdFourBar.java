@@ -12,7 +12,7 @@ public class CdFourBar {
     public double fourbarposcurrent;
     public double fourbarposlast;
     public double FOURBAR_CURRENT_THRESHOLD;
-    public AnalogInput fourbarpot;
+    // public AnalogInput fourbarpot;
     private ElapsedTime fourbartimer = new ElapsedTime();
     private int fourbartimeout = 2; // timeout for fourbar moves
 
@@ -23,7 +23,7 @@ public class CdFourBar {
         robotHardware.fourbarmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robotHardware.fourbarmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        fourbarpot = robotHardware.fourbarpos;
+        // fourbarpot = robotHardware.fourbarpos;
     }
     public void setFourbarPower(double pow) {
         robotHardware.fourbarmotor.setPower(pow * fourbarslow);
