@@ -15,7 +15,7 @@ public class CDFourBar {
     //TODO Check if 2 is long enough for timeout here???
     private int fourbartimeout = 2; // timeout for fourbar moves
 
-    public void CDFourbar(CDHardware theHardware){
+    public CDFourBar(CDHardware theHardware){
         robotHardware = theHardware;
         robotHardware.fourbarmotor.setDirection(DcMotorSimple.Direction.FORWARD);
         //Added to make ture that the fourbar defaults to brake mode
@@ -41,7 +41,7 @@ public class CDFourBar {
         boolean fourbarerror = false;
         //TODO  NEED ROBOT: Update fourbarpostarget values below to match readings from robot
         if (fourbarlocationtarget == "ground") {
-            boolean error = setFourbarPosition(1.29, autonMode);
+            boolean error = setFourbarPosition(.29, autonMode);
         } else if (fourbarlocationtarget == "low") {
             fourbarerror = setFourbarPosition(.58, autonMode);
         } else if (fourbarlocationtarget == "medium") {

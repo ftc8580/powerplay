@@ -7,7 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 // Telemetry
 
-//import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+//
+// import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 //import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 //import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 //import java.util.Locale;
@@ -19,7 +20,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     // Initialize our teleopThread
     private Thread teleopGamepad1Thread;
     // Initialize our local variables with values
-    // These "slow" variable is used to control the overall speed of the robot
+    // The basespeed "slow" variable is used to control the overall speed of the robot
     // TODO: Work with Drive Team to determine
     public double baseSpeed = 0.70;
 
@@ -29,6 +30,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     //TODO Check that these values are updated for the latest elevator so that freight can be put in proper level of alliance hub
 
     // Initialize our local variables for use later in telemetry or other methods
+    //Drive variables
     public double y;
     public double x;
     public double rx;
@@ -38,30 +40,37 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     public double rightRearPower;
     public double robotSpeed;
     public boolean constrainMovement;
+    //Fourbar variables
+    public double currentfourbarposition;
+    public double currentfourbarthreshold;
+    public double fourbarpotcurrent;
+    public boolean fourbarerror;
 
-    public org.firstinspires.ftc.teamcode.CDHardware myHardware;
+
+    public CDHardware myHardware;
+    // public org.firstinspires.ftc.teamcode.CDHardware myHardware;
 
     // State used for updating telemetry
-//    public Orientation angles;
-//    public Acceleration gravity;
-//    public BNO055IMU imu;
+    //    public Orientation angles;
+    //    public Acceleration gravity;
+    //    public BNO055IMU imu;
 
     @Override
     public void runOpMode() {
         // Initialize our classes to variables
         myHardware = new CDHardware(hardwareMap);
+        CDFourBar myFourbar = new CDFourBar(myHardware);
 
         // Configure initial variables
         constrainMovement = false;
-        //Wait for the driver to press PLAY on the driver station phone
-        // make a new thread
+        //Wait for the driver to press PLAY on the driver station/phone
         telemetry.addData("Status", "Fully Initialized");
         telemetry.update();
 
+        // make a new thread
         teleopGamepad1Thread = new Thread(this); // Define teleopThread
         waitForStart();
         //Run until the end (Driver presses STOP)
-
         teleopGamepad1Thread.start(); // Start the teleopThread
 
         // Polling rate for logging gets set to zero before the while loop
@@ -72,7 +81,28 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         // Everything Gamespad 2 will be handled between these two comments
             //
             // GAMEPAD 2 Code!
-            //
+            // FOURBAR CODE
+            if (fourbarerror) {
+                telemetry.addLine("DANGER: THE FOURBAR VALUES AREN'T CHANGING!");
+                telemetry.update();
+            }
+            //Refresh the fourbarposition and report threshold
+            currentfourbarposition = myFourbar.getFourbarPos(); //Variable Based
+            fourbarpotcurrent = myFourbar.getFourbarPotVolts(); //Potentiometer voltage based
+            currentfourbarthreshold = myFourbar.getFourbarCurrentThreshold();
+
+            double fourbarA = gamepad2.left_stick_y;
+            //Slow at top and bottom
+            //TODO put in proper values for fourbarpot current near top and bottom so it slows down
+            if ((fourbarpotcurrent > 2 && fourbarA <-0.01) || (fourbarpotcurrent <.5 && fourbarA >=0.01)) {
+                myFourbar.setFourbarPower(fourbarA*-.5);
+            } else if (fourbarA >=0.01 || fourbarA <=0.01) {
+                //TODO check direction on gamepad - remove *-1 below and - on .5 above if direction is wrong
+                myFourbar.setFourbarPower(fourbarA*-1);//Remember on controller -y is up
+            } else {
+                myFourbar.setFourbarPower(0.0);
+            }
+
         // End Gamepad 2
 
             // Telemetry Stuff -
@@ -223,7 +253,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             telemetry.addData("motorRF ", "%.2f", rightFrontPower);
             telemetry.addData("motorLR ", "%.2f", leftRearPower);
             telemetry.addData("motorRR ", "%.2f", rightRearPower);
-
+            telemetry.addData("FourbarPotCurrent", "%.2f", fourbarpotcurrent);
+            telemetry.addData("CurrFourbarThreshold", "%.2f", currentfourbarthreshold);
+            telemetry.addData("fourbarerror", fourbarerror);
         }
         // Loop and update the dashboard
         telemetry.update();
