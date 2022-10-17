@@ -75,7 +75,7 @@ public class CDArm {
         runtime.reset();
         //TODO redefine timeout if this is too long - needs testing
         double armPositionTimeoutSec = 4.0;
-        //TODO determine if threshold_pos is needed when working with encoder
+        //TODO determine if threshold_pos is needed when working with servo
         final double THRESHOLD_POS = 1.0; // base on encoder readings from armmotor ArmPosiiton
         double armmult = 1.0; // to slow down the arm if needed
         armstop = false; // initially we want the arm to move for the while loop
@@ -131,7 +131,7 @@ public class CDArm {
 //            }
             armrotlastpos = getArmRotPosition(); // updates every loop to say where we are in the beginning.
             ARMROTCURRENTTHRESHOLD = Math.abs(armrotlastpos - armrotpostarget);
-            if (ARMCURRENTTHRESHOLD <= THRESHOLD_ROTPOS)  {
+            if (ARMROTCURRENTTHRESHOLD <= THRESHOLD_ROTPOS)  {
                 robotHardware.armservo.setPosition(armrotpostarget);
                 armrotstop = true; // leave the while loop
             }

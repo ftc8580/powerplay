@@ -58,13 +58,15 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     public double armrotposcurrent;
     public double armrotposlast;
     public double armrotcurrentthreshold;
+    //Pickup variables
+    public double pickupposcurrent;
 
 
     public CDHardware myHardware;
     // public org.firstinspires.ftc.teamcode.CDHardware myHardware;
     public CDFourBar myFourbar;
     public CDArm myArm;
-
+    public CDPickup myPickup;
 
     // State used for updating telemetry
     //    public Orientation angles;
@@ -77,10 +79,12 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         myHardware = new CDHardware(hardwareMap);
         CDFourBar myFourbar = new CDFourBar(myHardware);
         CDArm myArm = new CDArm(myHardware);
+        CDPickup myPickup = new CDPickup(myHardware);
 
         // Configure initial variables
         //TODO if we want pacman model to be default this should be set to true
         constrainMovement = false;
+
         //Wait for the driver to press PLAY on the driver station/phone
         telemetry.addData("Status", "Fully Initialized");
         telemetry.update();
@@ -155,6 +159,17 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double armrotAtarget = (armrotposcurrent + armrotA * .0001);
             if ((armrotposcurrent>=0 && armrotposcurrent<=1 && (armrotA <-0.01 || armrotA >0.01))) {
                 myArm.setArmRotPosition(armrotAtarget);
+            }
+            float pickupclosednum = gamepad2.left_trigger;
+            //Close Pickup
+            if (pickupclosednum >=0.05); {
+                myPickup.setPickupPosition(myPickup.pickupclosed);
+            }
+
+            float pickupopennum = gamepad2.right_trigger;
+            //Open Pickup
+            if (pickupopennum >=0.05); {
+                myPickup.setPickupPosition(myPickup.pickupopen);
             }
 
         // End Gamepad 2
@@ -315,6 +330,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             telemetry.addData("ArmPosition", armposcurrent);
             telemetry.addData("armerror", armerror);
             telemetry.addData("ArmRotPosition", armrotposcurrent);
+            telemetry.addData("PickupPosition", pickupposcurrent);
         }
         // Loop and update the dashboard
         telemetry.update();

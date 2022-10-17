@@ -87,10 +87,11 @@ public class CDAutonBase extends LinearOpMode {
 //    }
 
     // Public variables for use in executeautons method
-    public org.firstinspires.ftc.teamcode.CDHardware myHardware;
-    public org.firstinspires.ftc.teamcode.CDDriveChassisAuton myChassis;
+    public CDHardware myHardware;
+    public CDDriveChassisAuton myChassis;
     public CDFourBar myFourbar;
     public CDArm myArm;
+    public CDPickup myPickup;
 //    public int duckLocation;
 //    public int duckWeDoNotSee;
 
@@ -102,6 +103,7 @@ public class CDAutonBase extends LinearOpMode {
         myChassis = new CDDriveChassisAuton(myHardware);
         myFourbar = new CDFourBar(myHardware);
         myArm = new CDArm(myHardware);
+        myPickup = new CDPickup(myHardware);
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");
