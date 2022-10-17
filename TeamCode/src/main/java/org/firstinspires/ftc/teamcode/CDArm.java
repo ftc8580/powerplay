@@ -94,9 +94,9 @@ public class CDArm {
             ARMCURRENTTHRESHOLD = Math.abs(armlastpos - armpostarget);
             //TODO update values below to reflect where near end ROM
             if (armlastpos < 10 || armlastpos > 35) {
-                armmult = .85;
+                armmult = .05;
             } else {
-                armmult = 1.0;
+                armmult = 0.10;
             }
             if (ARMCURRENTTHRESHOLD <= THRESHOLD_POS)  {
                 setArmPower(0); // need to stop the arm before leaving the loop
