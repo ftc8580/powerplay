@@ -54,6 +54,11 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     public double armEaseOut;
     //public boolean armupmagnetswitch;
     public boolean armerror = false;
+    //ArmRot variables
+    public double armrotposcurrent;
+    public double armrotposlast;
+    public double armrotcurrentthreshold;
+
 
     public CDHardware myHardware;
     // public org.firstinspires.ftc.teamcode.CDHardware myHardware;
@@ -126,7 +131,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 myFourbar.setFourbarPower(0.0);
                 myArm.setArmPower(0.0);
             }
-
+            //fine tune arm up
             boolean armUP = gamepad2.dpad_up;
             //TODO add max arm position
             if (((armposcurrent < 100) && armUP) == true) {
@@ -135,7 +140,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             } else {
                 myArm.setArmPower(0.0);
             }
-
+            //fine tune arm down
            boolean armDOWN = gamepad2.dpad_down;
             //TODO add min arm position
             if ((armposcurrent > 100) && armDOWN == true) {
@@ -143,6 +148,13 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 myArm.setArmPower(-.25);
             } else {
                 myArm.setArmPower(0.0);
+            }
+            //rotate arm
+            double armrotA = gamepad2.right_stick_x;
+            //TODO change multiplier below to impact how fast it moves - may need to add pause or timer to slow down???
+            double armrotAtarget = (armrotposcurrent + armrotA * .0001);
+            if ((armrotposcurrent>=0 && armrotposcurrent<=1 && (armrotA <-0.01 || armrotA >0.01))) {
+                myArm.setArmRotPosition(armrotAtarget);
             }
 
         // End Gamepad 2
@@ -302,6 +314,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             telemetry.addData("CurrArmDownThresh", "%.2f", armDownThresh);
             telemetry.addData("ArmPosition", armposcurrent);
             telemetry.addData("armerror", armerror);
+            telemetry.addData("ArmRotPosition", armrotposcurrent);
         }
         // Loop and update the dashboard
         telemetry.update();

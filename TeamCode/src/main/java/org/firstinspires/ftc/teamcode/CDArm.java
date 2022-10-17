@@ -16,12 +16,20 @@ public class CDArm {
     public double armposhigh = 26.0;
     public double armpostopup = 39.5;
     public double armpostopdown = 0;
+    //TODO reset values below to values from armservo
+    public double armrotback = 0;
+    public double armrotright = .33;
+    public double armrotfront = .66;
+    public double armrotleft = 1;
+
+
     //TODO delete below
     // public double wheelheightforelevator = 12;
 
     private ElapsedTime runtime = new ElapsedTime();
 
     CDHardware robotHardware;
+    //Arm up down using motor
     public boolean armstop;
     //public boolean magneticstop;
     public boolean armerror;
@@ -29,6 +37,13 @@ public class CDArm {
     public double armposcurrent;
     public double armlastpos;
     //public TouchSensor uparmmagnetswitch;
+
+    //Arm rotation using servo
+    public boolean armrotstop;
+    public boolean armroterror;
+    public double ARMROTCURRENTTHRESHOLD;
+    public double armrotposcurrent;
+    public double armrotlastpos;
 
     public CDArm(CDHardware theHardware){
 
@@ -47,12 +62,14 @@ public class CDArm {
         //robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public double getArmThreshold () { return ARMCURRENTTHRESHOLD; }
+    public double getArmRotThreshold () {return ARMROTCURRENTTHRESHOLD; }
 
     public void setArmPower(double pow) {
         robotHardware.armmotor.setPower(pow);
     }
 
     public double getArmPosition() { return robotHardware.armmotor.getCurrentPosition(); } //Position from armmotor encoder
+    public double getArmRotPosition() {return robotHardware.armservo.getPosition(); }  //Position from servo
 
     public boolean setArmPosition(double armpostarget) {
         runtime.reset();
@@ -62,7 +79,6 @@ public class CDArm {
         final double THRESHOLD_POS = 1.0; // base on encoder readings from armmotor ArmPosiiton
         double armmult = 1.0; // to slow down the arm if needed
         armstop = false; // initially we want the arm to move for the while loop
-        armstop = false;
         armerror = false;
         //while ((runtime.seconds() < armPositionTimeoutSec) && !armstop && !magneticstop && !armerror) {
         while ((runtime.seconds() < armPositionTimeoutSec) && !armstop && !armerror) {
@@ -93,7 +109,35 @@ public class CDArm {
             }
             armposcurrent = robotHardware.armmotor.getCurrentPosition(); // updates every loop to see where we ended up.
         }
-        return false; // Returns false if the elevator succeeded in moving to requested position, no error.
+        return false; // Returns false if the arm succeeded in moving to requested position, no error.
+    }
+    public boolean setArmRotPosition(double armrotpostarget) {
+        runtime.reset();
+        //TODO redefine timeout if this is too long - needs testing
+        double armrotPositionTimeoutSec = 4.0;
+        //TODO determine if threshold_pos is needed when working with encoder
+        final double THRESHOLD_ROTPOS = .005; // base on  readings from armservo
+        armrotstop = false; // initially we want the arm to move for the while loop
+        armerror = false;
+        //while ((runtime.seconds() < armrotPositionTimeoutSec) && !armrotstop && !magneticstop && !armroterror) {
+        while ((runtime.seconds() < armrotPositionTimeoutSec) && !armrotstop && !armroterror) {
+            // Simple check to see if the magnetic switch is contacted
+            // if (upelevatormagnetswitch.isPressed()) {
+            //   magneticstop = true;
+            //}
+//            if (armrotlastpos == armrotposcurrent) {
+//                armroterror = true;
+//                return true; // There was an error, the value didn't change.
+//            }
+            armrotlastpos = getArmRotPosition(); // updates every loop to say where we are in the beginning.
+            ARMROTCURRENTTHRESHOLD = Math.abs(armrotlastpos - armrotpostarget);
+            if (ARMCURRENTTHRESHOLD <= THRESHOLD_ROTPOS)  {
+                robotHardware.armservo.setPosition(armrotpostarget);
+                armrotstop = true; // leave the while loop
+            }
+            armrotposcurrent = getArmRotPosition();  // updates every loop to see where we ended up.
+        }
+        return false; // Returns false if the arm succeeded in moving to requested position, no error.
     }
     //
 }
