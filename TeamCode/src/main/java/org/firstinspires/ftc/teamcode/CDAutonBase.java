@@ -90,6 +90,7 @@ public class CDAutonBase extends LinearOpMode {
     public org.firstinspires.ftc.teamcode.CDHardware myHardware;
     public org.firstinspires.ftc.teamcode.CDDriveChassisAuton myChassis;
     public CDFourBar myFourbar;
+    public CDArm myArm;
 //    public int duckLocation;
 //    public int duckWeDoNotSee;
 
@@ -100,6 +101,7 @@ public class CDAutonBase extends LinearOpMode {
         myHardware = new CDHardware(hardwareMap);
         myChassis = new CDDriveChassisAuton(myHardware);
         myFourbar = new CDFourBar(myHardware);
+        myArm = new CDArm(myHardware);
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");
@@ -109,14 +111,16 @@ public class CDAutonBase extends LinearOpMode {
         myChassis.robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         myChassis.robotHardware.leftrearmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         myChassis.robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        myTurret.robotHardware.turretmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        myTurret.robotHardware.fourbarmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); \\commented because using pot for position
 
         myChassis.robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         myChassis.robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         myChassis.robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         myChassis.robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        myTurret.robotHardware.turretmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        myTurret.robotHardware.fourbarmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER); \\commented because using pot for position
 
+//        myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
 
         //Send telemetry to indicate successful Encoder reset
         telemetry.addData("MotorStartPos (RR, RF, LR, LF)", " %7d %7d %7d %7d", myChassis.robotHardware.rightrearmotor.getCurrentPosition(), myChassis.robotHardware.rightfrontmotor.getCurrentPosition(), myChassis.robotHardware.leftrearmotor.getCurrentPosition(), myChassis.robotHardware.leftfrontmotor.getCurrentPosition());
