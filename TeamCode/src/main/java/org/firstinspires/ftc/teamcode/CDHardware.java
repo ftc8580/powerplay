@@ -29,7 +29,7 @@ public class CDHardware {
         armmotor = hwMap.get(DcMotor.class, "motorArm");
         armservo = hwMap.get(Servo.class, "servoArm");
         intakeservo = hwMap.get(Servo.class, "servoIntake");
-        fourbarpos = hwMap.get(AnalogInput.class, "analogInputFourBar");
+        // fourbarpos = hwMap.get(AnalogInput.class, "analogInputFourBar");
     }
 }
 
