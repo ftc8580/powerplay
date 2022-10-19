@@ -225,7 +225,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                        rightFrontPower = (-x + rx) / denominator;
                        rightRearPower = (x + rx) / denominator;
                    }
-                   if (Math.abs(y)>Math.abs(x)) {
+                   if (Math.abs(y)>=,Math.abs(x)) {
                        leftFrontPower = (y - rx) / denominator;
                        leftRearPower = (y - rx) / denominator;
                        rightFrontPower = (y + rx) / denominator;
