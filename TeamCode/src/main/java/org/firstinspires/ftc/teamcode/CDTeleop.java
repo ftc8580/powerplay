@@ -120,17 +120,17 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double fourbarA = gamepad2.left_stick_y;
             //Slow at top and bottom
             //TODO put in proper values for fourbarpot current near top and bottom so it slows down
-            if ((fourbarpotcurrent > 2 && fourbarA <-0.01) || (fourbarpotcurrent <.5 && fourbarA >=0.01)) {
+            if ((fourbarpotcurrent > 3 && fourbarA <-0.01) || (fourbarpotcurrent <.25 && fourbarA >=0.01)) {
                 myFourbar.setFourbarPower(fourbarA*-.5);
                 //move arm proportionally to fourbar to keep level
-                //TODO Define multiplier that keeps this level- currently .1 below- may need to change direction
-                myArm.setArmPower(fourbarA*-.05*.1);
-            } else if (fourbarA >=0.01 || fourbarA <=0.01) {
+                //TODO Define multiplier that keeps this level- currently .1 below- may need to change direction- below removed since stays level
+                //myArm.setArmPower(fourbarA*-.05*.1);
+            } else if (fourbarA >=0.01 || fourbarA <=-0.01) {
                 //TODO check direction on gamepad - remove *-1 below and - on .5 above if direction is wrong
                 myFourbar.setFourbarPower(fourbarA*-1);//Remember on controller -y is up
                 //move arm proportionally to fourbar to keep level
-                //TODO Define multiplier that keeps this level- currently .1 below - may need to change direction
-                myArm.setArmPower(fourbarA*-0.1*.1);
+                //TODO Define multiplier that keeps this level- currently .1 below - may need to change direction- below removed since stays level
+                //myArm.setArmPower(fourbarA*-0.1*.1);
             } else {
                 myFourbar.setFourbarPower(0.0);
                 myArm.setArmPower(0.0);
@@ -138,37 +138,37 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             //fine tune arm up
             boolean armUP = gamepad2.dpad_up;
             //TODO add max arm position
-            if (((armposcurrent < 100) && armUP) == true) {
+            if (((armposcurrent < 100) && armUP)) {
                 //TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
-                myArm.setArmPower(.05);
+                myArm.setArmPower(.1);
             } else {
                 myArm.setArmPower(0.0);
             }
             //fine tune arm down
            boolean armDOWN = gamepad2.dpad_down;
             //TODO add min arm position
-            if ((armposcurrent > 100) && armDOWN == true) {
+            if ((armposcurrent > 100) && armDOWN) {
                 //TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
-                myArm.setArmPower(-.05);
+                myArm.setArmPower(-.11);
             } else {
                 myArm.setArmPower(0.0);
             }
             //rotate arm
             double armrotA = gamepad2.right_stick_x;
             //TODO change multiplier below to impact how fast it moves - may need to add pause or timer to slow down???
-            double armrotAtarget = (armrotposcurrent + armrotA * .0001);
+            double armrotAtarget = (armrotposcurrent + armrotA * .01);
             if ((armrotposcurrent>=0 && armrotposcurrent<=1 && (armrotA <-0.01 || armrotA >0.01))) {
                 myArm.setArmRotPosition(armrotAtarget);
             }
             float pickupclosednum = gamepad2.left_trigger;
             //Close Pickup
-            if (pickupclosednum >=0.05); {
+            if (pickupclosednum >=0.05) {
                 myPickup.setPickupPosition(myPickup.pickupclosed);
             }
 
             float pickupopennum = gamepad2.right_trigger;
             //Open Pickup
-            if (pickupopennum >=0.05); {
+            if (pickupopennum >=0.05) {
                 myPickup.setPickupPosition(myPickup.pickupopen);
             }
 
@@ -225,7 +225,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                        rightFrontPower = (-x + rx) / denominator;
                        rightRearPower = (x + rx) / denominator;
                    }
-                   if (Math.abs(y)>=,Math.abs(x)) {
+                   if (Math.abs(y)>=Math.abs(x)) {
                        leftFrontPower = (y - rx) / denominator;
                        leftRearPower = (y - rx) / denominator;
                        rightFrontPower = (y + rx) / denominator;
