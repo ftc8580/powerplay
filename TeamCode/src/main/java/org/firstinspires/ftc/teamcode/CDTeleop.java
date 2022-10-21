@@ -48,6 +48,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     //Arm variables
     public double armposcurrent;
     public double armposlast = 1.1; // Arbitrary
+    public double armUpMulti = 1.0; // In case we want to slow down the arm with the analog input.
     public double armcurrentthreshold;
     public boolean armisdown;
     public double armDownThresh;
@@ -133,31 +134,37 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 //myArm.setArmPower(fourbarA*-0.1*.1);
             } else {
                 myFourbar.setFourbarPower(0.0);
-                myArm.setArmPower(0.0);
+//                myArm.setArmPower(0.0);
             }
+
+            armposcurrent = myArm.getArmPosition();
+//            double armUpDown = gamepad2.right_stick_y;
+//            if (armUpDown > 0.2 || armUpDown < -0.2) {
+//                myArm.setArmPower(armUpDown * armUpMulti);
+//            } else {
+//                myArm.setArmPower(0.0);
+//            }
             //fine tune arm up
+            armposcurrent = myArm.getArmPosition();
             boolean armUP = gamepad2.dpad_up;
+            boolean armDOWN = gamepad2.dpad_down;
             //TODO add max arm position
-            if (((armposcurrent < 100) && armUP)) {
+            if (armUP) { //(((armposcurrent < 100) && armUP)) {
                 //TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
-                myArm.setArmPower(.1);
+                myArm.setArmPower(1.0);
+            } else if (armDOWN) { //((armposcurrent > 100) && armDOWN) {
+                    //TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
+                    myArm.setArmPower(-1.0);
             } else {
                 myArm.setArmPower(0.0);
             }
             //fine tune arm down
-           boolean armDOWN = gamepad2.dpad_down;
-            //TODO add min arm position
-            if ((armposcurrent > 100) && armDOWN) {
-                //TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
-                myArm.setArmPower(-.11);
-            } else {
-                myArm.setArmPower(0.0);
-            }
-            //rotate arm
+//            rotate arm
+
             double armrotA = gamepad2.right_stick_x;
             //TODO change multiplier below to impact how fast it moves - may need to add pause or timer to slow down???
             double armrotAtarget = (armrotposcurrent + armrotA * .01);
-            if ((armrotposcurrent>=0 && armrotposcurrent<=1 && (armrotA <-0.01 || armrotA >0.01))) {
+            if ((armrotposcurrent>=0 && armrotposcurrent<=1 )) {// && (armrotA <-0.01 || armrotA >0.01))) {
                 myArm.setArmRotPosition(armrotAtarget);
             }
             float pickupclosednum = gamepad2.left_trigger;
