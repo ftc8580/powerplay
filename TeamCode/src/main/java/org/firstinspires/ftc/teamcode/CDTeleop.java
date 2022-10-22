@@ -41,26 +41,26 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     public double robotSpeed;
     public boolean constrainMovement;
     //Fourbar variables
-    public double currentfourbarposition;
-    public double currentfourbarthreshold;
-    public double fourbarpotcurrent;
-    public boolean fourbarerror;
+    public double currentFourBarPosition;
+    public double currentFourBarThreshold;
+    public double fourBarPotCurrent;
+    public boolean fourBarError;
     //Arm variables
-    public double armposcurrent;
-    public double armposlast = 1.1; // Arbitrary
+    public double armPosCurrent;
+    public double armPosLast = 1.1; // Arbitrary
     public double armUpMulti = 1.0; // In case we want to slow down the arm with the analog input.
-    public double armcurrentthreshold;
-    public boolean armisdown;
+    public double armCurrentThreshold;
+    public boolean armIsDown;
     public double armDownThresh;
     public double armEaseOut;
     //public boolean armupmagnetswitch;
-    public boolean armerror = false;
+    public boolean armError = false;
     //ArmRot variables
-    public double armrotposcurrent;
-    public double armrotposlast;
-    public double armrotcurrentthreshold;
+    public double armRotPosCurrent;
+    public double armRotPosLast;
+    public double armRotCurrentThreshold;
     //Pickup variables
-    public double pickupposcurrent;
+    public double pickUpPosCurrent;
 
 
     public CDHardware myHardware;
@@ -105,23 +105,23 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             //
             // GAMEPAD 2 Code!
             // FOURBAR CODE
-            if (fourbarerror) {
+            if (fourBarError) {
                 telemetry.addLine("DANGER: THE FOURBAR VALUES AREN'T CHANGING!");
                 telemetry.update();
             }
             //Refresh the fourbarposition and report threshold
-            currentfourbarposition = myFourbar.getFourbarPos(); //Variable Based
-            fourbarpotcurrent = myFourbar.getFourbarPotVolts(); //Potentiometer voltage based
-            currentfourbarthreshold = myFourbar.getFourbarCurrentThreshold();
+            currentFourBarPosition = myFourbar.getFourbarPos(); //Variable Based
+            fourBarPotCurrent = myFourbar.getFourbarPotVolts(); //Potentiometer voltage based
+            currentFourBarThreshold = myFourbar.getFourbarCurrentThreshold();
 
             //Refresh the armpostion and report threshold
-            armposcurrent = myArm.getArmPosition();
-            armcurrentthreshold = myArm.ARMCURRENTTHRESHOLD;
+            armPosCurrent = myArm.getArmPosition();
+            armCurrentThreshold = myArm.ARMCURRENTTHRESHOLD;
 
             double fourbarA = gamepad2.left_stick_y;
             //Slow at top and bottom
             //TODO put in proper values for fourbarpot current near top and bottom so it slows down
-            if ((fourbarpotcurrent > 3 && fourbarA <-0.01) || (fourbarpotcurrent <.25 && fourbarA >=0.01)) {
+            if ((fourBarPotCurrent > 3 && fourbarA <-0.01) || (fourBarPotCurrent <.25 && fourbarA >=0.01)) {
                 myFourbar.setFourbarPower(fourbarA*-.5);
                 //move arm proportionally to fourbar to keep level
                 //TODO Define multiplier that keeps this level- currently .1 below- may need to change direction- below removed since stays level
@@ -137,7 +137,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 //                myArm.setArmPower(0.0);
             }
 
-            armposcurrent = myArm.getArmPosition();
+            armPosCurrent = myArm.getArmPosition();
 //            double armUpDown = gamepad2.right_stick_y;
 //            if (armUpDown > 0.2 || armUpDown < -0.2) {
 //                myArm.setArmPower(armUpDown * armUpMulti);
@@ -145,7 +145,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 //                myArm.setArmPower(0.0);
 //            }
             //fine tune arm up
-            armposcurrent = myArm.getArmPosition();
+            armPosCurrent = myArm.getArmPosition();
             boolean armUP = gamepad2.dpad_up;
             boolean armDOWN = gamepad2.dpad_down;
             //TODO add max arm position
@@ -163,8 +163,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
             double armrotA = gamepad2.right_stick_x;
             //TODO change multiplier below to impact how fast it moves - may need to add pause or timer to slow down???
-            double armrotAtarget = (armrotposcurrent + armrotA * .01);
-            if ((armrotposcurrent>=0 && armrotposcurrent<=1 )) {// && (armrotA <-0.01 || armrotA >0.01))) {
+            double armrotAtarget = (armRotPosCurrent + armrotA * .01);
+            if ((armRotPosCurrent >=0 && armRotPosCurrent <=1 )) {// && (armrotA <-0.01 || armrotA >0.01))) {
                 myArm.setArmRotPosition(armrotAtarget);
             }
             float pickupclosednum = gamepad2.left_trigger;
@@ -329,15 +329,15 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             telemetry.addData("motorRF ", "%.2f", rightFrontPower);
             telemetry.addData("motorLR ", "%.2f", leftRearPower);
             telemetry.addData("motorRR ", "%.2f", rightRearPower);
-            telemetry.addData("FourbarPotCurrent", "%.2f", fourbarpotcurrent);
-            telemetry.addData("CurrFourbarThreshold", "%.2f", currentfourbarthreshold);
-            telemetry.addData("fourbarerror", fourbarerror);
-            telemetry.addData("CurrArmThresh", "%.2f", armcurrentthreshold);
+            telemetry.addData("FourbarPotCurrent", "%.2f", fourBarPotCurrent);
+            telemetry.addData("CurrFourbarThreshold", "%.2f", currentFourBarThreshold);
+            telemetry.addData("fourbarerror", fourBarError);
+            telemetry.addData("CurrArmThresh", "%.2f", armCurrentThreshold);
             telemetry.addData("CurrArmDownThresh", "%.2f", armDownThresh);
-            telemetry.addData("ArmPosition", armposcurrent);
-            telemetry.addData("armerror", armerror);
-            telemetry.addData("ArmRotPosition", armrotposcurrent);
-            telemetry.addData("PickupPosition", pickupposcurrent);
+            telemetry.addData("ArmPosition", armPosCurrent);
+            telemetry.addData("armerror", armError);
+            telemetry.addData("ArmRotPosition", armRotPosCurrent);
+            telemetry.addData("PickupPosition", pickUpPosCurrent);
         }
         // Loop and update the dashboard
         telemetry.update();
