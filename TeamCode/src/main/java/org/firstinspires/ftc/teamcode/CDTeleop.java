@@ -116,7 +116,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
             //Refresh the armpostion and report threshold
             armPosCurrent = myArm.getArmPosition();
-            armCurrentThreshold = myArm.ARMCURRENTTHRESHOLD;
+            armCurrentThreshold = myArm.armCurrentThreshold;
 
             double fourbarA = gamepad2.left_stick_y;
             //Slow at top and bottom
