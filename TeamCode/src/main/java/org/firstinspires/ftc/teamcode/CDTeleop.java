@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode;
 //import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 // Telemetry
 
@@ -46,13 +47,15 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     public double fourBarPotCurrent;
     public boolean fourBarError;
     //Arm variables
-    public double armPosCurrent;
+    public int armPosCurrent;
     public double armPosLast = 1.1; // Arbitrary
     public double armUpMulti = 1.0; // In case we want to slow down the arm with the analog input.
     public double armCurrentThreshold;
     public boolean armIsDown;
     public double armDownThresh;
     public double armEaseOut;
+    public double armUpDownPower = 0.5;
+    public int armtargetPosition;
     //public boolean armupmagnetswitch;
     public boolean armError = false;
     //ArmRot variables
@@ -115,7 +118,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             currentFourBarThreshold = myFourbar.getFourbarCurrentThreshold();
 
             //Refresh the armpostion and report threshold
-            armPosCurrent = myArm.getArmPosition();
+             armPosCurrent = myArm.getArmPosition();
             armCurrentThreshold = myArm.armCurrentThreshold;
 
             double fourbarA = gamepad2.left_stick_y;
@@ -137,7 +140,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 //                myArm.setArmPower(0.0);
             }
 
-            armPosCurrent = myArm.getArmPosition();
+//            armPosCurrent = myArm.getArmPosition();
 //            double armUpDown = gamepad2.right_stick_y;
 //            if (armUpDown > 0.2 || armUpDown < -0.2) {
 //                myArm.setArmPower(armUpDown * armUpMulti);
@@ -145,22 +148,30 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 //                myArm.setArmPower(0.0);
 //            }
             //fine tune arm up
-            armPosCurrent = myArm.getArmPosition();
+            //armPosCurrent = myArm.getArmPosition();
             boolean armUP = gamepad2.dpad_up;
             boolean armDOWN = gamepad2.dpad_down;
             //TODO add max arm position
             if (armUP) { //(((armposcurrent < 100) && armUP)) {
                 //TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
-                myArm.setArmPower(1.0);
-            } else if (armDOWN) { //((armposcurrent > 100) && armDOWN) {
-                    //TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
-                    myArm.setArmPower(-1.0);
-            } else {
-                myArm.setArmPower(0.0);
+                armtargetPosition = 0;
+                myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                myArm.setArmPower(1.0* armUpDownPower);
+            } else if (armDOWN) { //((armposcurrent > 100) && armDOWN) {  //fine tune arm down
+                // TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
+                armtargetPosition = 0;
+                myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                myArm.setArmPower(-0.5* armUpDownPower);
+            //} else {
+            //  myArm.setArmPower(0.0);
+            } else if (armtargetPosition == 0) {
+                armtargetPosition = myArm.getArmPosition();
+                myArm.robotHardware.armmotor.setTargetPosition(armtargetPosition);
+                myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                myArm.robotHardware.armmotor.setPower(.25);
             }
-            //fine tune arm down
-//            rotate arm
 
+            // rotate arm
             double armrotA = gamepad2.right_stick_x;
             //TODO change multiplier below to impact how fast it moves - may need to add pause or timer to slow down???
             double armrotAtarget = (armRotPosCurrent + armrotA * .01);

@@ -59,7 +59,7 @@ public class CDArm {
         robotHardware.armmotor.setPower(pow);
     }
 
-    public double getArmPosition() { return robotHardware.armmotor.getCurrentPosition(); } //Position from armmotor encoder
+    public int getArmPosition() { return robotHardware.armmotor.getCurrentPosition(); } //Position from armmotor encoder
     public double getArmRotPosition() {return robotHardware.armservo.getPosition(); }  //Position from servo
 
     public boolean setArmPosition(double armPositionTarget) {
