@@ -103,32 +103,7 @@ public class CDArm {
         return false; // Returns false if the arm succeeded in moving to requested position, no error.
     }
     public boolean setArmRotPosition(double armRotationPositionTarget) {
-        elapsedRunTime.reset();
-        //TODO redefine timeout if this is too long - needs testing
-        double armRotationPositionTimeoutSeconds = 4.0;
-        //TODO determine if threshold_pos is needed when working with encoder
-        final double THRESHOLD_ROTATION_POSITION = .005; // base on  readings from armservo
-        armRotationStopped = false; // initially we want the arm to move for the while loop
-        armError = false;
-        //while ((runtime.seconds() < armRotationPositionTimeoutSeconds) && !armrotstop && !magneticstop && !armroterror) {
-        while ((elapsedRunTime.seconds() < armRotationPositionTimeoutSeconds) && !armRotationStopped && !armRotationError) {
-            // Simple check to see if the magnetic switch is contacted
-            // if (upelevatormagnetswitch.isPressed()) {
-            //   magneticstop = true;
-            //}
-//            if (armrotlastpos == armrotposcurrent) {
-//                armroterror = true;
-//                return true; // There was an error, the value didn't change.
-//            }
-            armRotationLastPosition = getArmRotPosition(); // updates every loop to say where we are in the beginning.
-            armRotationCurrentThreshold = Math.abs(armRotationLastPosition - armRotationPositionTarget);
-            if (armRotationCurrentThreshold <= THRESHOLD_ROTATION_POSITION)  {
-                robotHardware.armservo.setPosition(armRotationPositionTarget);
-                armRotationStopped = true; // leave the while loop
-            }
-            armRotationPositionCurrent = getArmRotPosition();  // updates every loop to see where we ended up.
-        }
-        return false; // Returns false if the arm succeeded in moving to requested position, no error.
+        robotHardware.armservo.setPosition(armRotationPositionTarget);
+        return (robotHardware.armservo.getPosition() == armRotationPositionTarget);
     }
-    //
 }

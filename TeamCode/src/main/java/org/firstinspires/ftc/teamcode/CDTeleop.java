@@ -64,7 +64,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     public double armRotCurrentThreshold;
     //Pickup variables
     public double pickUpPosCurrent;
-
+    public double armrotAtarget;
 
     public CDHardware myHardware;
     // public org.firstinspires.ftc.teamcode.CDHardware myHardware;
@@ -118,7 +118,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             currentFourBarThreshold = myFourbar.getFourbarCurrentThreshold();
 
             //Refresh the armpostion and report threshold
-             armPosCurrent = myArm.getArmPosition();
+            armPosCurrent = myArm.getArmPosition();
             armCurrentThreshold = myArm.armCurrentThreshold;
 
             double fourbarA = gamepad2.left_stick_y;
@@ -172,12 +172,22 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 
             // rotate arm
-            double armrotA = gamepad2.right_stick_x;
-            //TODO change multiplier below to impact how fast it moves - may need to add pause or timer to slow down???
-            double armrotAtarget = (armRotPosCurrent + armrotA * .01);
-            if ((armRotPosCurrent >=0 && armRotPosCurrent <=1 )) {// && (armrotA <-0.01 || armrotA >0.01))) {
-                myArm.setArmRotPosition(armrotAtarget);
+            armRotPosCurrent = myArm.getArmRotPosition();
+            armrotAtarget = myArm.getArmRotPosition(); // sets this initially
+            if (gamepad2.right_stick_x > .02 || gamepad2.right_stick_x < -.02) {
+                double armrotA = gamepad2.right_stick_x;
+                if (armrotA > .02) {
+                    armrotAtarget = (armRotPosCurrent + .0008);
+                    myArm.setArmRotPosition(armrotAtarget);
+                }
+                else if (armrotA < -.02) {
+                    armrotAtarget = (armRotPosCurrent - .0008);
+                    myArm.setArmRotPosition(armrotAtarget);
+                }
             }
+
+            //TODO change multiplier below to impact how fast it moves - may need to add pause or timer to slow down???
+
             float pickupclosednum = gamepad2.left_trigger;
             //Close Pickup
             if (pickupclosednum >=0.05) {
@@ -347,7 +357,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             telemetry.addData("CurrArmDownThresh", "%.2f", armDownThresh);
             telemetry.addData("ArmPosition", armPosCurrent);
             telemetry.addData("armerror", armError);
-            telemetry.addData("ArmRotPosition", armRotPosCurrent);
+            telemetry.addData("ArmRotPosition", (armRotPosCurrent * 1800));
+            telemetry.addData("ArmRotTarget", (armrotAtarget * 1800));
             telemetry.addData("PickupPosition", pickUpPosCurrent);
         }
         // Loop and update the dashboard
