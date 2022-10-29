@@ -117,9 +117,11 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             fourBarPotCurrent = myFourbar.getFourbarPotVolts(); //Potentiometer voltage based
             currentFourBarThreshold = myFourbar.getFourbarCurrentThreshold();
 
+/*
             //Refresh the armpostion and report threshold
             armPosCurrent = myArm.getArmPosition();
             armCurrentThreshold = myArm.armCurrentThreshold;
+*/
 
             double fourbarA = gamepad2.left_stick_y;
             //Slow at top and bottom
@@ -149,7 +151,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 //            }
             //fine tune arm up
             //armPosCurrent = myArm.getArmPosition();
-            boolean armUP = gamepad2.dpad_up;
+/*            boolean armUP = gamepad2.dpad_up;
             boolean armDOWN = gamepad2.dpad_down;
             //TODO add max arm position
             if (armUP) { //(((armposcurrent < 100) && armUP)) {
@@ -169,7 +171,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 myArm.robotHardware.armmotor.setTargetPosition(armtargetPosition);
                 myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 myArm.robotHardware.armmotor.setPower(.25);
-            }
+            }*/
 
             // rotate arm
             armRotPosCurrent = myArm.getArmRotPosition();
@@ -353,10 +355,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             telemetry.addData("FourbarPotCurrent", "%.2f", fourBarPotCurrent);
             telemetry.addData("CurrFourbarThreshold", "%.2f", currentFourBarThreshold);
             telemetry.addData("fourbarerror", fourBarError);
-            telemetry.addData("CurrArmThresh", "%.2f", armCurrentThreshold);
-            telemetry.addData("CurrArmDownThresh", "%.2f", armDownThresh);
-            telemetry.addData("ArmPosition", armPosCurrent);
-            telemetry.addData("armerror", armError);
+            //telemetry.addData("CurrArmThresh", "%.2f", armCurrentThreshold);
+            //telemetry.addData("CurrArmDownThresh", "%.2f", armDownThresh);
+            //telemetry.addData("ArmPosition", armPosCurrent);
+            //telemetry.addData("armerror", armError);
             telemetry.addData("ArmRotPosition", (armRotPosCurrent * 1800));
             telemetry.addData("ArmRotTarget", (armrotAtarget * 1800));
             telemetry.addData("PickupPosition", pickUpPosCurrent);

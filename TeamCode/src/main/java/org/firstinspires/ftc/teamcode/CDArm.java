@@ -46,23 +46,23 @@ public class CDArm {
         // robotHardware.armSwitchLow;
         // robotHardware.armSwitchGround;
 
-        robotHardware.armmotor.setDirection(DcMotorSimple.Direction.FORWARD);
+/*        robotHardware.armmotor.setDirection(DcMotorSimple.Direction.FORWARD);
         robotHardware.armmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robotHardware.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);*/
     }
     public double getArmThreshold () { return armCurrentThreshold; }
     public double getArmRotationThreshold() {return armRotationCurrentThreshold; }
 
-    public void setArmPower(double pow) {
+/*    public void setArmPower(double pow) {
         robotHardware.armmotor.setPower(pow);
-    }
+    }*/
 
-    public int getArmPosition() { return robotHardware.armmotor.getCurrentPosition(); } //Position from armmotor encoder
+    //public int getArmPosition() { return robotHardware.armmotor.getCurrentPosition(); } //Position from armmotor encoder
     public double getArmRotPosition() {return robotHardware.armservo.getPosition(); }  //Position from servo
 
-    public boolean setArmPosition(double armPositionTarget) {
+ /*   public boolean setArmPosition(double armPositionTarget) {
         elapsedRunTime.reset();
         //TODO redefine timeout if this is too long - needs testing
         double armPositionTimeoutSec = 4.0;
@@ -101,7 +101,7 @@ public class CDArm {
             armPositionCurrent = robotHardware.armmotor.getCurrentPosition(); // updates every loop to see where we ended up.
         }
         return false; // Returns false if the arm succeeded in moving to requested position, no error.
-    }
+    }*/
     public boolean setArmRotPosition(double armRotationPositionTarget) {
         robotHardware.armservo.setPosition(armRotationPositionTarget);
         return (robotHardware.armservo.getPosition() == armRotationPositionTarget);
