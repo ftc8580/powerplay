@@ -13,8 +13,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 //import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-import java.util.List;
-
 
 @Autonomous(name="CDAutonBase", group="Linear Opmode")
 @Disabled
@@ -91,9 +89,7 @@ public class CDAutonBase extends LinearOpMode {
     public CDDriveChassisAuton myChassis;
     public CDFourBar myFourbar;
     public CDArm myArm;
-    public CDPickup myPickup;
-//    public int duckLocation;
-//    public int duckWeDoNotSee;
+    public CDArmIntake myPickup;
 
     @Override
     public void runOpMode() {
@@ -103,29 +99,29 @@ public class CDAutonBase extends LinearOpMode {
         myChassis = new CDDriveChassisAuton(myHardware);
         myFourbar = new CDFourBar(myHardware);
         myArm = new CDArm(myHardware);
-        myPickup = new CDPickup(myHardware);
+        myPickup = new CDArmIntake(myHardware);
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");
 //        telemetry.update();
         // Setting the Modes, Do not need to change
-        myChassis.robotHardware.rightrearmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        myChassis.robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        myChassis.robotHardware.leftrearmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        myChassis.robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        myChassis.robotHardware.rightRearMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        myChassis.robotHardware.rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        myChassis.robotHardware.leftRearMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        myChassis.robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        myTurret.robotHardware.fourbarmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); \\commented because using pot for position
 
-        myChassis.robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        myChassis.robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        myChassis.robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        myChassis.robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        myChassis.robotHardware.rightRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        myChassis.robotHardware.rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        myChassis.robotHardware.leftRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        myChassis.robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        myTurret.robotHardware.fourbarmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER); \\commented because using pot for position
 
 //        myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
 
         //Send telemetry to indicate successful Encoder reset
-        telemetry.addData("MotorStartPos (RR, RF, LR, LF)", " %7d %7d %7d %7d", myChassis.robotHardware.rightrearmotor.getCurrentPosition(), myChassis.robotHardware.rightfrontmotor.getCurrentPosition(), myChassis.robotHardware.leftrearmotor.getCurrentPosition(), myChassis.robotHardware.leftfrontmotor.getCurrentPosition());
+        telemetry.addData("MotorStartPos (RR, RF, LR, LF)", " %7d %7d %7d %7d", myChassis.robotHardware.rightRearMotor.getCurrentPosition(), myChassis.robotHardware.rightFrontMotor.getCurrentPosition(), myChassis.robotHardware.leftRearMotor.getCurrentPosition(), myChassis.robotHardware.leftFrontMotor.getCurrentPosition());
         telemetry.addData("Status", "Initialized");
 
         // This new code is for the object detection

@@ -2,29 +2,29 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.util.CDRuntime;
 
 public class CDDriveChassisAuton {
     org.firstinspires.ftc.teamcode.CDHardware robotHardware;
-    private ElapsedTime runtime = new ElapsedTime();
+    private final CDRuntime runtime = new CDRuntime();
 
     public CDDriveChassisAuton(CDHardware theHardware) {
         robotHardware = theHardware;
 
-        robotHardware.leftfrontmotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        robotHardware.leftrearmotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        robotHardware.rightfrontmotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        robotHardware.rightrearmotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        robotHardware.leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        robotHardware.leftRearMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        robotHardware.rightFrontMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        robotHardware.rightRearMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.leftRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.rightRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robotHardware.rightrearmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robotHardware.rightfrontmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robotHardware.leftrearmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robotHardware.leftfrontmotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robotHardware.rightRearMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robotHardware.rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robotHardware.leftRearMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robotHardware.leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     //Create methods to drive using encoder
@@ -50,46 +50,46 @@ public class CDDriveChassisAuton {
         int newStraightTargetLF;
 
         //Determine new target position and pass to motor controller
-        newStraightTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int)(straightInches * COUNTS_PER_INCH);
-        newStraightTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() + (int)(straightInches * COUNTS_PER_INCH);
-        newStraightTargetLR = robotHardware.leftrearmotor.getCurrentPosition() + (int)(straightInches * COUNTS_PER_INCH);
-        newStraightTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int)(straightInches * COUNTS_PER_INCH);
+        newStraightTargetRR = robotHardware.rightRearMotor.getCurrentPosition() + (int)(straightInches * COUNTS_PER_INCH);
+        newStraightTargetRF = robotHardware.rightFrontMotor.getCurrentPosition() + (int)(straightInches * COUNTS_PER_INCH);
+        newStraightTargetLR = robotHardware.leftRearMotor.getCurrentPosition() + (int)(straightInches * COUNTS_PER_INCH);
+        newStraightTargetLF = robotHardware.leftFrontMotor.getCurrentPosition() + (int)(straightInches * COUNTS_PER_INCH);
 
-        robotHardware.rightrearmotor.setTargetPosition(newStraightTargetRR);
-        robotHardware.rightfrontmotor.setTargetPosition(newStraightTargetRF);
-        robotHardware.leftrearmotor.setTargetPosition(newStraightTargetLR);
-        robotHardware.leftfrontmotor.setTargetPosition(newStraightTargetLF);
+        robotHardware.rightRearMotor.setTargetPosition(newStraightTargetRR);
+        robotHardware.rightFrontMotor.setTargetPosition(newStraightTargetRF);
+        robotHardware.leftRearMotor.setTargetPosition(newStraightTargetLR);
+        robotHardware.leftFrontMotor.setTargetPosition(newStraightTargetLF);
 
 
         //Turn On RUN_TO_POSITION
-        robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.rightRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.leftRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Reset the timeout time and start motion
         runtime.reset();
-        robotHardware.rightrearmotor.setPower(Math.abs(speed));
-        robotHardware.rightfrontmotor.setPower(Math.abs(speed));
-        robotHardware.leftrearmotor.setPower(Math.abs(speed));
-        robotHardware.leftfrontmotor.setPower(Math.abs(speed));
+        robotHardware.rightRearMotor.setPower(Math.abs(speed));
+        robotHardware.rightFrontMotor.setPower(Math.abs(speed));
+        robotHardware.leftRearMotor.setPower(Math.abs(speed));
+        robotHardware.leftFrontMotor.setPower(Math.abs(speed));
 
         //Loop while motors are active. This uses && which means that if any of the motors hit their target the motion will stop.
         //This is safer to ensure the robot will end motion asap.
-        while ((runtime.seconds()<straightTimeout) && (robotHardware.rightrearmotor.isBusy() && robotHardware.rightfrontmotor.isBusy() && robotHardware.leftrearmotor.isBusy() && robotHardware.leftfrontmotor.isBusy())) {
+        while ((runtime.seconds()<straightTimeout) && (robotHardware.rightRearMotor.isBusy() && robotHardware.rightFrontMotor.isBusy() && robotHardware.leftRearMotor.isBusy() && robotHardware.leftFrontMotor.isBusy())) {
         }
 
         //Stop all motion
-        robotHardware.rightrearmotor.setPower(0);
-        robotHardware.rightfrontmotor.setPower(0);
-        robotHardware.leftrearmotor.setPower(0);
-        robotHardware.leftfrontmotor.setPower(0);
+        robotHardware.rightRearMotor.setPower(0);
+        robotHardware.rightFrontMotor.setPower(0);
+        robotHardware.leftRearMotor.setPower(0);
+        robotHardware.leftFrontMotor.setPower(0);
 
         //Turn off RUN_TO_POSITION
-        robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.rightRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.leftRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void encoderDriveStrafe(double speed, double strafeInches, double strafeTimeout) {
@@ -100,46 +100,46 @@ public class CDDriveChassisAuton {
         double strafemult = 1.25;
 
         //Determine new target position and pass to motor controller
-        newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int)(strafeInches * COUNTS_PER_INCH*strafemult);
-        newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int)(strafeInches * COUNTS_PER_INCH*strafemult);
-        newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() - (int)(strafeInches * COUNTS_PER_INCH*strafemult);
-        newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int)(strafeInches * COUNTS_PER_INCH*strafemult);
+        newStrafeTargetRR = robotHardware.rightRearMotor.getCurrentPosition() + (int)(strafeInches * COUNTS_PER_INCH*strafemult);
+        newStrafeTargetRF = robotHardware.rightFrontMotor.getCurrentPosition() - (int)(strafeInches * COUNTS_PER_INCH*strafemult);
+        newStrafeTargetLR = robotHardware.leftRearMotor.getCurrentPosition() - (int)(strafeInches * COUNTS_PER_INCH*strafemult);
+        newStrafeTargetLF = robotHardware.leftFrontMotor.getCurrentPosition() + (int)(strafeInches * COUNTS_PER_INCH*strafemult);
 
-        robotHardware.rightrearmotor.setTargetPosition(newStrafeTargetRR);
-        robotHardware.rightfrontmotor.setTargetPosition(newStrafeTargetRF);
-        robotHardware.leftrearmotor.setTargetPosition(newStrafeTargetLR);
-        robotHardware.leftfrontmotor.setTargetPosition(newStrafeTargetLF);
+        robotHardware.rightRearMotor.setTargetPosition(newStrafeTargetRR);
+        robotHardware.rightFrontMotor.setTargetPosition(newStrafeTargetRF);
+        robotHardware.leftRearMotor.setTargetPosition(newStrafeTargetLR);
+        robotHardware.leftFrontMotor.setTargetPosition(newStrafeTargetLF);
 
 
         //Turn On RUN_TO_POSITION
-        robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.rightRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.leftRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Reset the timeout time and start motion
         runtime.reset();
-        robotHardware.rightrearmotor.setPower(Math.abs(speed));
-        robotHardware.rightfrontmotor.setPower(Math.abs(speed));
-        robotHardware.leftrearmotor.setPower(Math.abs(speed));
-        robotHardware.leftfrontmotor.setPower(Math.abs(speed));
+        robotHardware.rightRearMotor.setPower(Math.abs(speed));
+        robotHardware.rightFrontMotor.setPower(Math.abs(speed));
+        robotHardware.leftRearMotor.setPower(Math.abs(speed));
+        robotHardware.leftFrontMotor.setPower(Math.abs(speed));
 
         //Loop while motors are active. This uses && which means that if any of the motors hit their target the motion will stop.
         //This is safer to ensure the robot will end motion asap.
-        while ((runtime.seconds()<strafeTimeout) && ((robotHardware.rightrearmotor.isBusy() & robotHardware.rightfrontmotor.isBusy() && robotHardware.leftrearmotor.isBusy() && robotHardware.leftfrontmotor.isBusy()))) {
+        while ((runtime.seconds()<strafeTimeout) && ((robotHardware.rightRearMotor.isBusy() & robotHardware.rightFrontMotor.isBusy() && robotHardware.leftRearMotor.isBusy() && robotHardware.leftFrontMotor.isBusy()))) {
         }
 
         //Stop all motion
-        robotHardware.rightrearmotor.setPower(0);
-        robotHardware.rightfrontmotor.setPower(0);
-        robotHardware.leftrearmotor.setPower(0);
-        robotHardware.leftfrontmotor.setPower(0);
+        robotHardware.rightRearMotor.setPower(0);
+        robotHardware.rightFrontMotor.setPower(0);
+        robotHardware.leftRearMotor.setPower(0);
+        robotHardware.leftFrontMotor.setPower(0);
 
         //Turn off RUN_TO_POSITION
-        robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.rightRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.leftRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void encoderDriveDiag(double speed, double diagInches, double diagTimeout, boolean isLeft) {
@@ -150,83 +150,83 @@ public class CDDriveChassisAuton {
         int newStrafeTargetLF;
         double strafemult = 1.25;
 
-        newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition();
-        newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition();
-        newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition();
-        newStrafeTargetLF = robotHardware.rightrearmotor.getCurrentPosition();
+        newStrafeTargetRF = robotHardware.rightFrontMotor.getCurrentPosition();
+        newStrafeTargetLR = robotHardware.leftRearMotor.getCurrentPosition();
+        newStrafeTargetRR = robotHardware.rightRearMotor.getCurrentPosition();
+        newStrafeTargetLF = robotHardware.rightRearMotor.getCurrentPosition();
         if (!isLeft && (diagInches > 0.01)) { // Forward Right
-            newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
-            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
-            newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition();
-            newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition();
+            newStrafeTargetLF = robotHardware.leftFrontMotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRR = robotHardware.rightRearMotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRF = robotHardware.rightFrontMotor.getCurrentPosition();
+            newStrafeTargetLR = robotHardware.leftRearMotor.getCurrentPosition();
         } else if (isLeft && (diagInches > 0.01)) { // Forward Left
-            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition();
-            newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition();
-            newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
-            newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRR = robotHardware.rightRearMotor.getCurrentPosition();
+            newStrafeTargetLF = robotHardware.leftFrontMotor.getCurrentPosition();
+            newStrafeTargetRF = robotHardware.rightFrontMotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetLR = robotHardware.leftRearMotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
         } else if (isLeft && (diagInches < 0.01)) { // Backwards Left
-            newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
-            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
-            newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition();
-            newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition();
+            newStrafeTargetLF = robotHardware.leftFrontMotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRR = robotHardware.rightRearMotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRF = robotHardware.rightFrontMotor.getCurrentPosition();
+            newStrafeTargetLR = robotHardware.leftRearMotor.getCurrentPosition();
         } else if (!isLeft && (diagInches < 0.01)) { // Backwards Right
-            newStrafeTargetRR = robotHardware.rightrearmotor.getCurrentPosition();
-            newStrafeTargetLF = robotHardware.leftfrontmotor.getCurrentPosition();
-            newStrafeTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
-            newStrafeTargetLR = robotHardware.leftrearmotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetRR = robotHardware.rightRearMotor.getCurrentPosition();
+            newStrafeTargetLF = robotHardware.leftFrontMotor.getCurrentPosition();
+            newStrafeTargetRF = robotHardware.rightFrontMotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
+            newStrafeTargetLR = robotHardware.leftRearMotor.getCurrentPosition() + (int)(diagInches * COUNTS_PER_INCH * strafemult);
         }
 
 
-        robotHardware.rightrearmotor.setTargetPosition(newStrafeTargetRR);
-        robotHardware.rightfrontmotor.setTargetPosition(newStrafeTargetRF);
-        robotHardware.leftrearmotor.setTargetPosition(newStrafeTargetLR);
-        robotHardware.leftfrontmotor.setTargetPosition(newStrafeTargetLF);
+        robotHardware.rightRearMotor.setTargetPosition(newStrafeTargetRR);
+        robotHardware.rightFrontMotor.setTargetPosition(newStrafeTargetRF);
+        robotHardware.leftRearMotor.setTargetPosition(newStrafeTargetLR);
+        robotHardware.leftFrontMotor.setTargetPosition(newStrafeTargetLF);
 
 
         //Turn On RUN_TO_POSITION
-        robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.rightRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.leftRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Reset the timeout time and start motion
         runtime.reset();
-        robotHardware.rightrearmotor.setPower(Math.abs(speed));
-        robotHardware.rightfrontmotor.setPower(Math.abs(speed));
-        robotHardware.leftrearmotor.setPower(Math.abs(speed));
-        robotHardware.leftfrontmotor.setPower(Math.abs(speed));
+        robotHardware.rightRearMotor.setPower(Math.abs(speed));
+        robotHardware.rightFrontMotor.setPower(Math.abs(speed));
+        robotHardware.leftRearMotor.setPower(Math.abs(speed));
+        robotHardware.leftFrontMotor.setPower(Math.abs(speed));
 
         //Loop while motors are active. This uses && which means that if any of the motors hit their target the motion will stop.
         //This is safer to ensure the robot will end motion asap.
         if (!isLeft && (diagInches > 0.01)) { // Forward Right
-            while ((runtime.seconds()<diagTimeout) && (robotHardware.rightrearmotor.isBusy() && robotHardware.leftfrontmotor.isBusy())) {
+            while ((runtime.seconds()<diagTimeout) && (robotHardware.rightRearMotor.isBusy() && robotHardware.leftFrontMotor.isBusy())) {
             }
 
         } else if (isLeft && (diagInches > 0.01)) { // Forward Left
-           while ((runtime.seconds()<diagTimeout) && (robotHardware.rightfrontmotor.isBusy() && robotHardware.leftrearmotor.isBusy())) {
+           while ((runtime.seconds()<diagTimeout) && (robotHardware.rightFrontMotor.isBusy() && robotHardware.leftRearMotor.isBusy())) {
             }
 
         } else if (isLeft && (diagInches < 0.01)) { // Backwards Left
-            while ((runtime.seconds()<diagTimeout) && (robotHardware.rightrearmotor.isBusy() && robotHardware.leftfrontmotor.isBusy())) {
+            while ((runtime.seconds()<diagTimeout) && (robotHardware.rightRearMotor.isBusy() && robotHardware.leftFrontMotor.isBusy())) {
             }
 
         } else if (!isLeft && (diagInches < 0.01)) { // Backwards Right
-            while ((runtime.seconds()<diagTimeout) && ( robotHardware.rightfrontmotor.isBusy() && robotHardware.leftrearmotor.isBusy())) {
+            while ((runtime.seconds()<diagTimeout) && ( robotHardware.rightFrontMotor.isBusy() && robotHardware.leftRearMotor.isBusy())) {
             }
         }
 
 
         //Stop all motion
-        robotHardware.rightrearmotor.setPower(0);
-        robotHardware.rightfrontmotor.setPower(0);
-        robotHardware.leftrearmotor.setPower(0);
-        robotHardware.leftfrontmotor.setPower(0);
+        robotHardware.rightRearMotor.setPower(0);
+        robotHardware.rightFrontMotor.setPower(0);
+        robotHardware.leftRearMotor.setPower(0);
+        robotHardware.leftFrontMotor.setPower(0);
 
         //Turn off RUN_TO_POSITION
-        robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.rightRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.leftRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void encoderDriveTurn(double speed, double turnDeg, double strafeTimeout) {
@@ -240,46 +240,46 @@ public class CDDriveChassisAuton {
         double turnInches = turnDeg/360 * (2*3.1415*9);
 
         //Determine new target position and pass to motor controller
-        newTurnTargetRR = robotHardware.rightrearmotor.getCurrentPosition() - (int)(turnInches * COUNTS_PER_INCH);
-        newTurnTargetRF = robotHardware.rightfrontmotor.getCurrentPosition() - (int)(turnInches * COUNTS_PER_INCH);
-        newTurnTargetLR = robotHardware.leftrearmotor.getCurrentPosition() + (int)(turnInches * COUNTS_PER_INCH);
-        newTurnTargetLF = robotHardware.leftfrontmotor.getCurrentPosition() + (int)(turnInches * COUNTS_PER_INCH);
+        newTurnTargetRR = robotHardware.rightRearMotor.getCurrentPosition() - (int)(turnInches * COUNTS_PER_INCH);
+        newTurnTargetRF = robotHardware.rightFrontMotor.getCurrentPosition() - (int)(turnInches * COUNTS_PER_INCH);
+        newTurnTargetLR = robotHardware.leftRearMotor.getCurrentPosition() + (int)(turnInches * COUNTS_PER_INCH);
+        newTurnTargetLF = robotHardware.leftFrontMotor.getCurrentPosition() + (int)(turnInches * COUNTS_PER_INCH);
 
-        robotHardware.rightrearmotor.setTargetPosition(newTurnTargetRR);
-        robotHardware.rightfrontmotor.setTargetPosition(newTurnTargetRF);
-        robotHardware.leftrearmotor.setTargetPosition(newTurnTargetLR);
-        robotHardware.leftfrontmotor.setTargetPosition(newTurnTargetLF);
+        robotHardware.rightRearMotor.setTargetPosition(newTurnTargetRR);
+        robotHardware.rightFrontMotor.setTargetPosition(newTurnTargetRF);
+        robotHardware.leftRearMotor.setTargetPosition(newTurnTargetLR);
+        robotHardware.leftFrontMotor.setTargetPosition(newTurnTargetLF);
 
 
         //Turn On RUN_TO_POSITION
-        robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.rightRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.rightFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.leftRearMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Reset the timeout time and start motion
         runtime.reset();
-        robotHardware.rightrearmotor.setPower(Math.abs(speed));
-        robotHardware.rightfrontmotor.setPower(Math.abs(speed));
-        robotHardware.leftrearmotor.setPower(Math.abs(speed));
-        robotHardware.leftfrontmotor.setPower(Math.abs(speed));
+        robotHardware.rightRearMotor.setPower(Math.abs(speed));
+        robotHardware.rightFrontMotor.setPower(Math.abs(speed));
+        robotHardware.leftRearMotor.setPower(Math.abs(speed));
+        robotHardware.leftFrontMotor.setPower(Math.abs(speed));
 
         //Loop while motors are active. This uses && which means that if any of the motors hit their target the motion will stop.
         //This is safer to ensure the robot will end motion asap.
-        while ((runtime.seconds()<strafeTimeout) && (robotHardware.rightrearmotor.isBusy() && robotHardware.rightfrontmotor.isBusy() && robotHardware.leftrearmotor.isBusy() && robotHardware.leftfrontmotor.isBusy())) {
+        while ((runtime.seconds()<strafeTimeout) && (robotHardware.rightRearMotor.isBusy() && robotHardware.rightFrontMotor.isBusy() && robotHardware.leftRearMotor.isBusy() && robotHardware.leftFrontMotor.isBusy())) {
         }
 
         //Stop all motion
-        robotHardware.rightrearmotor.setPower(0);
-        robotHardware.rightfrontmotor.setPower(0);
-        robotHardware.leftrearmotor.setPower(0);
-        robotHardware.leftfrontmotor.setPower(0);
+        robotHardware.rightRearMotor.setPower(0);
+        robotHardware.rightFrontMotor.setPower(0);
+        robotHardware.leftRearMotor.setPower(0);
+        robotHardware.leftFrontMotor.setPower(0);
 
         //Turn off RUN_TO_POSITION
-        robotHardware.rightrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.rightfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.leftrearmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robotHardware.leftfrontmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.rightRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.leftRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
 
