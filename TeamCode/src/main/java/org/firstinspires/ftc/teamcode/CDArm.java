@@ -39,8 +39,8 @@ public class CDArm {
     public CDArm(CDHardware theHardware){
 
         robotHardware = theHardware;
-        //robotHardware.armVerticalServo.scaleRange();
-        //robotHardware.armRotationServo.scaleRange();
+        robotHardware.armVerticalServo.scaleRange(.4, .8);
+        robotHardware.armRotationServo.scaleRange(.15, .37);
 
     }
     //public double getArmThreshold () { return armCurrentThreshold; }
