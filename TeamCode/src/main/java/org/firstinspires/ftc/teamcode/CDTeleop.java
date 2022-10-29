@@ -46,8 +46,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     public double currentFourBarThreshold;
     public double fourBarPotCurrent;
     public boolean fourBarError;
-    //Arm variables
-    public int armPosCurrent;
+    //Arm UpDown variables
+    public double armUpDownPosCurrent;
+    public double armUpDownAtarget;
+/*    public int armPosCurrent;
     public double armPosLast = 1.1; // Arbitrary
     public double armUpMulti = 1.0; // In case we want to slow down the arm with the analog input.
     public double armCurrentThreshold;
@@ -55,22 +57,33 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     public double armDownThresh;
     public double armEaseOut;
     public double armUpDownPower = 0.5;
-    public int armtargetPosition;
+    public int armtargetPosition;*/
     //public boolean armupmagnetswitch;
-    public boolean armError = false;
+    //public boolean armError = false;
+
     //ArmRot variables
     public double armRotPosCurrent;
-    public double armRotPosLast;
-    public double armRotCurrentThreshold;
-    //Pickup variables
-    public double pickUpPosCurrent;
     public double armrotAtarget;
+/*    public double armRotPosLast;
+    public double armRotCurrentThreshold;*/
+    //Pickup variables
+    //public double pickUpPosCurrent;
+
+    //Intake variables
+    public double intakePosCurrent;
+    public double intakeAtarget;
+    //Extend variables
+    public double extendPosCurrent;
+    public double extendAtarget;
+    //Grab variables
+    public double grabPosCurrent;
+    public double grabAtarget;
 
     public CDHardware myHardware;
     // public org.firstinspires.ftc.teamcode.CDHardware myHardware;
     public CDFourBar myFourbar;
     public CDArm myArm;
-    public CDPickup myPickup;
+    //public CDPickup myPickup;
 
     // State used for updating telemetry
     //    public Orientation angles;
@@ -83,7 +96,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         myHardware = new CDHardware(hardwareMap);
         CDFourBar myFourbar = new CDFourBar(myHardware);
         CDArm myArm = new CDArm(myHardware);
-        CDPickup myPickup = new CDPickup(myHardware);
+        //CDPickup myPickup = new CDPickup(myHardware);
 
         // Configure initial variables
         //TODO if we want pacman model to be default this should be set to true
@@ -173,24 +186,80 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 myArm.robotHardware.armmotor.setPower(.25);
             }*/
 
-            // rotate arm
+            // arm updown
+            armUpDownPosCurrent = myArm.getArmUpDownPosition();
+            armUpDownAtarget = myArm.getArmUpDownPosition(); // sets this initially
+            boolean armUP = gamepad2.dpad_up;
+            boolean armDOWN = gamepad2.dpad_down;
+            if (armUP) {
+                armUpDownAtarget = (armUpDownPosCurrent + .0008);
+                myArm.setArmUpDownPosition(armUpDownAtarget);
+                armUP = !armUP;
+                }
+            else if (armDOWN) {
+                armUpDownAtarget = (armUpDownPosCurrent - .0008);
+                myArm.setArmUpDownPosition(armUpDownAtarget);
+                armDOWN = !armDOWN;
+            }
+
+            // arm rotate
             armRotPosCurrent = myArm.getArmRotPosition();
             armrotAtarget = myArm.getArmRotPosition(); // sets this initially
             if (gamepad2.right_stick_x > .02 || gamepad2.right_stick_x < -.02) {
                 double armrotA = gamepad2.right_stick_x;
                 if (armrotA > .02) {
-                    armrotAtarget = (armRotPosCurrent + .0008);
+                    armrotAtarget = (armRotPosCurrent + .00008);
                     myArm.setArmRotPosition(armrotAtarget);
-                }
-                else if (armrotA < -.02) {
-                    armrotAtarget = (armRotPosCurrent - .0008);
+                }else if (armrotA < -.02) {
+                    armrotAtarget = (armRotPosCurrent - .00008);
                     myArm.setArmRotPosition(armrotAtarget);
                 }
             }
 
+            // Pickup
+            intakePosCurrent = myArm.getIntakePosition();
+            intakeAtarget = myArm.getIntakePosition(); // sets this initially
+            if (gamepad2.left_trigger > .01) {
+                intakeAtarget = (intakePosCurrent + .0008);
+                myArm.setIntakePosition(intakeAtarget);
+            }
+            else if (gamepad2.right_trigger >.01) {
+                intakeAtarget = (intakePosCurrent - .0008);
+                myArm.setIntakePosition(intakeAtarget);
+            }
+
+            // Extend
+            extendPosCurrent = myArm.getExtendPosition();
+            extendAtarget = myArm.getExtendPosition(); // sets this initially
+            if (gamepad1.left_trigger > .01) {
+                extendAtarget = (extendPosCurrent + .0008);
+                myArm.setExtendPosition(extendAtarget);
+            }
+            else if (gamepad1.right_trigger >.01) {
+                extendAtarget = (extendPosCurrent - .0008);
+                myArm.setExtendPosition(extendAtarget);
+            }
+
+            //Grab
+            grabPosCurrent = myArm.getGrabPosition();
+            grabAtarget = myArm.getGrabPosition(); // sets this initially
+            boolean grab = gamepad1.left_bumper;
+            boolean release = gamepad1.right_bumper;
+            if (grab) {
+                grabAtarget = (grabPosCurrent + .0008);
+                myArm.setGrabPosition(grabAtarget);
+            }
+            else if (release) {
+                grabAtarget = (grabPosCurrent - .0008);
+                myArm.setGrabPosition(grabAtarget);
+            }
+
+
+
+
             //TODO change multiplier below to impact how fast it moves - may need to add pause or timer to slow down???
 
-            float pickupclosednum = gamepad2.left_trigger;
+            /*float pickupclosednum = gamepad2.left_trigger;
             //Close Pickup
             if (pickupclosednum >=0.05) {
                 myPickup.setPickupPosition(myPickup.pickupclosed);
@@ -201,7 +270,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             if (pickupopennum >=0.05) {
                 myPickup.setPickupPosition(myPickup.pickupopen);
             }
-
+*/
         // End Gamepad 2
 
             // Telemetry Stuff -
@@ -362,9 +431,17 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             //telemetry.addData("CurrArmDownThresh", "%.2f", armDownThresh);
             //telemetry.addData("ArmPosition", armPosCurrent);
             //telemetry.addData("armerror", armError);
-            telemetry.addData("ArmRotPosition", (armRotPosCurrent * 1800));
-            telemetry.addData("ArmRotTarget", (armrotAtarget * 1800));
-            telemetry.addData("PickupPosition", pickUpPosCurrent);
+            telemetry.addData("ArmUpDownPosition", (armUpDownPosCurrent));
+            telemetry.addData("ArmUpDownTarget", (armUpDownAtarget));
+            telemetry.addData("ArmRotPosition", armRotPosCurrent);
+            telemetry.addData("ArmRotTarget", armrotAtarget);
+            telemetry.addData("IntakePosition", (intakePosCurrent));
+            telemetry.addData("IntakeTarget", (intakeAtarget));
+            telemetry.addData("ExtendPosition", (extendPosCurrent));
+            telemetry.addData("ExtendTarget", (extendAtarget));
+            telemetry.addData("GrabPosition", (grabPosCurrent));
+            telemetry.addData("GrabTarget", (grabAtarget));
+            //telemetry.addData("PickupPosition", pickUpPosCurrent);
         }
         // Loop and update the dashboard
         telemetry.update();

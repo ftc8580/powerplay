@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.hardware.Sensor;
-import com.qualcomm.hardware.bosch.*;
 import com.qualcomm.robotcore.hardware.*;
 
 //Defines the motors and (possible) sensors
@@ -15,9 +13,12 @@ public class CDHardware {
     public DcMotor fourbarmotor;
     public AnalogInput fourbarpot;
     //Arm
-    //public DcMotor armmotor;
-    public Servo armservo;
+    public Servo armupdownservo;
+    public Servo armrotservo;
     public Servo intakeservo;
+    //Grabber
+    public Servo extendservo;
+    public Servo grabservo;
 
 
 
@@ -29,10 +30,12 @@ public class CDHardware {
         leftrearmotor = hwMap.get(DcMotor.class, "motorLR");
         rightrearmotor = hwMap.get(DcMotor.class, "motorRR");
         fourbarmotor = hwMap.get(DcMotor.class, "motorFourBar");
-        //armmotor = hwMap.get(DcMotor.class, "motorArm");
-        armservo = hwMap.get(Servo.class, "servoArm");
-        intakeservo = hwMap.get(Servo.class, "servoIntake");
         fourbarpot = hwMap.get(AnalogInput.class, "fourBarPos");
+        armupdownservo = hwMap.get(Servo.class, "servoUpDownArm");
+        armrotservo = hwMap.get(Servo.class, "servoRotArm");
+        intakeservo = hwMap.get(Servo.class, "servoIntake");
+        extendservo = hwMap.get(Servo.class, "servoExtend");
+        grabservo = hwMap.get(Servo.class, "servoGrab");
     }
 }
 
