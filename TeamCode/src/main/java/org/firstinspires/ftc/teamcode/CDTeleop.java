@@ -194,12 +194,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             if (armUP) {
                 armUpDownAtarget = (armUpDownPosCurrent + .0008);
                 myArm.setArmUpDownPosition(armUpDownAtarget);
-                armUP = !armUP;
                 }
             else if (armDOWN) {
                 armUpDownAtarget = (armUpDownPosCurrent - .0008);
                 myArm.setArmUpDownPosition(armUpDownAtarget);
-                armDOWN = !armDOWN;
             }
 
             // arm rotate
