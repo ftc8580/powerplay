@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.teamcode.util.CDRuntime;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class CDArm {
     // This is where we set the values for our distance sensor
@@ -18,9 +18,8 @@ public class CDArm {
     public double armRotationFront = .66;
     public double armRotationLeft = 1;*/
 
-    private final CDRuntime runtime = new CDRuntime();
-
-    CDHardware robotHardware;
+    private final Servo verticalServo;
+    private final Servo rotationServo;
     //Arm up down using servo
 
     /*public boolean armStopped;
@@ -35,13 +34,17 @@ public class CDArm {
     //public double armRotationCurrentThreshold;
     public double armRotationPositionCurrent;
     public double armRotationLastPosition;*/
+    public double armClearToRotatePosition = 0.50;
 
     public CDArm(CDHardware theHardware){
+        verticalServo = theHardware.armVerticalServo;
+        rotationServo = theHardware.armRotationServo;
 
-        robotHardware = theHardware;
-        robotHardware.armVerticalServo.scaleRange(.4, .8);
-        robotHardware.armRotationServo.scaleRange(.15, .37);
+        verticalServo.scaleRange(.4, .8);
+        rotationServo.scaleRange(.15, .37);
 
+        verticalServo.setPosition(0.69);
+        rotationServo.setPosition(0.338);
     }
     //public double getArmThreshold () { return armCurrentThreshold; }
     //public double getArmRotationThreshold() {return armRotationCurrentThreshold; }
@@ -50,18 +53,22 @@ public class CDArm {
         robotHardware.armmotor.setPower(pow);
     }*/
 
-    public double getArmVerticalPosition() { return robotHardware.armVerticalServo.getPosition(); } //Position from arm vertical servo
-    public double getArmRotationPosition() {return robotHardware.armRotationServo.getPosition(); }  //Position from arm rotation servo
-
-    public boolean setArmVerticalPosition(double armVerticalPositionTarget) {
-        robotHardware.armVerticalServo.setPosition(armVerticalPositionTarget);
-        return robotHardware.armVerticalServo.getPosition() == armVerticalPositionTarget;
-    }
-    public boolean setArmRotationPosition(double armRotationPositionTarget) {
-        robotHardware.armRotationServo.setPosition(armRotationPositionTarget);
-        return robotHardware.armRotationServo.getPosition() == armRotationPositionTarget;
+    public double getArmVerticalPosition() {
+        return verticalServo.getPosition();
     }
 
+    public double getArmRotationPosition() {
+        return rotationServo.getPosition();
+    }
+
+    public void setArmVerticalPosition(double armVerticalPositionTarget) {
+        verticalServo.setPosition(armVerticalPositionTarget);
+    }
+
+    public void setArmRotationPosition(double armRotationPositionTarget) {
+        rotationServo.setPosition(armRotationPositionTarget);
+    }
+}
 //TODO DELETE BELOW - Leaving to use timeout reference in case needed
  /*   public boolean setArmPosition(double armPositionTarget) {
         elapsedRunTime.reset();
@@ -101,6 +108,3 @@ public class CDArm {
         }
         return false; // Returns false if the arm succeeded in moving to requested position, no error.
     }*/
-
-
-}

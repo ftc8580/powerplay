@@ -182,11 +182,21 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 arm.robotHardware.armmotor.setPower(.25);
             }*/
 
-            // arm updown
+
             armUpDownPosCurrent = arm.getArmVerticalPosition();
             armUpDownAtarget = arm.getArmVerticalPosition(); // sets this initially
+            armRotPosCurrent = arm.getArmRotationPosition();
+            armrotAtarget = arm.getArmRotationPosition(); // sets this initially
+
             boolean armUP = gamepad2.dpad_up;
             boolean armDOWN = gamepad2.dpad_down;
+
+            // Flip controls if the arm is rotated forward
+            if (armRotPosCurrent < 0.56) {
+                armUP = gamepad2.dpad_down;
+                armDOWN = gamepad2.dpad_up;
+            }
+
             if (armUP) {
                 armUpDownAtarget = (armUpDownPosCurrent + .0008);
                 arm.setArmVerticalPosition(armUpDownAtarget);
@@ -196,15 +206,13 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 
             // arm rotate
-            armRotPosCurrent = arm.getArmRotationPosition();
-            armrotAtarget = arm.getArmRotationPosition(); // sets this initially
             if (gamepad2.right_stick_x > .02 || gamepad2.right_stick_x < -.02) {
                 double armrotA = gamepad2.right_stick_x;
                 if (armrotA > .02) {
-                    armrotAtarget = (armRotPosCurrent + .00008);
+                    armrotAtarget = (armRotPosCurrent + .001);
                     arm.setArmRotationPosition(armrotAtarget);
-                }else if (armrotA < -.02) {
-                    armrotAtarget = (armRotPosCurrent - .00008);
+                } else if (armrotA < -.02) {
+                    armrotAtarget = (armRotPosCurrent - .001);
                     arm.setArmRotationPosition(armrotAtarget);
                 }
             }
@@ -248,6 +256,14 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 
 
+            if (gamepad2.a) {
+
+                arm.setArmVerticalPosition(arm.armClearToRotatePosition);
+                double armRotPositionToNotCrash = .343;
+                arm.setArmRotationPosition(armRotPositionToNotCrash);
+                double armVerticalPositionToNotCrash = .565;
+                arm.setArmVerticalPosition(armVerticalPositionToNotCrash);
+            }
 
 
             //TODO change multiplier below to impact how fast it moves - may need to add pause or timer to slow down???
