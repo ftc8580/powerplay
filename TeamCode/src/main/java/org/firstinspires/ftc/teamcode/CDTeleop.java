@@ -23,7 +23,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     // Initialize our local variables with values
     // The basespeed "slow" variable is used to control the overall speed of the robot
     // TODO: Work with Drive Team to determine
-    public double baseSpeed = 0.70;
+    public double baseSpeed = 0.90;
 
     public boolean imuTelemetry = false;
     //For setting elevator position using buttons
@@ -222,13 +222,16 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             while (opModeIsActive()) {
             // Everything gamepad 1:
                 // User controls for the robot speed overall
-                if (gamepad1.left_trigger != 0) {
-                    robotSpeed = baseSpeed * 1.4;
-                } else if (gamepad1.right_trigger != 0) {
-                    robotSpeed = baseSpeed * .4;
-                } else {
-                    robotSpeed = baseSpeed;
-                }
+                //if (gamepad1.left_trigger != 0) {
+                if (gamepad1.y) {
+                        robotSpeed = baseSpeed * 1.0;
+                    //} else if (gamepad1.right_trigger != 0) {
+                    } else if (gamepad1.x) {
+                        robotSpeed = baseSpeed * .4;
+                    } else {
+                        robotSpeed = baseSpeed;
+                    }
+
                 if (gamepad1.a) {
                     //Button A = unconstrained movement
                     constrainMovement = false;
