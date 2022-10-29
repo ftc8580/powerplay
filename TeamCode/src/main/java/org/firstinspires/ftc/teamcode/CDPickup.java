@@ -4,14 +4,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.util.CDRuntime;
 
 public class CDPickup {
-    public double SCALE_RANGE_MIN = 0.283;
-    public double SCALE_RANGE_MAX = 0.80;
-
     private final CDRuntime runtime = new CDRuntime();
-
     private final Servo pickupServo;
 
     public CDPickup(CDHardware theHardware) {
+        double SCALE_RANGE_MIN = 0.283;
+        double SCALE_RANGE_MAX = 0.80;
+
         pickupServo = theHardware.pickupServo;
         pickupServo.scaleRange(SCALE_RANGE_MIN, SCALE_RANGE_MAX);
     }

@@ -54,10 +54,6 @@ public class CDArm {
 
     public double getArmVerticalPosition() { return robotHardware.armVerticalServo.getPosition(); } //Position from arm vertical servo
     public double getArmRotationPosition() {return robotHardware.armRotationServo.getPosition(); }  //Position from arm rotation servo
-    public double getExtendPosition() {return robotHardware.grabberExtendServo.getPosition(); }  //position of Extend servo
-    public double getGrabPosition() {return robotHardware.grabberServo.getPosition(); }  //position of Grab servo
-
-
 
     public boolean setArmVerticalPosition(double armVerticalPositionTarget) {
         robotHardware.armVerticalServo.setPosition(armVerticalPositionTarget);
@@ -66,14 +62,6 @@ public class CDArm {
     public boolean setArmRotationPosition(double armRotationPositionTarget) {
         robotHardware.armRotationServo.setPosition(armRotationPositionTarget);
         return robotHardware.armRotationServo.getPosition() == armRotationPositionTarget;
-    }
-    public boolean setExtendPosition(double extendPositionTarget) {
-        robotHardware.grabberExtendServo.setPosition(extendPositionTarget);
-        return robotHardware.grabberExtendServo.getPosition() == extendPositionTarget;
-    }
-    public boolean setGrabPosition(double grabPositionTarget) {
-        robotHardware.grabberServo.setPosition(grabPositionTarget);
-        return robotHardware.armRotationServo.getPosition() == grabPositionTarget;
     }
 
 //TODO DELETE BELOW - Leaving to use timeout reference in case needed

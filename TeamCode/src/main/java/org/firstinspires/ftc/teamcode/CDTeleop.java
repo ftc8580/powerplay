@@ -92,7 +92,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         CDFourBar fourBar = new CDFourBar(robotHardware);
         CDArm arm = new CDArm(robotHardware);
         CDPickup pickup = new CDPickup(robotHardware);
-        //CDPickup myPickup = new CDPickup(myHardware);
+        CDGrabber grabber = new CDGrabber(robotHardware);
 
         // Configure initial variables
         //TODO if we want pacman model to be default this should be set to true
@@ -222,29 +222,29 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 
             // Extend
-            extendPosCurrent = arm.getExtendPosition();
-            extendAtarget = arm.getExtendPosition(); // sets this initially
+            extendPosCurrent = grabber.getExtendPosition();
+            extendAtarget = grabber.getExtendPosition(); // sets this initially
             if (gamepad1.left_trigger > .01) {
                 extendAtarget = (extendPosCurrent + .0008);
-                arm.setExtendPosition(extendAtarget);
+                grabber.setExtendPosition(extendAtarget);
             }
             else if (gamepad1.right_trigger >.01) {
                 extendAtarget = (extendPosCurrent - .0008);
-                arm.setExtendPosition(extendAtarget);
+                grabber.setExtendPosition(extendAtarget);
             }
 
             //Grab
-            grabPosCurrent = arm.getGrabPosition();
-            grabAtarget = arm.getGrabPosition(); // sets this initially
+            grabPosCurrent = grabber.getGrabPosition();
+            grabAtarget = grabber.getGrabPosition(); // sets this initially
             boolean grab = gamepad1.left_bumper;
             boolean release = gamepad1.right_bumper;
             if (grab) {
                 grabAtarget = (grabPosCurrent + .0008);
-                arm.setGrabPosition(grabAtarget);
+                grabber.setGrabPosition(grabAtarget);
             }
             else if (release) {
                 grabAtarget = (grabPosCurrent - .0008);
-                arm.setGrabPosition(grabAtarget);
+                grabber.setGrabPosition(grabAtarget);
             }
 
 
