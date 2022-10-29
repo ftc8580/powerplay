@@ -12,7 +12,7 @@ public class CDGrabber {
         extendServo = theHardware.grabberExtendServo;
         grabServo = theHardware.grabberServo;
 
-        extendServo.scaleRange(.22, .586);
+        //extendServo.scaleRange(.22, .586);
         grabServo.scaleRange(.35, .75);
     }
 
