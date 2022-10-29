@@ -68,13 +68,13 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     //Pickup variables
     //public double pickUpPosCurrent;
 
-    //Intake variables
-    public double intakePosCurrent;
-    public double intakeAtarget;
-    //Extend variables
+    // Pickup variables
+    public double pickupPositionCurrent;
+    public double pickupTarget;
+    // Extend variables
     public double extendPosCurrent;
     public double extendAtarget;
-    //Grab variables
+    // Grab variables
     public double grabPosCurrent;
     public double grabAtarget;
 
@@ -91,7 +91,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         robotHardware = new CDHardware(hardwareMap);
         CDFourBar fourBar = new CDFourBar(robotHardware);
         CDArm arm = new CDArm(robotHardware);
-        CDArmIntake armIntake = new CDArmIntake(robotHardware);
+        CDPickup pickup = new CDPickup(robotHardware);
         //CDPickup myPickup = new CDPickup(myHardware);
 
         // Configure initial variables
@@ -210,15 +210,15 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 
             // Pickup
-            intakePosCurrent = armIntake.getServoPosition();
-            intakeAtarget = armIntake.getServoPosition(); // sets this initially
+            pickupPositionCurrent = pickup.getServoPosition();
+            pickupTarget = pickup.getServoPosition(); // sets this initially
             if (gamepad2.left_trigger > .01) {
-                intakeAtarget = intakePosCurrent + .0008;
-                armIntake.setPickupPosition(intakeAtarget);
+                pickupTarget = pickupPositionCurrent + .0008;
+                pickup.setServoPosition(pickupTarget);
             }
             else if (gamepad2.right_trigger > .01) {
-                intakeAtarget = intakePosCurrent - .0008;
-                armIntake.setPickupPosition(intakeAtarget);
+                pickupTarget = pickupPositionCurrent - .0008;
+                pickup.setServoPosition(pickupTarget);
             }
 
             // Extend
@@ -428,8 +428,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             telemetry.addData("ArmUpDownTarget", (armUpDownAtarget));
             telemetry.addData("ArmRotPosition", armRotPosCurrent);
             telemetry.addData("ArmRotTarget", armrotAtarget);
-            telemetry.addData("IntakePosition", (intakePosCurrent));
-            telemetry.addData("IntakeTarget", (intakeAtarget));
+            telemetry.addData("PickupPosition", (pickupPositionCurrent));
+            telemetry.addData("PickupTarget", (pickupTarget));
             telemetry.addData("ExtendPosition", (extendPosCurrent));
             telemetry.addData("ExtendTarget", (extendAtarget));
             telemetry.addData("GrabPosition", (grabPosCurrent));

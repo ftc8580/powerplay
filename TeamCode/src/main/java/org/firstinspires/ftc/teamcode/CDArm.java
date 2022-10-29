@@ -41,8 +41,8 @@ public class CDArm {
         robotHardware = theHardware;
         //robotHardware.armVerticalServo.scaleRange();
         //robotHardware.armRotationServo.scaleRange();
-        robotHardware.chassisIntakeExtendServo.scaleRange(.22, .586);
-        robotHardware.chassisIntakeGrabServo.scaleRange(.35, .75);
+        robotHardware.grabberExtendServo.scaleRange(.22, .586);
+        robotHardware.grabberServo.scaleRange(.35, .75);
 
     }
     //public double getArmThreshold () { return armCurrentThreshold; }
@@ -54,8 +54,8 @@ public class CDArm {
 
     public double getArmVerticalPosition() { return robotHardware.armVerticalServo.getPosition(); } //Position from arm vertical servo
     public double getArmRotationPosition() {return robotHardware.armRotationServo.getPosition(); }  //Position from arm rotation servo
-    public double getExtendPosition() {return robotHardware.chassisIntakeExtendServo.getPosition(); }  //position of Extend servo
-    public double getGrabPosition() {return robotHardware.chassisIntakeGrabServo.getPosition(); }  //position of Grab servo
+    public double getExtendPosition() {return robotHardware.grabberExtendServo.getPosition(); }  //position of Extend servo
+    public double getGrabPosition() {return robotHardware.grabberServo.getPosition(); }  //position of Grab servo
 
 
 
@@ -68,11 +68,11 @@ public class CDArm {
         return robotHardware.armRotationServo.getPosition() == armRotationPositionTarget;
     }
     public boolean setExtendPosition(double extendPositionTarget) {
-        robotHardware.chassisIntakeExtendServo.setPosition(extendPositionTarget);
-        return robotHardware.chassisIntakeExtendServo.getPosition() == extendPositionTarget;
+        robotHardware.grabberExtendServo.setPosition(extendPositionTarget);
+        return robotHardware.grabberExtendServo.getPosition() == extendPositionTarget;
     }
     public boolean setGrabPosition(double grabPositionTarget) {
-        robotHardware.chassisIntakeGrabServo.setPosition(grabPositionTarget);
+        robotHardware.grabberServo.setPosition(grabPositionTarget);
         return robotHardware.armRotationServo.getPosition() == grabPositionTarget;
     }
 

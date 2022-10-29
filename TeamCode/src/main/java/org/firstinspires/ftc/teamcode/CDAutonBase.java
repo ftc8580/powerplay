@@ -89,7 +89,7 @@ public class CDAutonBase extends LinearOpMode {
     public CDDriveChassisAuton myChassis;
     public CDFourBar myFourbar;
     public CDArm myArm;
-    public CDArmIntake myPickup;
+    public CDPickup myPickup;
 
     @Override
     public void runOpMode() {
@@ -99,7 +99,7 @@ public class CDAutonBase extends LinearOpMode {
         myChassis = new CDDriveChassisAuton(myHardware);
         myFourbar = new CDFourBar(myHardware);
         myArm = new CDArm(myHardware);
-        myPickup = new CDArmIntake(myHardware);
+        myPickup = new CDPickup(myHardware);
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");

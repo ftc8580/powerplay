@@ -15,10 +15,10 @@ public class CDHardware {
     //Arm
     public Servo armVerticalServo;
     public Servo armRotationServo;
-    public Servo armIntakeServo;
+    public Servo pickupServo;
     //Grabber
-    public Servo chassisIntakeExtendServo;
-    public Servo chassisIntakeGrabServo;
+    public Servo grabberExtendServo;
+    public Servo grabberServo;
 
 
 
@@ -33,9 +33,9 @@ public class CDHardware {
         fourBarPotentiometer = hwMap.get(AnalogInput.class, "fourBarPos");
         armVerticalServo = hwMap.get(Servo.class, "servoUpDownArm");
         armRotationServo = hwMap.get(Servo.class, "servoRotArm");
-        armIntakeServo = hwMap.get(Servo.class, "servoIntake");
-        chassisIntakeExtendServo = hwMap.get(Servo.class, "servoExtend");
-        chassisIntakeGrabServo = hwMap.get(Servo.class, "servoGrab");
+        pickupServo = hwMap.get(Servo.class, "servoIntake");
+        grabberExtendServo = hwMap.get(Servo.class, "servoExtend");
+        grabberServo = hwMap.get(Servo.class, "servoGrab");
     }
 }
 
