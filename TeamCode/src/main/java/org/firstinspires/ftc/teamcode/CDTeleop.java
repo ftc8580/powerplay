@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode;
 //import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.sun.tools.javac.comp.Check;
 
 // Telemetry
 
@@ -48,6 +49,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     //Arm UpDown variables
     public double armUpDownPosCurrent;
     public double armUpDownAtarget;
+    public double armClearToRotatePositionWithCone;
 /*    public int armPosCurrent;
     public double armPosLast = 1.1; // Arbitrary
     public double armUpMulti = 1.0; // In case we want to slow down the arm with the analog input.
@@ -151,38 +153,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 //                arm.setArmPower(0.0);
             }
 
-//            armPosCurrent = arm.getArmPosition();
-//            double armUpDown = gamepad2.right_stick_y;
-//            if (armUpDown > 0.2 || armUpDown < -0.2) {
-//                arm.setArmPower(armUpDown * armUpMulti);
-//            } else {
-//                arm.setArmPower(0.0);
-//            }
-            //fine tune arm up
-            //armPosCurrent = arm.getArmPosition();
-/*            boolean armUP = gamepad2.dpad_up;
-            boolean armDOWN = gamepad2.dpad_down;
-            //TODO add max arm position
-            if (armUP) { //(((armposcurrent < 100) && armUP)) {
-                //TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
-                armtargetPosition = 0;
-                arm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                arm.setArmPower(1.0* armUpDownPower);
-            } else if (armDOWN) { //((armposcurrent > 100) && armDOWN) {  //fine tune arm down
-                // TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
-                armtargetPosition = 0;
-                arm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                arm.setArmPower(-0.5* armUpDownPower);
-            //} else {
-            //  arm.setArmPower(0.0);
-            } else if (armtargetPosition == 0) {
-                armtargetPosition = arm.getArmPosition();
-                arm.robotHardware.armmotor.setTargetPosition(armtargetPosition);
-                arm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                arm.robotHardware.armmotor.setPower(.25);
-            }*/
-
-
+            //arm vertical
             armUpDownPosCurrent = arm.getArmVerticalPosition();
             armUpDownAtarget = arm.getArmVerticalPosition(); // sets this initially
             armRotPosCurrent = arm.getArmRotationPosition();
@@ -255,31 +226,66 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 grabber.setGrabPosition(grabAtarget);
             }
 
-
+            //Go HOME (Back pickup position between fourbars)
             if (gamepad2.a) {
+                double armRotPositionHOME = .343;
+                double armVerticalPositionHOME = .565;
+                double fourbarPositionHOME = .23;
+                double fourbarPositiontoRotateHOME = .8;
 
-                arm.setArmVerticalPosition(arm.armClearToRotatePosition);
-                double armRotPositionToNotCrash = .343;
-                arm.setArmRotationPosition(armRotPositionToNotCrash);
-                double armVerticalPositionToNotCrash = .565;
-                arm.setArmVerticalPosition(armVerticalPositionToNotCrash);
+                // Check if arm clear to rotate
+
+                //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
+                if (fourBarPotCurrent < fourbarPositiontoRotateHOME && (arm.getArmRotationPosition() < (armRotPositionHOME - .01)) || (arm.getArmRotationPosition() > (armRotPositionHOME + .01))) {
+                        fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
+                        //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
+                        armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
+                        arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
+                        //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
+                        sleep(2000);
+                        arm.setArmRotationPosition(armRotPositionHOME);
+                        sleep(2000);
+                    }
+                //check if fourbar motor busy
+                boolean fourbarBusyCheck = fourBar.robotHardware.fourBarMotor.isBusy();
+                if (!fourbarBusyCheck) {
+                    arm.setArmVerticalPosition(armVerticalPositionHOME);
+                }
+                //Double check before moving down
+                if (arm.getArmRotationPosition()>=.333 && arm.getArmRotationPosition()<=.353 && arm.getArmVerticalPosition()>=.555 && arm.getArmVerticalPosition()<=.575) {
+                    fourBar.setFourbarPosition(fourbarPositionHOME, false);
+                }
+            }
+            //Go FRONT Medium with cone
+            if (gamepad2.y) {
+                double armRotPositionFRONT = .82;
+                double armVerticalPositionFRONT = .565;
+                double fourbarPositionFRONTMED= .8;
+                double fourbarPositiontoRotateHOME = .8;
+                double armRotPositionHOME = .343;
+                double armVerticalPositionHOME = .565;
+
+                //Check if arm inside fourbar and set arm to vert HOME position
+                if (fourBarPotCurrent < fourbarPositiontoRotateHOME && ((arm.getArmRotationPosition() > (armRotPositionHOME -.02)) && (arm.getArmRotationPosition() < (armRotPositionFRONT + .02)))) {
+                    //set vertical arm position to HOME to ensure clears
+                    arm.setArmRotationPosition(armRotPositionHOME);
+                    arm.setArmVerticalPosition(armVerticalPositionHOME);
+                }
+                //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
+                if (fourBarPotCurrent < fourbarPositiontoRotateHOME && ((arm.getArmRotationPosition() < (armRotPositionFRONT- .02)) && (arm.getArmRotationPosition() > (armRotPositionFRONT + .02)))) {
+                    fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
+                    //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
+                    armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
+                    arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
+                    //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
+                    sleep(2000);
+                    arm.setArmRotationPosition(armRotPositionFRONT);
+                    sleep(2000);
+                    arm.setArmVerticalPosition(armVerticalPositionFRONT);
+                    fourBar.setFourbarPosition(fourbarPositionFRONTMED, false);
+                }
             }
 
-
-            //TODO change multiplier below to impact how fast it moves - may need to add pause or timer to slow down???
-
-            /*float pickupclosednum = gamepad2.left_trigger;
-            //Close Pickup
-            if (pickupclosednum >=0.05) {
-                myPickup.setPickupPosition(myPickup.pickupclosed);
-            }
-
-            float pickupopennum = gamepad2.right_trigger;
-            //Open Pickup
-            if (pickupopennum >=0.05) {
-                myPickup.setPickupPosition(myPickup.pickupopen);
-            }
-*/
         // End Gamepad 2
 
             // Telemetry Stuff -

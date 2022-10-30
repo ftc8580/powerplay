@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.*;
+
 
 public class CDArm {
     // This is where we set the values for our distance sensor
@@ -34,7 +35,8 @@ public class CDArm {
     //public double armRotationCurrentThreshold;
     public double armRotationPositionCurrent;
     public double armRotationLastPosition;*/
-    public double armClearToRotatePosition = 0.50;
+    public double armClearToRotatePositionWithCone = .565; //(.87* fourBarPositionCurrent - .14);
+    //TODO define armClearToRotatePositionNoCone y=.92x+.01
 
     public CDArm(CDHardware theHardware){
         verticalServo = theHardware.armVerticalServo;
@@ -43,7 +45,7 @@ public class CDArm {
         verticalServo.scaleRange(.4, .8);
         rotationServo.scaleRange(.15, .37);
 
-        verticalServo.setPosition(0.69);
+        verticalServo.setPosition(0.565);
         rotationServo.setPosition(0.338);
     }
     //public double getArmThreshold () { return armCurrentThreshold; }
