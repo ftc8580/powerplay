@@ -244,13 +244,13 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     sleep(1000);
                     }
-                }
                 //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
                 armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
                 arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
                 //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
                 arm.setArmRotationPosition(armRotPositionHOME);
                 //check if fourbar motor busy
+                sleep(1000);
                 boolean fourbarBusyCheck = fourBar.robotHardware.fourBarMotor.isBusy();
                 if (!fourbarBusyCheck) {
                     arm.setArmVerticalPosition(armVerticalPositionHOME);
@@ -259,7 +259,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 if (arm.getArmRotationPosition() >= .333 && arm.getArmRotationPosition()<=.353 && arm.getArmVerticalPosition()>=.555 && arm.getArmVerticalPosition()<=.575) {
                     fourBar.setFourbarPosition(fourbarPositionHOME, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
-                    sleep(1000);}
+                    }
             }
             //Go FRONT Medium with cone
             if (gamepad2.y) {
