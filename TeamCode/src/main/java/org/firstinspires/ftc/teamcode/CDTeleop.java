@@ -242,10 +242,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && ((arm.getArmRotationPosition() < (armRotPositionHOME - .01)) || (arm.getArmRotationPosition() > (armRotPositionHOME + .01)))) {
                     fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
-                        sleep(1000);
-                        fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
-                        composeTelemetry(imuTelemetry);
+                    sleep(1000);
                     }
                 }
                 //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
@@ -261,11 +258,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 //Double check before moving down
                 if (arm.getArmRotationPosition() >= .333 && arm.getArmRotationPosition()<=.353 && arm.getArmVerticalPosition()>=.555 && arm.getArmVerticalPosition()<=.575) {
                     fourBar.setFourbarPosition(fourbarPositionHOME, false);
-                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
-                        sleep(1000);
-                        fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
-                        composeTelemetry(imuTelemetry);
-                    }                }
+                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+                    sleep(1000);}
             }
             //Go FRONT Medium with cone
             if (gamepad2.y) {
@@ -278,7 +272,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
                 //Check if arm inside fourbar and set arm to vert HOME position
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && (((arm.getArmRotationPosition() > (armRotPositionHOME -.02)) && (arm.getArmRotationPosition() < (armRotPositionFRONT + .02))))) {
+                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && (((arm.getArmRotationPosition() > (armRotPositionHOME -.02)) && ((arm.getArmRotationPosition() < (armRotPositionFRONT + .02)))))) {
                     //set vertical arm position to HOME to ensure clears
                     arm.setArmRotationPosition(armRotPositionHOME);
                     arm.setArmVerticalPosition(armVerticalPositionHOME);
