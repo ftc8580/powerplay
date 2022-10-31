@@ -243,6 +243,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                     fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
+                        sleep(1000);
                         fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
                         composeTelemetry(imuTelemetry);
                     }
@@ -261,6 +262,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 if (arm.getArmRotationPosition() >= .333 && arm.getArmRotationPosition()<=.353 && arm.getArmVerticalPosition()>=.555 && arm.getArmVerticalPosition()<=.575) {
                     fourBar.setFourbarPosition(fourbarPositionHOME, false);
                     while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
+                        sleep(1000);
                         fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
                         composeTelemetry(imuTelemetry);
                     }                }
