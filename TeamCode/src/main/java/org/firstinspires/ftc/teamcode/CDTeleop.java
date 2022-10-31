@@ -242,11 +242,11 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 //                    while (fourBar.robotHardware.fourBarMotor.isBusy()) {
 //                        sleep(50);
 //                    }
-                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
-                        fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
-                        composeTelemetry(imuTelemetry);
-                    }
+//                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+//                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
+//                        fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+//                        composeTelemetry(imuTelemetry);
+//                    }
                     //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
                     armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
                     arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
@@ -264,11 +264,11 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 //                    while (fourBar.robotHardware.fourBarMotor.isBusy()) {
 //                        sleep(50);
 //                    }
-                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
-                        fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
-                        composeTelemetry(imuTelemetry);
-                    }
+//                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+//                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
+//                        fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+//                        composeTelemetry(imuTelemetry);
+//                    }
                 }
             }
             //Go FRONT Medium with cone
@@ -290,10 +290,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 if (fourBarPotCurrent < fourbarPositiontoRotateHOME && ((arm.getArmRotationPosition() < (armRotPositionFRONT - .02)) && (arm.getArmRotationPosition() > (armRotPositionFRONT + .02)))) {
                     fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
-                        fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
-                        composeTelemetry(imuTelemetry);
-                    }
+//                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
+//                        fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+//                        composeTelemetry(imuTelemetry);
+//                    }
                     //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
                     armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
                     arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
@@ -302,11 +302,11 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 arm.setArmRotationPosition(armRotPositionFRONT);
                 arm.setArmVerticalPosition(armVerticalPositionFRONT);
                 fourBar.setFourbarPosition(fourbarPositionFRONTMED, false);
-                fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
-                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
-                    composeTelemetry(imuTelemetry);
-                }
+//                fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+//                while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
+//                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+//                    composeTelemetry(imuTelemetry);
+//                }
             }
 
             // End Gamepad 2
