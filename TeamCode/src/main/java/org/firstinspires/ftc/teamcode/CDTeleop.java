@@ -245,6 +245,14 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
                         fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+                        // Telemetry Stuff -
+                        // need to slow down the logging
+                        if (i == 10) {
+                            composeTelemetry(imuTelemetry);
+                            i = 0;
+                        } else {
+                            i++;
+                        }
                     }
                     //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
                     armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
@@ -266,6 +274,14 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
                         fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+                        // Telemetry Stuff -
+                        // need to slow down the logging
+                        if (i == 10) {
+                            composeTelemetry(imuTelemetry);
+                            i = 0;
+                        } else {
+                            i++;
+                        }
                     }
                 }
             }
@@ -290,6 +306,14 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
                         fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+                        // Telemetry Stuff -
+                        // need to slow down the logging
+                        if (i == 10) {
+                            composeTelemetry(imuTelemetry);
+                            i = 0;
+                        } else {
+                            i++;
+                        }
                     }
                     //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
                     armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
@@ -302,6 +326,14 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                 while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+                    // Telemetry Stuff -
+                    // need to slow down the logging
+                    if (i == 10) {
+                        composeTelemetry(imuTelemetry);
+                        i = 0;
+                    } else {
+                        i++;
+                    }
                 }
             }
 
