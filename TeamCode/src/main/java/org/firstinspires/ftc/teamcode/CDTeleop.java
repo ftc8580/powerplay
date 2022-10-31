@@ -243,23 +243,22 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                     fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
                     while (fourBar.robotHardware.fourBarMotor.isBusy()) { sleep(50); }
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                    //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
-                    armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
-                    arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
-                    //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
-                    arm.setArmRotationPosition(armRotPositionHOME);
                 }
+                //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
+                armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
+                arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
+                //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
+                arm.setArmRotationPosition(armRotPositionHOME);
                 //check if fourbar motor busy
                 boolean fourbarBusyCheck = fourBar.robotHardware.fourBarMotor.isBusy();
                 if (!fourbarBusyCheck) {
                     arm.setArmVerticalPosition(armVerticalPositionHOME);
                 }
                 //Double check before moving down
-                if (arm.getArmRotationPosition()>=.333 && arm.getArmRotationPosition()<=.353 && arm.getArmVerticalPosition()>=.555 && arm.getArmVerticalPosition()<=.575) {
-                    fourBar.setFourbarPosition(fourbarPositionHOME, false);
+                if (arm.getArmRotationPosition() >= .333 && arm.getArmRotationPosition()<=.353 && arm.getArmVerticalPosition()>=.555 && arm.getArmVerticalPosition()<=.575) {
+                    //fourBar.setFourbarPosition(fourbarPositionHOME, false);
                     while (fourBar.robotHardware.fourBarMotor.isBusy()) { sleep(50); }
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-
                 }
             }
             //Go FRONT Medium with cone
