@@ -24,11 +24,11 @@ public class CDGrabber {
         return grabServo.getPosition();
     }
 
-    public void setExtendPosition(double extendPositionTarget) {
+    public synchronized void setExtendPosition(double extendPositionTarget) {
         extendServo.setPosition(extendPositionTarget);
     }
 
-    public void setGrabPosition(double grabPositionTarget) {
+    public synchronized void setGrabPosition(double grabPositionTarget) {
         grabServo.setPosition(grabPositionTarget);
     }
 }

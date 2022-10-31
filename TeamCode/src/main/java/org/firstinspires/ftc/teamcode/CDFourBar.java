@@ -16,7 +16,7 @@ public class CDFourBar {
     //TODO Check if 2 is long enough for timeout here???
     private int fourBarTimeout = 2; // timeout for fourbar moves
 
-    public CDFourBar(CDHardware theHardware){
+    public CDFourBar(CDHardware theHardware) {
         robotHardware = theHardware;
         robotHardware.fourBarMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         //Added to make ture that the fourbar defaults to brake mode
@@ -25,9 +25,11 @@ public class CDFourBar {
 
         fourBarPotentiometer = robotHardware.fourBarPotentiometer;
     }
-    public void setFourBarPower(double pow) {
+
+    public synchronized void setFourBarPower(double pow) {
         robotHardware.fourBarMotor.setPower(pow * fourBarSlowSpeedMultiplier);
     }
+
     public double getFourBarPotentiometerVolts() {
         // Reference https://docs.revrobotics.com/potentiometer/untitled-1#calculating-the-relationship-between-voltage-and-angle
         return fourBarPotentiometer.getVoltage();
@@ -37,7 +39,7 @@ public class CDFourBar {
     //static final double COUNTS_PER_FOURBAR_MOTOR_REV = 288; //Core Hex Motor
     //static final double DRIVE_GEAR_REDUCTION = .52; //This is greater than 1 if geared up
 
-    public boolean setFourbarDirection(String fourBarLocationTarget, boolean autonMode) {
+    public synchronized boolean setFourbarDirection(String fourBarLocationTarget, boolean autonMode) {
         // This method will return false for successful turn or true for an error.
         boolean fourBarError = false;
         //TODO  NEED ROBOT: Update fourbarpostarget values below to match readings from robot
@@ -46,13 +48,14 @@ public class CDFourBar {
         } else if (fourBarLocationTarget == "low") {
             fourBarError = setFourbarPosition(.58, autonMode);
         } else if (fourBarLocationTarget == "medium") {
-            fourBarError =  setFourbarPosition(2.47, autonMode);
+            fourBarError = setFourbarPosition(2.47, autonMode);
         } else if (fourBarLocationTarget == "high") {
-            fourBarError =  setFourbarPosition(2.87, autonMode);
+            fourBarError = setFourbarPosition(2.87, autonMode);
         }
         return fourBarError;
     }
-    public boolean setFourbarPosition(double fourBarPositionTarget, boolean autonMode) {
+
+    public synchronized boolean setFourbarPosition(double fourBarPositionTarget, boolean autonMode) {
         // This method will return false for successful turn or true for an error.
         //TODO Need to confirm threshold is good
         final double FOURBAR_THRESHOLD_POS = 0.1; // volts
@@ -101,7 +104,7 @@ public class CDFourBar {
                 setFourBarPower(-1 * fourBarSpeedMultiple);
                 fourBarStop = false;
             } else if (fourBarPositionLast < fourBarPositionTarget) {
-                setFourBarPower(1*fourBarSpeedMultiple);
+                setFourBarPower(1 * fourBarSpeedMultiple);
                 fourBarStop = false;
             }
             fourBarPositionCurrent = getFourBarPotentiometerVolts(); //updates every loop to see where we landed for lockup detection.
@@ -110,9 +113,13 @@ public class CDFourBar {
     }
 // 2/3 Digital control hub
 
-    public double getFourBarPosition() { return robotHardware.fourBarMotor.getCurrentPosition(); }
+    public double getFourBarPosition() {
+        return robotHardware.fourBarMotor.getCurrentPosition();
+    }
 
-    public double getFourBarCurrentThreshold() { return this.FOURBAR_CURRENT_THRESHOLD; }
+    public double getFourBarCurrentThreshold() {
+        return this.FOURBAR_CURRENT_THRESHOLD;
+    }
 
     public void calibrateZeroFourBar() {
         // Reset the encoder to zero on init

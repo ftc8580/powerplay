@@ -17,7 +17,7 @@ public class CDPickup {
         return pickupServo.getPosition();
     }
 
-    public void setServoPosition(double servoPositionTarget) {
+    public synchronized void setServoPosition(double servoPositionTarget) {
         pickupServo.setPosition(servoPositionTarget);
     }
 }

@@ -63,11 +63,18 @@ public class CDArm {
         return rotationServo.getPosition();
     }
 
-    public void setArmVerticalPosition(double armVerticalPositionTarget) {
+    public synchronized void setArmVerticalPosition(double armVerticalPositionTarget) {
         verticalServo.setPosition(armVerticalPositionTarget);
     }
+//    public void gotoArmVerticalPosition(double lastPosition, double armVerticalPositionTarget) {
+//        double msPerIncrement = .2;
+//        double delta = armVerticalPositionTarget - lastPosition;
+//        double waitTime = delta * msPerIncrement;
+//        verticalServo.setPosition(armVerticalPositionTarget);
+//        wait(waitTime);
+//    }
 
-    public void setArmRotationPosition(double armRotationPositionTarget) {
+    public synchronized void setArmRotationPosition(double armRotationPositionTarget) {
         rotationServo.setPosition(armRotationPositionTarget);
     }
 }
