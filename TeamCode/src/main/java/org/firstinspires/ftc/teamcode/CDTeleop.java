@@ -271,11 +271,11 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                 if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && (((arm.getArmRotationPosition() > (armRotPositionHOME -.02)) && ((arm.getArmRotationPosition() < (armRotPositionFRONT + .02)))))) {
                     //set vertical arm position to HOME to ensure clears
-                    arm.setArmRotationPosition(armRotPositionHOME);
+//                    arm.setArmRotationPosition(armRotPositionHOME); // We should already be here.
                     arm.setArmVerticalPosition(armVerticalPositionHOME);
                 }
                 //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
-                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && (((arm.getArmRotationPosition() < (armRotPositionFRONT- .02)) && (arm.getArmRotationPosition() > (armRotPositionFRONT + .02))))) {
+                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && ((arm.getArmRotationPosition() > (armRotPositionFRONT- .02)) && (arm.getArmRotationPosition() < (armRotPositionFRONT + .02)))) {
                     fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     sleep(2000);
