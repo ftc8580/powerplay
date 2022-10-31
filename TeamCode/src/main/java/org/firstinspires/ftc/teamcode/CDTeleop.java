@@ -241,6 +241,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
                 if (fourBarPotCurrent < fourbarPositiontoRotateHOME && (arm.getArmRotationPosition() < (armRotPositionHOME - .01)) || (arm.getArmRotationPosition() > (armRotPositionHOME + .01))) {
                         fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
+                        while (fourBar.robotHardware.fourBarMotor.isBusy()) { sleep(50); }
                         fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
                         armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
@@ -256,6 +257,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 //Double check before moving down
                 if (arm.getArmRotationPosition()>=.333 && arm.getArmRotationPosition()<=.353 && arm.getArmVerticalPosition()>=.555 && arm.getArmVerticalPosition()<=.575) {
                     fourBar.setFourbarPosition(fourbarPositionHOME, false);
+                    while (fourBar.robotHardware.fourBarMotor.isBusy()) { sleep(50); }
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
 
                 }
@@ -279,15 +281,17 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 if (fourBarPotCurrent < fourbarPositiontoRotateHOME && ((arm.getArmRotationPosition() < (armRotPositionFRONT- .02)) && (arm.getArmRotationPosition() > (armRotPositionFRONT + .02)))) {
                     fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+                    while (fourBar.robotHardware.fourBarMotor.isBusy()) { sleep(50); }
                     //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
                     armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
                     arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
                     //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
-                    arm.setArmRotationPosition(armRotPositionFRONT);
-                    arm.setArmVerticalPosition(armVerticalPositionFRONT);
-                    fourBar.setFourbarPosition(fourbarPositionFRONTMED, false);
-                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                 }
+                arm.setArmRotationPosition(armRotPositionFRONT);
+                arm.setArmVerticalPosition(armVerticalPositionFRONT);
+                fourBar.setFourbarPosition(fourbarPositionFRONTMED, false);
+                while (fourBar.robotHardware.fourBarMotor.isBusy()) { sleep(50); }
+                fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
             }
 
         // End Gamepad 2
