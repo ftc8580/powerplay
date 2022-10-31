@@ -241,8 +241,11 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
                 if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && ((arm.getArmRotationPosition() < (armRotPositionHOME - .01)) || (arm.getArmRotationPosition() > (armRotPositionHOME + .01)))) {
                     fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
-                    while (fourBar.robotHardware.fourBarMotor.isBusy()) { sleep(50); }
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
+                        fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+                        composeTelemetry(imuTelemetry);
+                    }
                 }
                 //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
                 armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
@@ -257,9 +260,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 //Double check before moving down
                 if (arm.getArmRotationPosition() >= .333 && arm.getArmRotationPosition()<=.353 && arm.getArmVerticalPosition()>=.555 && arm.getArmVerticalPosition()<=.575) {
                     fourBar.setFourbarPosition(fourbarPositionHOME, false);
-                    while (fourBar.robotHardware.fourBarMotor.isBusy()) { sleep(50); }
-                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                }
+                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
+                        fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+                        composeTelemetry(imuTelemetry);
+                    }                }
             }
             //Go FRONT Medium with cone
             if (gamepad2.y) {
