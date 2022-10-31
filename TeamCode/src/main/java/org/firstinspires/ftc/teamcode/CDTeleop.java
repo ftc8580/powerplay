@@ -254,10 +254,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                     arm.setArmRotationPosition(armRotPositionHOME);
                 }
                 //check if fourbar motor busy
-                boolean fourbarBusyCheck = fourBar.robotHardware.fourBarMotor.isBusy();
-                if (!fourbarBusyCheck) {
-                    arm.setArmVerticalPosition(armVerticalPositionHOME);
-                }
+//                boolean fourbarBusyCheck = fourBar.robotHardware.fourBarMotor.isBusy();
+//                if (!fourbarBusyCheck) {
+//                    arm.setArmVerticalPosition(armVerticalPositionHOME);
+//                }
                 //Double check before moving down
                 if (arm.getArmRotationPosition() >= .333 && arm.getArmRotationPosition() <= .353 && arm.getArmVerticalPosition() >= .555 && arm.getArmVerticalPosition() <= .575) {
                     fourBar.setFourbarPosition(fourbarPositionHOME, false);
