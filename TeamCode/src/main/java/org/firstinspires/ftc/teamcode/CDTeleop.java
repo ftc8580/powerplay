@@ -243,8 +243,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 //                        sleep(50);
 //                    }
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                    while (fourBarPotCurrent > fourbarPositiontoRotateHOME) {
-                        sleep(50);
+                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
                         fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
                     }
                     //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
@@ -265,8 +264,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 //                        sleep(50);
 //                    }
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                    while (fourBarPotCurrent > fourbarPositiontoRotateHOME) {
-                        sleep(50);
+                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
                         fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
                     }
                 }
@@ -290,8 +288,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 if (fourBarPotCurrent < fourbarPositiontoRotateHOME && ((arm.getArmRotationPosition() < (armRotPositionFRONT - .02)) && (arm.getArmRotationPosition() > (armRotPositionFRONT + .02)))) {
                     fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                    while (fourBarPotCurrent > fourbarPositiontoRotateHOME) {
-                        sleep(50);
+                    while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
                         fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
                     }
                     //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
@@ -303,8 +300,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 arm.setArmVerticalPosition(armVerticalPositionFRONT);
                 fourBar.setFourbarPosition(fourbarPositionFRONTMED, false);
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                while (fourBarPotCurrent > fourbarPositiontoRotateHOME) {
-                    sleep(50);
+                while (fourBarPotCurrent < fourbarPositiontoRotateHOME) {
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
                 }
             }
