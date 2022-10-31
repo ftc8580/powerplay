@@ -450,6 +450,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             telemetry.addData("FourbarPotCurrent", "%.2f", fourBarPotCurrent);
             telemetry.addData("CurrFourbarThreshold", "%.2f", currentFourBarThreshold);
             telemetry.addData("fourbarerror", fourBarError);
+            double fourbarPositiontoRotateHOME = .8;
             telemetry.addData("FourBarPotUnderHome", (fourBarPotCurrent < fourbarPositiontoRotateHOME));
             //telemetry.addData("CurrArmThresh", "%.2f", armCurrentThreshold);
             //telemetry.addData("CurrArmDownThresh", "%.2f", armDownThresh);
