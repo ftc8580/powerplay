@@ -4,7 +4,7 @@ package org.firstinspires.ftc.teamcode;
 //import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.sun.tools.javac.comp.Check;
 
 // Telemetry
 
@@ -49,6 +49,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     //Arm UpDown variables
     public double armUpDownPosCurrent;
     public double armUpDownAtarget;
+    public double armClearToRotatePositionWithCone;
 /*    public int armPosCurrent;
     public double armPosLast = 1.1; // Arbitrary
     public double armUpMulti = 1.0; // In case we want to slow down the arm with the analog input.
@@ -69,21 +70,17 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     //Pickup variables
     //public double pickUpPosCurrent;
 
-    //Intake variables
-    public double intakePosCurrent;
-    public double intakeAtarget;
-    //Extend variables
+    // Pickup variables
+    public double pickupPositionCurrent;
+    public double pickupTarget;
+    // Extend variables
     public double extendPosCurrent;
     public double extendAtarget;
-    //Grab variables
+    // Grab variables
     public double grabPosCurrent;
     public double grabAtarget;
 
-    public CDHardware myHardware;
-    // public org.firstinspires.ftc.teamcode.CDHardware myHardware;
-    public CDFourBar myFourbar;
-    public CDArm myArm;
-    //public CDPickup myPickup;
+    public CDHardware robotHardware;
 
     // State used for updating telemetry
     //    public Orientation angles;
@@ -93,10 +90,11 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     @Override
     public void runOpMode() {
         // Initialize our classes to variables
-        myHardware = new CDHardware(hardwareMap);
-        CDFourBar myFourbar = new CDFourBar(myHardware);
-        CDArm myArm = new CDArm(myHardware);
-        //CDPickup myPickup = new CDPickup(myHardware);
+        robotHardware = new CDHardware(hardwareMap);
+        CDFourBar fourBar = new CDFourBar(robotHardware);
+        CDArm arm = new CDArm(robotHardware);
+        CDPickup pickup = new CDPickup(robotHardware);
+        CDGrabber grabber = new CDGrabber(robotHardware);
 
         // Configure initial variables
         //TODO if we want pacman model to be default this should be set to true
@@ -117,7 +115,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
         while (opModeIsActive()) {
 
-        // Everything Gamespad 2 will be handled between these two comments
+            // Everything Gamespad 2 will be handled between these two comments
             //
             // GAMEPAD 2 Code!
             // FOURBAR CODE
@@ -126,150 +124,174 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 telemetry.update();
             }
             //Refresh the fourbarposition and report threshold
-            currentFourBarPosition = myFourbar.getFourbarPos(); //Variable Based
-            fourBarPotCurrent = myFourbar.getFourbarPotVolts(); //Potentiometer voltage based
-            currentFourBarThreshold = myFourbar.getFourbarCurrentThreshold();
+            currentFourBarPosition = fourBar.getFourBarPosition(); //Variable Based
+            fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+            currentFourBarThreshold = fourBar.getFourBarCurrentThreshold();
 
 /*
             //Refresh the armpostion and report threshold
-            armPosCurrent = myArm.getArmPosition();
-            armCurrentThreshold = myArm.armCurrentThreshold;
+            armPosCurrent = arm.getArmPosition();
+            armCurrentThreshold = arm.armCurrentThreshold;
 */
 
             double fourbarA = gamepad2.left_stick_y;
             //Slow at top and bottom
             //TODO put in proper values for fourbarpot current near top and bottom so it slows down
             if ((fourBarPotCurrent > 3 && fourbarA <-0.01) || (fourBarPotCurrent <.25 && fourbarA >=0.01)) {
-                myFourbar.setFourbarPower(fourbarA*-.5);
+                fourBar.setFourBarPower(fourbarA*-.5);
+                fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                 //move arm proportionally to fourbar to keep level
                 //TODO Define multiplier that keeps this level- currently .1 below- may need to change direction- below removed since stays level
-                //myArm.setArmPower(fourbarA*-.05*.1);
+                //arm.setArmPower(fourbarA*-.05*.1);
             } else if (fourbarA >=0.01 || fourbarA <=-0.01) {
                 //TODO check direction on gamepad - remove *-1 below and - on .5 above if direction is wrong
-                myFourbar.setFourbarPower(fourbarA*-1);//Remember on controller -y is up
+                fourBar.setFourBarPower(fourbarA*-1);//Remember on controller -y is up
+                fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                 //move arm proportionally to fourbar to keep level
                 //TODO Define multiplier that keeps this level- currently .1 below - may need to change direction- below removed since stays level
-                //myArm.setArmPower(fourbarA*-0.1*.1);
+                //arm.setArmPower(fourbarA*-0.1*.1);
             } else {
-                myFourbar.setFourbarPower(0.0);
-//                myArm.setArmPower(0.0);
+                fourBar.setFourBarPower(0.0);
+                fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+//                arm.setArmPower(0.0);
             }
 
-//            armPosCurrent = myArm.getArmPosition();
-//            double armUpDown = gamepad2.right_stick_y;
-//            if (armUpDown > 0.2 || armUpDown < -0.2) {
-//                myArm.setArmPower(armUpDown * armUpMulti);
-//            } else {
-//                myArm.setArmPower(0.0);
-//            }
-            //fine tune arm up
-            //armPosCurrent = myArm.getArmPosition();
-/*            boolean armUP = gamepad2.dpad_up;
-            boolean armDOWN = gamepad2.dpad_down;
-            //TODO add max arm position
-            if (armUP) { //(((armposcurrent < 100) && armUP)) {
-                //TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
-                armtargetPosition = 0;
-                myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                myArm.setArmPower(1.0* armUpDownPower);
-            } else if (armDOWN) { //((armposcurrent > 100) && armDOWN) {  //fine tune arm down
-                // TODO setting arm power to .05 since this is fine tune and dpad value is always 1 - adjust if needed
-                armtargetPosition = 0;
-                myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                myArm.setArmPower(-0.5* armUpDownPower);
-            //} else {
-            //  myArm.setArmPower(0.0);
-            } else if (armtargetPosition == 0) {
-                armtargetPosition = myArm.getArmPosition();
-                myArm.robotHardware.armmotor.setTargetPosition(armtargetPosition);
-                myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                myArm.robotHardware.armmotor.setPower(.25);
-            }*/
+            //arm vertical
+            armUpDownPosCurrent = arm.getArmVerticalPosition();
+            armUpDownAtarget = arm.getArmVerticalPosition(); // sets this initially
+            armRotPosCurrent = arm.getArmRotationPosition();
+            armrotAtarget = arm.getArmRotationPosition(); // sets this initially
 
-            // arm updown
-            armUpDownPosCurrent = myArm.getArmUpDownPosition();
-            armUpDownAtarget = myArm.getArmUpDownPosition(); // sets this initially
             boolean armUP = gamepad2.dpad_up;
             boolean armDOWN = gamepad2.dpad_down;
+
+            // Flip controls if the arm is rotated forward
+            if (armRotPosCurrent < 0.56) {
+                armUP = gamepad2.dpad_down;
+                armDOWN = gamepad2.dpad_up;
+            }
+
             if (armUP) {
                 armUpDownAtarget = (armUpDownPosCurrent + .0008);
-                myArm.setArmUpDownPosition(armUpDownAtarget);
-                }
-            else if (armDOWN) {
+                arm.setArmVerticalPosition(armUpDownAtarget);
+            } else if (armDOWN) {
                 armUpDownAtarget = (armUpDownPosCurrent - .0008);
-                myArm.setArmUpDownPosition(armUpDownAtarget);
+                arm.setArmVerticalPosition(armUpDownAtarget);
             }
 
             // arm rotate
-            armRotPosCurrent = myArm.getArmRotPosition();
-            armrotAtarget = myArm.getArmRotPosition(); // sets this initially
             if (gamepad2.right_stick_x > .02 || gamepad2.right_stick_x < -.02) {
                 double armrotA = gamepad2.right_stick_x;
                 if (armrotA > .02) {
-                    armrotAtarget = (armRotPosCurrent + .00008);
-                    myArm.setArmRotPosition(armrotAtarget);
-                }else if (armrotA < -.02) {
-                    armrotAtarget = (armRotPosCurrent - .00008);
-                    myArm.setArmRotPosition(armrotAtarget);
+                    armrotAtarget = (armRotPosCurrent + .001);
+                    arm.setArmRotationPosition(armrotAtarget);
+                } else if (armrotA < -.02) {
+                    armrotAtarget = (armRotPosCurrent - .001);
+                    arm.setArmRotationPosition(armrotAtarget);
                 }
             }
 
             // Pickup
-            intakePosCurrent = myArm.getIntakePosition();
-            intakeAtarget = myArm.getIntakePosition(); // sets this initially
+            pickupPositionCurrent = pickup.getServoPosition();
+            pickupTarget = pickup.getServoPosition(); // sets this initially
             if (gamepad2.left_trigger > .01) {
-                intakeAtarget = (intakePosCurrent + .0008);
-                myArm.setIntakePosition(intakeAtarget);
+                pickupTarget = pickupPositionCurrent + .0008;
+                pickup.setServoPosition(pickupTarget);
             }
-            else if (gamepad2.right_trigger >.01) {
-                intakeAtarget = (intakePosCurrent - .0008);
-                myArm.setIntakePosition(intakeAtarget);
+            else if (gamepad2.right_trigger > .01) {
+                pickupTarget = pickupPositionCurrent - .0008;
+                pickup.setServoPosition(pickupTarget);
             }
 
             // Extend
-            extendPosCurrent = myArm.getExtendPosition();
-            extendAtarget = myArm.getExtendPosition(); // sets this initially
+            extendPosCurrent = grabber.getExtendPosition();
+            extendAtarget = grabber.getExtendPosition(); // sets this initially
             if (gamepad1.left_trigger > .01) {
                 extendAtarget = (extendPosCurrent + .0008);
-                myArm.setExtendPosition(extendAtarget);
+                grabber.setExtendPosition(extendAtarget);
             }
             else if (gamepad1.right_trigger >.01) {
                 extendAtarget = (extendPosCurrent - .0008);
-                myArm.setExtendPosition(extendAtarget);
+                grabber.setExtendPosition(extendAtarget);
             }
 
             //Grab
-            grabPosCurrent = myArm.getGrabPosition();
-            grabAtarget = myArm.getGrabPosition(); // sets this initially
+            grabPosCurrent = grabber.getGrabPosition();
+            grabAtarget = grabber.getGrabPosition(); // sets this initially
             boolean grab = gamepad1.left_bumper;
             boolean release = gamepad1.right_bumper;
             if (grab) {
                 grabAtarget = (grabPosCurrent + .0008);
-                myArm.setGrabPosition(grabAtarget);
+                grabber.setGrabPosition(grabAtarget);
             }
             else if (release) {
                 grabAtarget = (grabPosCurrent - .0008);
-                myArm.setGrabPosition(grabAtarget);
+                grabber.setGrabPosition(grabAtarget);
             }
 
+            //Go HOME (Back pickup position between fourbars)
+            if (gamepad2.a) {
+                double armRotPositionHOME = .343;
+                double armVerticalPositionHOME = .565;
+                double fourbarPositionHOME = .23;
+                double fourbarPositiontoRotateHOME = .8;
 
+                // Check if arm clear to rotate
+                fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+                //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
+                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && ((arm.getArmRotationPosition() < (armRotPositionHOME - .01)) || (arm.getArmRotationPosition() > (armRotPositionHOME + .01)))) {
+                    fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
+                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+                    sleep(1000);
+                    }
+                //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
+                armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
+                arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
+                //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
+                arm.setArmRotationPosition(armRotPositionHOME);
+                //check if fourbar motor busy
+                sleep(1000);
+                arm.setArmVerticalPosition(armVerticalPositionHOME);
+                //Double check before moving down
+                if (arm.getArmRotationPosition() >= .333 && arm.getArmRotationPosition()<=.353 && arm.getArmVerticalPosition()>=.555 && arm.getArmVerticalPosition()<=.575) {
+                    fourBar.setFourbarPosition(fourbarPositionHOME, false);
+                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
+                    }
+            }
+            //Go FRONT Medium with cone
+            if (gamepad2.y) {
+                double armRotPositionFRONT = .82;
+                double armVerticalPositionFRONT = .565;
+                double fourbarPositionFRONTMED= .8;
+                double fourbarPositiontoRotateHOME = .8;
+                double armRotPositionHOME = .343;
+                double armVerticalPositionHOME = .565;
 
-
-            //TODO change multiplier below to impact how fast it moves - may need to add pause or timer to slow down???
-
-            /*float pickupclosednum = gamepad2.left_trigger;
-            //Close Pickup
-            if (pickupclosednum >=0.05) {
-                myPickup.setPickupPosition(myPickup.pickupclosed);
+                //Check if arm inside fourbar and set arm to vert HOME position
+                fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && (((arm.getArmRotationPosition() > (armRotPositionHOME -.02)) && ((arm.getArmRotationPosition() < (armRotPositionFRONT + .02)))))) {
+                    //set vertical arm position to HOME to ensure clears
+//                    arm.setArmRotationPosition(armRotPositionHOME); // We should already be here.
+                    arm.setArmVerticalPosition(armVerticalPositionHOME);
+                }
+                //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
+                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && ((arm.getArmRotationPosition() > (armRotPositionFRONT- .02)) && (arm.getArmRotationPosition() < (armRotPositionFRONT + .02)))) {
+                    fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
+                    fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+                    sleep(2000);
+                    //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
+                    armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
+                    arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
+                    //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
+                }
+                arm.setArmRotationPosition(armRotPositionFRONT);
+                arm.setArmVerticalPosition(armVerticalPositionFRONT);
+                fourBar.setFourbarPosition(fourbarPositionFRONTMED, false);
+                sleep(2000);
+                fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
             }
 
-            float pickupopennum = gamepad2.right_trigger;
-            //Open Pickup
-            if (pickupopennum >=0.05) {
-                myPickup.setPickupPosition(myPickup.pickupopen);
-            }
-*/
-        // End Gamepad 2
+            // End Gamepad 2
 
             // Telemetry Stuff -
             // need to slow down the logging
@@ -285,19 +307,19 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     // Threaded Gamepad 1. Everything Gamepad 1 will happen below.
     public void run() {
         try {
-            CDDriveChassis myChassis = new CDDriveChassis(myHardware);
+            CDDriveChassis myChassis = new CDDriveChassis(robotHardware);
             while (opModeIsActive()) {
-            // Everything gamepad 1:
+                // Everything gamepad 1:
                 // User controls for the robot speed overall
                 //if (gamepad1.left_trigger != 0) {
                 if (gamepad1.y) {
-                        robotSpeed = baseSpeed * 1.0;
+                    robotSpeed = baseSpeed * 1.0;
                     //} else if (gamepad1.right_trigger != 0) {
-                    } else if (gamepad1.x) {
-                        robotSpeed = baseSpeed * .4;
-                    } else {
-                        robotSpeed = baseSpeed;
-                    }
+                } else if (gamepad1.x) {
+                    robotSpeed = baseSpeed * .4;
+                } else {
+                    robotSpeed = baseSpeed;
+                }
 
                 if (gamepad1.a) {
                     //Button A = unconstrained movement
@@ -319,18 +341,18 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 // at least one is out of the range [-1, 1]
                 double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
                 if (constrainMovement) {
-                   if (Math.abs(x)>Math.abs(y)) {
-                       leftFrontPower = (x - rx) / denominator;
-                       leftRearPower = (-x - rx) / denominator;
-                       rightFrontPower = (-x + rx) / denominator;
-                       rightRearPower = (x + rx) / denominator;
-                   }
-                   if (Math.abs(y)>=Math.abs(x)) {
-                       leftFrontPower = (y - rx) / denominator;
-                       leftRearPower = (y - rx) / denominator;
-                       rightFrontPower = (y + rx) / denominator;
-                       rightRearPower = (y + rx) / denominator;
-                   }
+                    if (Math.abs(x)>Math.abs(y)) {
+                        leftFrontPower = (x - rx) / denominator;
+                        leftRearPower = (-x - rx) / denominator;
+                        rightFrontPower = (-x + rx) / denominator;
+                        rightRearPower = (x + rx) / denominator;
+                    }
+                    if (Math.abs(y)>=Math.abs(x)) {
+                        leftFrontPower = (y - rx) / denominator;
+                        leftRearPower = (y - rx) / denominator;
+                        rightFrontPower = (y + rx) / denominator;
+                        rightRearPower = (y + rx) / denominator;
+                    }
                 } else {
                     leftFrontPower = (y + x - rx) / denominator;
                     leftRearPower = (y - x - rx) / denominator;
@@ -425,6 +447,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             telemetry.addData("FourbarPotCurrent", "%.2f", fourBarPotCurrent);
             telemetry.addData("CurrFourbarThreshold", "%.2f", currentFourBarThreshold);
             telemetry.addData("fourbarerror", fourBarError);
+            double fourbarPositiontoRotateHOME = .8;
+            telemetry.addData("FourBarPotUnderHome", (fourBarPotCurrent < fourbarPositiontoRotateHOME));
             //telemetry.addData("CurrArmThresh", "%.2f", armCurrentThreshold);
             //telemetry.addData("CurrArmDownThresh", "%.2f", armDownThresh);
             //telemetry.addData("ArmPosition", armPosCurrent);
@@ -433,8 +457,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             telemetry.addData("ArmUpDownTarget", (armUpDownAtarget));
             telemetry.addData("ArmRotPosition", armRotPosCurrent);
             telemetry.addData("ArmRotTarget", armrotAtarget);
-            telemetry.addData("IntakePosition", (intakePosCurrent));
-            telemetry.addData("IntakeTarget", (intakeAtarget));
+            telemetry.addData("PickupPosition", (pickupPositionCurrent));
+            telemetry.addData("PickupTarget", (pickupTarget));
             telemetry.addData("ExtendPosition", (extendPosCurrent));
             telemetry.addData("ExtendTarget", (extendAtarget));
             telemetry.addData("GrabPosition", (grabPosCurrent));

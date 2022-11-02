@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.*;
+
 
 public class CDArm {
-
     // This is where we set the values for our distance sensor
     //TODO reset values below to values from armmotor encoder
 /*    public double defaultArmPosition = 26.0;
@@ -19,9 +19,8 @@ public class CDArm {
     public double armRotationFront = .66;
     public double armRotationLeft = 1;*/
 
-    private final ElapsedTime elapsedRunTime = new ElapsedTime();
-
-    CDHardware robotHardware;
+    private final Servo verticalServo;
+    private final Servo rotationServo;
     //Arm up down using servo
 
     /*public boolean armStopped;
@@ -36,16 +35,18 @@ public class CDArm {
     //public double armRotationCurrentThreshold;
     public double armRotationPositionCurrent;
     public double armRotationLastPosition;*/
+    public double armClearToRotatePositionWithCone = .565; //(.87* fourBarPositionCurrent - .14);
+    //TODO define armClearToRotatePositionNoCone y=.92x+.01
 
     public CDArm(CDHardware theHardware){
+        verticalServo = theHardware.armVerticalServo;
+        rotationServo = theHardware.armRotationServo;
 
-        robotHardware = theHardware;
-        //robotHardware.armupdownservo.scaleRange();
-        //robotHardware.armrotservo.scaleRange();
-        robotHardware.intakeservo.scaleRange(.283, .80);
-        robotHardware.extendservo.scaleRange(.22, .586);
-        robotHardware.grabservo.scaleRange(.35, .75);
+        verticalServo.scaleRange(.4, .8);
+        rotationServo.scaleRange(.15, .37);
 
+        verticalServo.setPosition(0.565);
+        rotationServo.setPosition(0.338);
     }
     //public double getArmThreshold () { return armCurrentThreshold; }
     //public double getArmRotationThreshold() {return armRotationCurrentThreshold; }
@@ -54,35 +55,29 @@ public class CDArm {
         robotHardware.armmotor.setPower(pow);
     }*/
 
-    public double getArmUpDownPosition() { return robotHardware.armupdownservo.getPosition(); } //Position from arm updown servo
-    public double getArmRotPosition() {return robotHardware.armrotservo.getPosition(); }  //Position from arm rotation servo
-    public double getIntakePosition() {return robotHardware.intakeservo.getPosition(); }  //position of Intake servo
-    public double getExtendPosition() {return robotHardware.extendservo.getPosition(); }  //position of Extend servo
-    public double getGrabPosition() {return robotHardware.grabservo.getPosition(); }  //position of Grab servo
-
-
-
-    public boolean setArmUpDownPosition(double armUpDownPositionTarget) {
-        robotHardware.armupdownservo.setPosition(armUpDownPositionTarget);
-        return (robotHardware.armupdownservo.getPosition() == armUpDownPositionTarget);
-    }
-    public boolean setArmRotPosition(double armRotationPositionTarget) {
-        robotHardware.armrotservo.setPosition(armRotationPositionTarget);
-        return (robotHardware.armrotservo.getPosition() == armRotationPositionTarget);
-    }
-    public boolean setIntakePosition(double intakePositionTarget) {
-        robotHardware.intakeservo.setPosition(intakePositionTarget);
-        return (robotHardware.intakeservo.getPosition() == intakePositionTarget);
-    }
-    public boolean setExtendPosition(double extendPositionTarget) {
-        robotHardware.extendservo.setPosition(extendPositionTarget);
-        return (robotHardware.extendservo.getPosition() == extendPositionTarget);
-    }
-    public boolean setGrabPosition(double grabPositionTarget) {
-        robotHardware.grabservo.setPosition(grabPositionTarget);
-        return (robotHardware.armrotservo.getPosition() == grabPositionTarget);
+    public double getArmVerticalPosition() {
+        return verticalServo.getPosition();
     }
 
+    public double getArmRotationPosition() {
+        return rotationServo.getPosition();
+    }
+
+    public synchronized void setArmVerticalPosition(double armVerticalPositionTarget) {
+        verticalServo.setPosition(armVerticalPositionTarget);
+    }
+//    public void gotoArmVerticalPosition(double lastPosition, double armVerticalPositionTarget) {
+//        double msPerIncrement = .2;
+//        double delta = armVerticalPositionTarget - lastPosition;
+//        double waitTime = delta * msPerIncrement;
+//        verticalServo.setPosition(armVerticalPositionTarget);
+//        wait(waitTime);
+//    }
+
+    public synchronized void setArmRotationPosition(double armRotationPositionTarget) {
+        rotationServo.setPosition(armRotationPositionTarget);
+    }
+}
 //TODO DELETE BELOW - Leaving to use timeout reference in case needed
  /*   public boolean setArmPosition(double armPositionTarget) {
         elapsedRunTime.reset();
@@ -122,6 +117,3 @@ public class CDArm {
         }
         return false; // Returns false if the arm succeeded in moving to requested position, no error.
     }*/
-
-
-}

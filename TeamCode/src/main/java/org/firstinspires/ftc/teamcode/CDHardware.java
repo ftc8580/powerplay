@@ -5,37 +5,37 @@ import com.qualcomm.robotcore.hardware.*;
 //Defines the motors and (possible) sensors
 public class CDHardware {
     // Wheel motors
-    public DcMotor leftfrontmotor;
-    public DcMotor rightfrontmotor;
-    public DcMotor leftrearmotor;
-    public DcMotor rightrearmotor;
+    public DcMotor leftFrontMotor;
+    public DcMotor rightFrontMotor;
+    public DcMotor leftRearMotor;
+    public DcMotor rightRearMotor;
     //Fourbar
-    public DcMotor fourbarmotor;
-    public AnalogInput fourbarpot;
+    public DcMotor fourBarMotor;
+    public AnalogInput fourBarPotentiometer;
     //Arm
-    public Servo armupdownservo;
-    public Servo armrotservo;
-    public Servo intakeservo;
+    public Servo armVerticalServo;
+    public Servo armRotationServo;
+    public Servo pickupServo;
     //Grabber
-    public Servo extendservo;
-    public Servo grabservo;
+    public Servo grabberExtendServo;
+    public Servo grabberServo;
 
 
 
     public CDHardware (HardwareMap hwMap){
         //Defines Hardware map from Control Hub
         //TODO: Need to double check motor mapping on the driver hub and check orientation
-        leftfrontmotor = hwMap.get(DcMotor.class, "motorLF");
-        rightfrontmotor = hwMap.get(DcMotor.class, "motorRF");
-        leftrearmotor = hwMap.get(DcMotor.class, "motorLR");
-        rightrearmotor = hwMap.get(DcMotor.class, "motorRR");
-        fourbarmotor = hwMap.get(DcMotor.class, "motorFourBar");
-        fourbarpot = hwMap.get(AnalogInput.class, "fourBarPos");
-        armupdownservo = hwMap.get(Servo.class, "servoUpDownArm");
-        armrotservo = hwMap.get(Servo.class, "servoRotArm");
-        intakeservo = hwMap.get(Servo.class, "servoIntake");
-        extendservo = hwMap.get(Servo.class, "servoExtend");
-        grabservo = hwMap.get(Servo.class, "servoGrab");
+        leftFrontMotor = hwMap.get(DcMotor.class, "motorLF");
+        rightFrontMotor = hwMap.get(DcMotor.class, "motorRF");
+        leftRearMotor = hwMap.get(DcMotor.class, "motorLR");
+        rightRearMotor = hwMap.get(DcMotor.class, "motorRR");
+        fourBarMotor = hwMap.get(DcMotor.class, "motorFourBar");
+        fourBarPotentiometer = hwMap.get(AnalogInput.class, "fourBarPos");
+        armVerticalServo = hwMap.get(Servo.class, "servoUpDownArm");
+        armRotationServo = hwMap.get(Servo.class, "servoRotArm");
+        pickupServo = hwMap.get(Servo.class, "servoIntake");
+        grabberExtendServo = hwMap.get(Servo.class, "servoExtend");
+        grabberServo = hwMap.get(Servo.class, "servoGrab");
     }
 }
 
