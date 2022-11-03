@@ -21,7 +21,7 @@ public class CDArm extends SubsystemBase {
 
     private final Servo verticalServo;
     private final Servo rotationServo;
-    //Arm up down using servo
+    private final CDPickup pickup;
 
     /*public boolean armStopped;
     public boolean armError;
@@ -41,6 +41,7 @@ public class CDArm extends SubsystemBase {
     public CDArm(CDHardware theHardware){
         verticalServo = theHardware.armVerticalServo;
         rotationServo = theHardware.armRotationServo;
+        pickup = new CDPickup(theHardware);
 
         verticalServo.scaleRange(.4, .8);
         rotationServo.scaleRange(.15, .37);
@@ -57,11 +58,19 @@ public class CDArm extends SubsystemBase {
         return rotationServo.getPosition();
     }
 
-    public synchronized void setArmVerticalPosition(double armVerticalPositionTarget) {
+    public void setArmVerticalPosition(double armVerticalPositionTarget) {
         verticalServo.setPosition(armVerticalPositionTarget);
     }
 
-    public synchronized void setArmRotationPosition(double armRotationPositionTarget) {
+    public void setArmRotationPosition(double armRotationPositionTarget) {
         rotationServo.setPosition(armRotationPositionTarget);
+    }
+
+    public void openPickup() {
+        pickup.setServoPosition(1);
+    }
+
+    public void closePickup() {
+        pickup.setServoPosition(0);
     }
 }
