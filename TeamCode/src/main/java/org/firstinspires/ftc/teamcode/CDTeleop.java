@@ -259,13 +259,15 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double armRotPositionHome = 0.343;
 
             // Statemachine for Arm
-
+            double armVertMinimum; //Mainly for use in other places, but this is how we manage the state of it.
             boolean isArmInside = (within(armRotInsideFourbarLow, armRotInsideFourbarHigh, armRotationPosition));
-            // Variable Precision depending on Arm State
-            if (isArmInside) { // Suspect
+            // Variables depending on Arm State
+            if (isArmInside) {
                 precision = .0008;
+                armVertMinimum = (0.38 * (fourBarPotCurrent) + 0.52);
             } else {
                 precision = .02;
+                armVertMinimum = 0.0;
             }
             boolean isArmHome = (within(armRotPositionHome - precision, armRotPositionHome + precision, armRotationPosition) && within(armVertPositionHome - precision, armVertPositionHome + precision, armVerticalPosition));
             boolean isArmBack = within(armRotRangeDangerLow, armRotRangeDangerHigh, armRotationPosition);
