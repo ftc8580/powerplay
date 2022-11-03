@@ -307,7 +307,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             if (gamepad2.a) {
                 //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
                 if (!isArmClearToMoveFree && !isArmInside) {
-                    fourBar.setFourbarPosition(fourbarArmClearedPositionHome, false);
+                    fourBar.setFourBarPosition(fourbarArmClearedPositionHome, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     sleep(1000);
                 }
@@ -318,19 +318,19 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 //Double check before moving down
                 isArmHome = (within(armRotPositionHome - precision, armRotPositionHome + precision, armRotationPosition) && within(armVertPositionHome - precision, armVertPositionHome + precision, armVerticalPosition));
                 if (isArmHome) {
-                    fourBar.setFourbarPosition(fourbarLowerPositionHome, false);
+                    fourBar.setFourBarPosition(fourbarLowerPositionHome, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
                 }
             } else if (gamepad2.y) {
                 arm.setArmVerticalPosition(armVertPositionHome);
                 sleep(1000);
                 if (!isArmClearToMoveFree) {
-                    fourBar.setFourbarPosition(fourbarArmClearedPositionHome, false);
+                    fourBar.setFourBarPosition(fourbarArmClearedPositionHome, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     sleep(2000);
                 }
                 arm.setArmRotationPosition(armRotPositionFront);
-                fourBar.setFourbarPosition(fourbarMiddlePositionHome, false);
+                fourBar.setFourBarPosition(fourbarMiddlePositionHome, false);
                 sleep(2000);
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
             }
