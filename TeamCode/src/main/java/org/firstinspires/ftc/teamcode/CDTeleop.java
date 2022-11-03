@@ -168,7 +168,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             boolean armDOWN = gamepad2.dpad_down;
 
             // Flip controls if the arm is rotated forward
-            if (armRotPosCurrent < 0.56) {
+            if (armRotPosCurrent < 0.63) {
                 armUP = gamepad2.dpad_down;
                 armDOWN = gamepad2.dpad_up;
             }
@@ -231,21 +231,24 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double armRotationPosition = arm.getArmRotationPosition();
             double armVerticalPosition = arm.getArmVerticalPosition();
             // Define variables for ranges to parse late
-            double armRotRangeFrontLow = 0.6;
-            double armRotRangeFrontHigh = 1.0;
-            double armRotRangeLeftLow = 0.47;
-            double armRotRangeLeftHigh = 0.63;
-            double armRotRangeRightLow = 0.01; //notice extra zero
-            double armRotRangeRightHigh = 0.17;
-            double armRotRangeDangerLow = 0.18; // Back area is dangerous
-            double armRotRangeDangerHigh = 0.46; // Back area is dangerous
-            double armRotInsideFourbarLow = 0.333; // Back area is dangerous except this area
-            double armRotInsideFourbarHigh = 0.353; // Back area is dangerous except this area
+            // For Front and back zones use <= or >= to; Side zones just use < or >
+            double armRotRangeFrontLow = 0.63; // Use >= when evaluating
+            double armRotRangeFrontHigh = 1.0;// Use <= when evaluating
+            double armRotRangeLeftLow = 0.47; // Use > when evaluating
+            double armRotRangeLeftHigh = 0.63; //Use < when evaluating
+            double armRotRangeRightLow = 0.0; //Use >= when evaluating
+            double armRotRangeRightHigh = 0.18; //Use < when evaluating
+            double armRotRangeDangerLow = 0.18; // Back area is dangerous //Use >= when evaluating
+            double armRotRangeDangerHigh = 0.47; // Back area is dangerous //Use <= when evaluating
+            double armRotInsideFourbarLow = 0.333; // Back area is dangerous except this area //Use >= when evaluating
+            double armRotInsideFourbarHigh = 0.353; // Back area is dangerous except this area //Use <= when evaluating
             double armFreelyRotateVerticalHeightLow = 0.0;
-            double armFreelyRotateVerticalHeightHigh = 0.06;
+            //TODO DO NOT USE BELOW UNTIL CHECK ON ROBOT - arm will likely collide with floor then moved to front. May also hit robot. Will likely need to define safe fourbar position for this.
+            double armFreelyRotateVerticalHeightHigh = 0.06; //Notice this is very small range 0-0.06 (Four bar all the way down)
 
             double fourbarRangeLow = 0.23;
-            double fourbarRangeHigh = 1.15;
+            //TODO Check max when manually push all the way up (upped from 1.15 to 1.25 for now to make sure we don't get readings out of range)
+            double fourbarRangeHigh = 1.25; //1.15 is max in normal operation testing, however, set to 1.25 to make sure we are never out of range.
 
             // Define variables for Arm Positions
             double armRotPositionFront = 0.82;
@@ -253,7 +256,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double armRotPositionRight = 0.058; //Notice extra zero
             double armRotPositionBack = 0.343;
 
-            // Define variables for Home Positions
+            // Define variables for Home Positions. HOME is back pickup position between fourbars.
             double fourbarPositionHome = 0.23;
             double armVertPositionHome = 0.565;
             double armRotPositionHome = 0.343;
