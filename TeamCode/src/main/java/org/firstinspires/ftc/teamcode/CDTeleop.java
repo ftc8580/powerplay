@@ -5,7 +5,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.sun.tools.javac.comp.Check;
 
 // Telemetry
 
@@ -80,7 +79,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     // Grab variables
     public double grabPosCurrent;
     public double grabAtarget;
-    public double armClearToRotatePosition;
+    public double armVertClearToRotatePosition;
     public double precision;
 
     public CDHardware robotHardware;
@@ -245,7 +244,6 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double armFreelyRotateVerticalHeightLow = 0.0;
             //TODO DO NOT USE BELOW UNTIL CHECK ON ROBOT - arm will likely collide with floor then moved to front. May also hit robot. Will likely need to define safe fourbar position for this.
             double armFreelyRotateVerticalHeightHigh = 0.06; //Notice this is very small range 0-0.06 (Four bar all the way down)
-
             double fourbarRangeLow = 0.23;
             //TODO Check max when manually push all the way up (upped from 1.15 to 1.25 for now to make sure we don't get readings out of range)
             double fourbarRangeHigh = 1.25; //1.15 is max in normal operation testing, however, set to 1.25 to make sure we are never out of range.
@@ -257,7 +255,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double armRotPositionBack = 0.343;
 
             // Define variables for Home Positions. HOME is back pickup position between fourbars.
-            double fourbarPositionHome = 0.23;
+            double fourbarLowerPositionHome = 0.23;
+            double fourbarMiddlePositionHome = 0.8; //
+            double fourbarArmClearedPositionHome = 0.8; // 0.6 when loaded
             double armVertPositionHome = 0.565;
             double armRotPositionHome = 0.343;
 
@@ -292,55 +292,45 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
 //                double fourbarPositionMinimumFreelyMoveArm = 0.8; // Replaced with armClearToRotatePosition
             if (isPickedUp) {
-                armClearToRotatePosition = ((0.87 * fourBarPotCurrent) - 0.14);
+                armVertClearToRotatePosition = ((0.87 * fourBarPotCurrent) - 0.14);
             } else {
-                armClearToRotatePosition = ((.92 * fourBarPotCurrent) + 0.01);
+                armVertClearToRotatePosition = ((.92 * fourBarPotCurrent) + 0.01);
             }
 
-            boolean isArmVerticalEnough = (within(armFreelyRotateVerticalHeightLow, armFreelyRotateVerticalHeightHigh, armVerticalPosition) || (within((armClearToRotatePosition - precision), (armClearToRotatePosition + precision), armRotationPosition)));
-            boolean isArmClearToMoveFree = (armRotPosCurrent >= armClearToRotatePosition); // || (isArmVerticalEnough))); // arm is either vertical enough needs more consideration for the fourbar is positioned enough
+            boolean isArmVerticalEnough = (within(armFreelyRotateVerticalHeightLow, armFreelyRotateVerticalHeightHigh, armVerticalPosition) || (within((armVertClearToRotatePosition - precision), (armVertClearToRotatePosition + precision), armRotationPosition)));
+            boolean isArmClearToMoveFree = (armRotPosCurrent >= armVertClearToRotatePosition); // || (isArmVerticalEnough))); // arm is either vertical enough needs more consideration for the fourbar is positioned enough
             boolean isArmInDangerZone = (within(armRotRangeDangerLow, armRotRangeDangerHigh, armRotationPosition));
             boolean isFourbarClear = (isArmInside); // Need more logic here.
-            boolean isFourbarHome = (within(fourbarPositionHome - potPrecision, fourbarPositionHome + potPrecision, fourBar.getFourBarPosition()));
+            boolean isFourbarHome = (within(fourbarLowerPositionHome - potPrecision, fourbarLowerPositionHome + potPrecision, fourBar.getFourBarPosition()));
 
             //Go HOME (Back pickup position between fourbars)
             if (gamepad2.a) {
                 //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
-                if (isArmClearToMoveFree && !isArmInside) {
-                    fourBar.setFourbarPosition(armClearToRotatePosition, false);
+                if (!isArmClearToMoveFree && !isArmInside) {
+                    fourBar.setFourbarPosition(fourbarArmClearedPositionHome, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     sleep(1000);
                 }
-                arm.setArmVerticalPosition(armVertPositionHome); // One of these is redundant
+                arm.setArmVerticalPosition(armVertPositionHome);
                 //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
                 arm.setArmRotationPosition(armRotPositionHome);
-                arm.setArmVerticalPosition(armVertPositionHome); // One of these is redundant
                 sleep(1000);
                 //Double check before moving down
+                isArmHome = (within(armRotPositionHome - precision, armRotPositionHome + precision, armRotationPosition) && within(armVertPositionHome - precision, armVertPositionHome + precision, armVerticalPosition));
                 if (isArmHome) {
-                    fourBar.setFourbarPosition(fourbarPositionHome, false);
+                    fourBar.setFourbarPosition(fourbarLowerPositionHome, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
                 }
-            }
-
-            if (gamepad2.y) {
-                //Check if arm inside fourbar and set arm to vert HOME position
-                if ((fourBarPotCurrent <= armClearToRotatePosition) && isArmInside) {
-                    //set vertical arm position to HOME to ensure clears
-                    arm.setArmVerticalPosition(armVertPositionHome);
-                }
-                //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
-                if (isArmClearToMoveFree && !isArmInside) {
-                    fourBar.setFourbarPosition(armClearToRotatePosition, false);
+            } else if (gamepad2.y) {
+                arm.setArmVerticalPosition(armVertPositionHome);
+                sleep(1000);
+                if (!isArmClearToMoveFree) {
+                    fourBar.setFourbarPosition(fourbarArmClearedPositionHome, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     sleep(2000);
-                    //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
-                    arm.setArmVerticalPosition(armVertPositionHome);
-                    //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
                 }
                 arm.setArmRotationPosition(armRotPositionFront);
-                arm.setArmVerticalPosition(armVertPositionHome);
-                fourBar.setFourbarPosition(fourbarPositionHome, false);
+                fourBar.setFourbarPosition(fourbarMiddlePositionHome, false);
                 sleep(2000);
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
             }
