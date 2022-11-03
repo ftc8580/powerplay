@@ -13,7 +13,7 @@ public class CDGrabber {
         extendServo.scaleRange(0.127, 0.57);
         extendServo.setPosition(0.0);
         grabServo.scaleRange(.35, .75);
-        grabServo.setPosition(0.0);
+        grabServo.setPosition(1.0);
     }
 
     public double getExtendPosition() {
