@@ -227,8 +227,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 grabAtarget = (grabPosCurrent - .0008);
                 grabber.setGrabPosition(grabAtarget);
             }
-
-            //Go FRONT Medium with cone
+            // Arm statemachine - This will move and be refactored.
             double armRotationPosition = arm.getArmRotationPosition();
             double armVerticalPosition = arm.getArmVerticalPosition();
             // Define variables for ranges to parse late
