@@ -265,10 +265,12 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double armVertMinimum; //Mainly for use in other places, but this is how we manage the state of it.
             boolean isArmInside = (within(armRotInsideFourbarLow, armRotInsideFourbarHigh, armRotationPosition));
             // Variables depending on Arm State
+            double potPrecision = 0.05;
             if (isArmInside) {
                 precision = .0008;
                 armVertMinimum = (0.38 * (fourBarPotCurrent) + 0.52);
             } else {
+
                 precision = .02;
                 armVertMinimum = 0.0;
             }
@@ -284,8 +286,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // Pickup
             double pickedUpLow = 0.0; // NEED TO UPDATE!!
             double pickedUpHigh = 0.25; // NEED TO UPDATE!!
-            boolean isPickedUp = within(pickedUpLow, pickedUpHigh, grabber.getGrabPosition());
-
+//            boolean isPickedUp = within(pickedUpLow, pickedUpHigh, grabber.getGrabPosition());
+            boolean isPickedUp = true; // Test prior line after test is satisfied.
             // Cone variants
             fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
 //                double fourbarPositionMinimumFreelyMoveArm = 0.8; // Replaced with armClearToRotatePosition
@@ -296,9 +298,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 
             boolean isArmVerticalEnough = (within(armFreelyRotateVerticalHeightLow, armFreelyRotateVerticalHeightHigh, armVerticalPosition) || (within((armClearToRotatePosition - precision), (armClearToRotatePosition + precision), armRotationPosition)));
-            boolean isArmClearToMoveFree = ((isArmVerticalEnough) || (fourBar.getFourBarPosition() >= armClearToRotatePosition)); // arm is either vertical enough or the fourbar is positioned enough
+            boolean isArmClearToMoveFree = (armRotPosCurrent >= armClearToRotatePosition); // || (isArmVerticalEnough))); // arm is either vertical enough needs more consideration for the fourbar is positioned enough
             boolean isArmInDangerZone = (within(armRotRangeDangerLow, armRotRangeDangerHigh, armRotationPosition));
             boolean isFourbarClear = (isArmInside); // Need more logic here.
+            boolean isFourbarHome = (within(fourbarPositionHome - potPrecision, fourbarPositionHome + potPrecision, fourBar.getFourBarPosition()));
 
             //Go HOME (Back pickup position between fourbars)
             if (gamepad2.a) {
