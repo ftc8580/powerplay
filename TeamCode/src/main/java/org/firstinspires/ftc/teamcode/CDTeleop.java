@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 // There are work in progress / untested IMU elements in this code which we may want to use so they are preserved.
 //import com.qualcomm.hardware.bosch.BNO055IMU;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.sun.tools.javac.comp.Check;
@@ -15,7 +16,7 @@ import com.sun.tools.javac.comp.Check;
 //import java.util.Locale;
 
 
-@TeleOp(name="CDTeleop", group="Linear Opmode")
+@TeleOp(name = "CDTeleop", group = "Linear Opmode")
 public class CDTeleop extends LinearOpMode implements Runnable {
 
     // Initialize our teleopThread
@@ -79,6 +80,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     // Grab variables
     public double grabPosCurrent;
     public double grabAtarget;
+    public double armClearToRotatePosition;
+    public double precision;
 
     public CDHardware robotHardware;
 
@@ -133,19 +136,18 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             armPosCurrent = arm.getArmPosition();
             armCurrentThreshold = arm.armCurrentThreshold;
 */
-
             double fourbarA = gamepad2.left_stick_y;
             //Slow at top and bottom
             //TODO put in proper values for fourbarpot current near top and bottom so it slows down
-            if ((fourBarPotCurrent > 3 && fourbarA <-0.01) || (fourBarPotCurrent <.25 && fourbarA >=0.01)) {
-                fourBar.setFourBarPower(fourbarA*-.5);
+            if ((fourBarPotCurrent > 3 && fourbarA < -0.01) || (fourBarPotCurrent < .25 && fourbarA >= 0.01)) {
+                fourBar.setFourBarPower(fourbarA * -.5);
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                 //move arm proportionally to fourbar to keep level
                 //TODO Define multiplier that keeps this level- currently .1 below- may need to change direction- below removed since stays level
                 //arm.setArmPower(fourbarA*-.05*.1);
-            } else if (fourbarA >=0.01 || fourbarA <=-0.01) {
+            } else if (fourbarA >= 0.01 || fourbarA <= -0.01) {
                 //TODO check direction on gamepad - remove *-1 below and - on .5 above if direction is wrong
-                fourBar.setFourBarPower(fourbarA*-1);//Remember on controller -y is up
+                fourBar.setFourBarPower(fourbarA * -1);//Remember on controller -y is up
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                 //move arm proportionally to fourbar to keep level
                 //TODO Define multiplier that keeps this level- currently .1 below - may need to change direction- below removed since stays level
@@ -197,8 +199,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             if (gamepad2.left_trigger > .01) {
                 pickupTarget = pickupPositionCurrent + .0008;
                 pickup.setServoPosition(pickupTarget);
-            }
-            else if (gamepad2.right_trigger > .01) {
+            } else if (gamepad2.right_trigger > .01) {
                 pickupTarget = pickupPositionCurrent - .0008;
                 pickup.setServoPosition(pickupTarget);
             }
@@ -209,8 +210,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             if (gamepad1.left_trigger > .01) {
                 extendAtarget = (extendPosCurrent + .0008);
                 grabber.setExtendPosition(extendAtarget);
-            }
-            else if (gamepad1.right_trigger >.01) {
+            } else if (gamepad1.right_trigger > .01) {
                 extendAtarget = (extendPosCurrent - .0008);
                 grabber.setExtendPosition(extendAtarget);
             }
@@ -223,70 +223,117 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             if (grab) {
                 grabAtarget = (grabPosCurrent + .0008);
                 grabber.setGrabPosition(grabAtarget);
-            }
-            else if (release) {
+            } else if (release) {
                 grabAtarget = (grabPosCurrent - .0008);
                 grabber.setGrabPosition(grabAtarget);
             }
 
+            //Go FRONT Medium with cone
+            double armRotationPosition = arm.getArmRotationPosition();
+            double armVerticalPosition = arm.getArmVerticalPosition();
+            // Define variables for ranges to parse late
+            double armRotRangeFrontLow = 0.6;
+            double armRotRangeFrontHigh = 1.0;
+            double armRotRangeLeftLow = 0.47;
+            double armRotRangeLeftHigh = 0.63;
+            double armRotRangeRightLow = 0.01; //notice extra zero
+            double armRotRangeRightHigh = 0.17;
+            double armRotRangeDangerLow = 0.18; // Back area is dangerous
+            double armRotRangeDangerHigh = 0.46; // Back area is dangerous
+            double armRotInsideFourbarLow = 0.333; // Back area is dangerous except this area
+            double armRotInsideFourbarHigh = 0.353; // Back area is dangerous except this area
+            double armFreelyRotateVerticalHeightLow = 0.0;
+            double armFreelyRotateVerticalHeightHigh = 0.06;
+
+            double fourbarRangeLow = 0.23;
+            double fourbarRangeHigh = 1.15;
+
+            // Define variables for Arm Positions
+            double armRotPositionFront = 0.82;
+            double armRotPositionLeft = 0.56;
+            double armRotPositionRight = 0.058; //Notice extra zero
+            double armRotPositionBack = 0.343;
+
+            // Define variables for Home Positions
+            double fourbarPositionHome = 0.23;
+            double armVertPositionHome = 0.565;
+            double armRotPositionHome = 0.343;
+
+            // Statemachine for Arm
+
+            boolean isArmInside = (within(armRotInsideFourbarLow, armRotInsideFourbarHigh, armRotationPosition));
+            // Variable Precision depending on Arm State
+            if (isArmInside) { // Suspect
+                precision = .0008;
+            } else {
+                precision = .02;
+            }
+            boolean isArmHome = (within(armRotPositionHome - precision, armRotPositionHome + precision, armRotationPosition) && within(armVertPositionHome - precision, armVertPositionHome + precision, armVerticalPosition));
+            boolean isArmBack = within(armRotRangeDangerLow, armRotRangeDangerHigh, armRotationPosition);
+            boolean isArmLeft = within(armRotRangeLeftLow, armRotRangeLeftHigh, armRotationPosition);
+            boolean isArmRight = within(armRotRangeRightLow, armRotRangeRightHigh, armRotationPosition);
+            boolean isArmFront = within(armRotRangeFrontLow, armRotRangeFrontHigh, armRotationPosition);
+
+            // Statemachine for Fourbar clearance
+            // Fourbar is higher than the minimium collision of arm
+
+            // Pickup
+            double pickedUpLow = 0.0; // NEED TO UPDATE!!
+            double pickedUpHigh = 0.25; // NEED TO UPDATE!!
+            boolean isPickedUp = within(pickedUpLow, pickedUpHigh, grabber.getGrabPosition());
+
+            // Cone variants
+            fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
+//                double fourbarPositionMinimumFreelyMoveArm = 0.8; // Replaced with armClearToRotatePosition
+            if (isPickedUp) {
+                armClearToRotatePosition = ((0.87 * fourBarPotCurrent) - 0.14);
+            } else {
+                armClearToRotatePosition = ((.92 * fourBarPotCurrent) + 0.01);
+            }
+
+            boolean isArmVerticalEnough = (within(armFreelyRotateVerticalHeightLow, armFreelyRotateVerticalHeightHigh, armVerticalPosition) || (within((armClearToRotatePosition - precision), (armClearToRotatePosition + precision), armRotationPosition));
+            boolean isArmClearToMoveFree = ((isArmVerticalEnough) || (fourBar.getFourBarPosition() >= armClearToRotatePosition)); // arm is either vertical enough or the fourbar is positioned enough
+            boolean isArmInDangerZone = (within(armRotRangeDangerLow, armRotRangeDangerHigh, armRotationPosition);
+            boolean isFourbarClear = (isArmInside); // Need more logic here.
+
             //Go HOME (Back pickup position between fourbars)
             if (gamepad2.a) {
-                double armRotPositionHOME = .343;
-                double armVerticalPositionHOME = .565;
-                double fourbarPositionHOME = .23;
-                double fourbarPositiontoRotateHOME = .8;
-
-                // Check if arm clear to rotate
-                fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                 //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
-                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && ((arm.getArmRotationPosition() < (armRotPositionHOME - .01)) || (arm.getArmRotationPosition() > (armRotPositionHOME + .01)))) {
-                    fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
+                if (isArmClearToMoveFree && !isArmInside) {
+                    fourBar.setFourbarPosition(armClearToRotatePosition, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     sleep(1000);
-                    }
-                //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
-                armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
-                arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
+                }
+                arm.setArmVerticalPosition(armVertPositionHome); // One of these is redundant
                 //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
-                arm.setArmRotationPosition(armRotPositionHOME);
-                //check if fourbar motor busy
+                arm.setArmRotationPosition(armRotPositionHome);
+                arm.setArmVerticalPosition(armVertPositionHome); // One of these is redundant
                 sleep(1000);
-                arm.setArmVerticalPosition(armVerticalPositionHOME);
                 //Double check before moving down
-                if (arm.getArmRotationPosition() >= .333 && arm.getArmRotationPosition()<=.353 && arm.getArmVerticalPosition()>=.555 && arm.getArmVerticalPosition()<=.575) {
-                    fourBar.setFourbarPosition(fourbarPositionHOME, false);
+                if (isArmHome) {
+                    fourBar.setFourbarPosition(fourbarPositionHome, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
-                    }
+                }
             }
-            //Go FRONT Medium with cone
-            if (gamepad2.y) {
-                double armRotPositionFRONT = .82;
-                double armVerticalPositionFRONT = .565;
-                double fourbarPositionFRONTMED= .8;
-                double fourbarPositiontoRotateHOME = .8;
-                double armRotPositionHOME = .343;
-                double armVerticalPositionHOME = .565;
 
+            if (gamepad2.y) {
                 //Check if arm inside fourbar and set arm to vert HOME position
-                fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && (((arm.getArmRotationPosition() > (armRotPositionHOME -.02)) && ((arm.getArmRotationPosition() < (armRotPositionFRONT + .02)))))) {
+                if ((fourBarPotCurrent <= armClearToRotatePosition) && isArmInside) {
                     //set vertical arm position to HOME to ensure clears
-//                    arm.setArmRotationPosition(armRotPositionHOME); // We should already be here.
-                    arm.setArmVerticalPosition(armVerticalPositionHOME);
+                    arm.setArmVerticalPosition(armVertPositionHome);
                 }
                 //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
-                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && ((arm.getArmRotationPosition() > (armRotPositionFRONT- .02)) && (arm.getArmRotationPosition() < (armRotPositionFRONT + .02)))) {
-                    fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
+                if (isArmClearToMoveFree && !isArmInside) {
+                    fourBar.setFourbarPosition(armClearToRotatePosition, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     sleep(2000);
                     //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
-                    armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
-                    arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
+                    arm.setArmVerticalPosition(armVertPositionHome);
                     //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
                 }
-                arm.setArmRotationPosition(armRotPositionFRONT);
-                arm.setArmVerticalPosition(armVerticalPositionFRONT);
-                fourBar.setFourbarPosition(fourbarPositionFRONTMED, false);
+                arm.setArmRotationPosition(armRotPositionFront);
+                arm.setArmVerticalPosition(armVertPositionHome);
+                fourBar.setFourbarPosition(fourbarPositionHome, false);
                 sleep(2000);
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
             }
@@ -341,13 +388,13 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 // at least one is out of the range [-1, 1]
                 double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
                 if (constrainMovement) {
-                    if (Math.abs(x)>Math.abs(y)) {
+                    if (Math.abs(x) > Math.abs(y)) {
                         leftFrontPower = (x - rx) / denominator;
                         leftRearPower = (-x - rx) / denominator;
                         rightFrontPower = (-x + rx) / denominator;
                         rightRearPower = (x + rx) / denominator;
                     }
-                    if (Math.abs(y)>=Math.abs(x)) {
+                    if (Math.abs(y) >= Math.abs(x)) {
                         leftFrontPower = (y - rx) / denominator;
                         leftRearPower = (y - rx) / denominator;
                         rightFrontPower = (y + rx) / denominator;
@@ -373,6 +420,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     //----------------------------------------------------------------------------------------------
     // Telemetry Configuration
     //----------------------------------------------------------------------------------------------
+
+    boolean within(double low, double high, double number) {
+        return (number >= low && number <= high);
+    }
 
     void composeTelemetry(boolean imuTelemetry) {
         telemetry.clearAll();
