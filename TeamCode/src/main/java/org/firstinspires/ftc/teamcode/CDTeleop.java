@@ -247,6 +247,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 //TODO add .6 Fourbar postion if no cone for rotation - Use pickup value to determine
                 armClearToRotatePositionWithCone = (.87 * fourBarPotCurrent - .14);
                 arm.setArmVerticalPosition(arm.armClearToRotatePositionWithCone);
+                sleep(1000);
                 //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
                 arm.setArmRotationPosition(armRotPositionHOME);
                 //check if fourbar motor busy
@@ -266,16 +267,24 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 double fourbarPositiontoRotateHOME = .8;
                 double armRotPositionHOME = .343;
                 double armVerticalPositionHOME = .565;
+                boolean armInsideFourBarRotHomeRange;
+
+                if (((arm.getArmRotationPosition() > (armRotPositionHOME -.02)) && ((arm.getArmRotationPosition() < (armRotPositionFRONT + .02))))) {
+                    armInsideFourBarRotHomeRange=true;
+                }else {
+                    armInsideFourBarRotHomeRange=false;
+                }
 
                 //Check if arm inside fourbar and set arm to vert HOME position
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && (((arm.getArmRotationPosition() > (armRotPositionHOME -.02)) && ((arm.getArmRotationPosition() < (armRotPositionFRONT + .02)))))) {
+                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && ((arm.getArmRotationPosition() > (armRotPositionHOME -.02)) && ((arm.getArmRotationPosition() < (armRotPositionHOME + .02))))) {
                     //set vertical arm position to HOME to ensure clears
 //                    arm.setArmRotationPosition(armRotPositionHOME); // We should already be here.
                     arm.setArmVerticalPosition(armVerticalPositionHOME);
                 }
+                sleep(2000);
                 //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
-                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && ((arm.getArmRotationPosition() > (armRotPositionFRONT- .02)) && (arm.getArmRotationPosition() < (armRotPositionFRONT + .02)))) {
+                if ((fourBarPotCurrent < fourbarPositiontoRotateHOME) && ((arm.getArmRotationPosition() < (armRotPositionFRONT- .05)) && (arm.getArmRotationPosition() > (armRotPositionFRONT + .05)))) {
                     fourBar.setFourbarPosition(fourbarPositiontoRotateHOME, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     sleep(2000);
