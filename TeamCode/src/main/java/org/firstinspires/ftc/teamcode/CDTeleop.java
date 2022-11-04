@@ -5,6 +5,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.firstinspires.ftc.teamcode.util.Within;
 
 // Telemetry
 
@@ -116,8 +117,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         int i = 0;
 
         while (opModeIsActive()) {
-            double armRotationPosition = arm.getArmRotationPosition();
-            double armVerticalPosition = arm.getArmVerticalPosition();
+
             // Everything Gamespad 2 will be handled between these two comments
             //
             // GAMEPAD 2 Code!
@@ -130,33 +130,43 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             currentFourBarPosition = fourBar.getFourBarPosition(); //Variable Based
             fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
             currentFourBarThreshold = fourBar.getFourBarCurrentThreshold();
-
+            double armRotationPosition = arm.getArmRotationPosition();
+            double armVerticalPosition = arm.getArmVerticalPosition();
 /*
             //Refresh the armpostion and report threshold
             armPosCurrent = arm.getArmPosition();
             armCurrentThreshold = arm.armCurrentThreshold;
 */
-            double fourbarA = gamepad2.left_stick_y;
+            boolean isFourbarInRange;
+            double fourbarRangeLow = 0.23;
+            double fourbarRangeHigh = 1.25; //1.15 is max in normal operation testing, however, set to 1.25 to make sure we are never out of range.
+            isFourbarInRange = Within.within(fourbarRangeLow, fourbarRangeHigh, fourBarPotCurrent);
+            double fourbarUpDownInput = gamepad2.left_stick_y;
             //Slow at top and bottom
             //TODO put in proper values for fourbarpot current near top and bottom so it slows down
-            if ((fourBarPotCurrent > 3 && fourbarA < -0.01) || (fourBarPotCurrent < .25 && fourbarA >= 0.01)) {
-                fourBar.setFourBarPower(fourbarA * -.5);
+            if ((isFourbarInRange && fourbarUpDownInput < -0.01) || (isFourbarInRange && fourbarUpDownInput >= 0.01)) {
+                fourBar.setFourBarPower(fourbarUpDownInput * -.5);
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                 //move arm proportionally to fourbar to keep level
                 //TODO Define multiplier that keeps this level- currently .1 below- may need to change direction- below removed since stays level
-                //arm.setArmPower(fourbarA*-.05*.1);
-            } else if (fourbarA >= 0.01 || fourbarA <= -0.01) {
+                //arm.setArmPower(fourbarUpDownInput*-.05*.1);
+            } else if (fourbarUpDownInput >= 0.01 || fourbarUpDownInput <= -0.01) {
                 //TODO check direction on gamepad - remove *-1 below and - on .5 above if direction is wrong
-                fourBar.setFourBarPower(fourbarA * -1);//Remember on controller -y is up
+                fourBar.setFourBarPower(fourbarUpDownInput * -1);//Remember on controller -y is up
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                 //move arm proportionally to fourbar to keep level
                 //TODO Define multiplier that keeps this level- currently .1 below - may need to change direction- below removed since stays level
-                //arm.setArmPower(fourbarA*-0.1*.1);
+                //arm.setArmPower(fourbarUpDownInput*-0.1*.1);
             } else {
                 fourBar.setFourBarPower(0.0);
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-//                arm.setArmPower(0.0);
+                isFourbarInRange = Within.within(fourbarRangeLow, fourbarRangeHigh, fourBarPotCurrent);
+                if (!isFourbarInRange) {
+                    double fourBarPositionTarget = Math.max(Math.min(fourbarRangeHigh, fourBarPotCurrent), fourbarRangeLow);
+                    fourBar.setFourbarPosition(fourBarPositionTarget, false);
+                }
             }
+//                arm.setArmPower(0.0);
 
             //arm vertical
             armUpDownPosCurrent = arm.getArmVerticalPosition();
@@ -166,8 +176,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
             boolean armUP = gamepad2.dpad_up;
             boolean armDOWN = gamepad2.dpad_down;
-            double armRotMoveSpeed = .001;
-            double armVertMoveSpeed = .008;
+            double armRotMoveSpeed = .003;
+            double armVertMoveSpeed = .01;
 
             // Flip controls if the arm is rotated forward
             if (armRotationPosition < 0.63) {
@@ -235,7 +245,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
             // Define variables for ranges to parse late
             // For Front and back zones use <= or >= to; Side zones just use < or >
-            double armRotRangeFrontLow = 0.63; // Use >= when evaluating
+            double armRotRangeFrontLow = 0.630; // Use >= when evaluating
             double armRotRangeFrontHigh = 1.0;// Use <= when evaluating
             double armRotRangeLeftLow = 0.47; // Use > when evaluating
             double armRotRangeLeftHigh = 0.63; //Use < when evaluating
@@ -248,9 +258,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double armFreelyRotateVerticalHeightLow = 0.0;
             //TODO DO NOT USE BELOW UNTIL CHECK ON ROBOT - arm will likely collide with floor then moved to front. May also hit robot. Will likely need to define safe fourbar position for this.
             double armFreelyRotateVerticalHeightHigh = 0.06; //Notice this is very small range 0-0.06 (Four bar all the way down)
-            double fourbarRangeLow = 0.23;
-            //TODO Check max when manually push all the way up (upped from 1.15 to 1.25 for now to make sure we don't get readings out of range)
-            double fourbarRangeHigh = 1.25; //1.15 is max in normal operation testing, however, set to 1.25 to make sure we are never out of range.
+
 
             // Define variables for Arm Positions
             double armRotPositionFront = 0.82;
@@ -267,22 +275,21 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
             // Statemachine for Arm
             double armVertMinimum; //Mainly for use in other places, but this is how we manage the state of it.
-            boolean isArmInside = (within(armRotInsideFourbarLow, armRotInsideFourbarHigh, armRotationPosition));
+            boolean isArmInside = (Within.within(armRotInsideFourbarLow, armRotInsideFourbarHigh, armRotationPosition));
             // Variables depending on Arm State
             double potPrecision = 0.05;
             if (isArmInside) {
                 precision = 0.02; //.0008;
                 armVertMinimum = (0.38 * (fourBarPotCurrent) + 0.52);
             } else {
-
                 precision = .02;
                 armVertMinimum = 0.0;
             }
-            boolean isArmHome = (within(armRotPositionHome - precision, armRotPositionHome + precision, armRotationPosition) && within(armVertPositionHome - precision, armVertPositionHome + precision, armVerticalPosition));
-            boolean isArmBack = within(armRotRangeDangerLow, armRotRangeDangerHigh, armRotationPosition);
-            boolean isArmLeft = within(armRotRangeLeftLow, armRotRangeLeftHigh, armRotationPosition);
-            boolean isArmRight = within(armRotRangeRightLow, armRotRangeRightHigh, armRotationPosition);
-            boolean isArmFront = within(armRotRangeFrontLow, armRotRangeFrontHigh, armRotationPosition);
+            boolean isArmHome = (Within.within(armRotPositionHome - precision, armRotPositionHome + precision, armRotationPosition) && Within.within(armVertPositionHome - precision, armVertPositionHome + precision, armVerticalPosition));
+            boolean isArmBack = Within.within(armRotRangeDangerLow, armRotRangeDangerHigh, armRotationPosition);
+            boolean isArmLeft = Within.within(armRotRangeLeftLow, armRotRangeLeftHigh, armRotationPosition);
+            boolean isArmRight = Within.within(armRotRangeRightLow, armRotRangeRightHigh, armRotationPosition);
+            boolean isArmFront = Within.within(armRotRangeFrontLow, armRotRangeFrontHigh, armRotationPosition);
 
             // Statemachine for Fourbar clearance
             // Fourbar is higher than the minimium collision of arm
@@ -290,7 +297,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // Pickup
             double pickedUpLow = 0.0; // NEED TO UPDATE!!
             double pickedUpHigh = 0.25; // NEED TO UPDATE!!
-//            boolean isPickedUp = within(pickedUpLow, pickedUpHigh, grabber.getGrabPosition());
+//            boolean isPickedUp = Within.within(pickedUpLow, pickedUpHigh, grabber.getGrabPosition());
             boolean isPickedUp = true; // Test prior line after test is satisfied.
             // Cone variants
             fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
@@ -301,11 +308,11 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 armVertClearToRotatePosition = ((.92 * fourBarPotCurrent) + 0.01);
             }
 
-            boolean isArmVerticalEnough = (within(armFreelyRotateVerticalHeightLow, armFreelyRotateVerticalHeightHigh, armVerticalPosition) || (within((armVertClearToRotatePosition - precision), (armVertClearToRotatePosition + precision), armRotationPosition)));
+            boolean isArmVerticalEnough = (Within.within(armFreelyRotateVerticalHeightLow, armFreelyRotateVerticalHeightHigh, armVerticalPosition) || (Within.within((armVertClearToRotatePosition - precision), (armVertClearToRotatePosition + precision), armRotationPosition)));
             boolean isArmClearToMoveFree = (armVerticalPosition <= armVertClearToRotatePosition); // || (isArmVerticalEnough))); // arm is either vertical enough needs more consideration for the fourbar is positioned enough
-            boolean isArmInDangerZone = (within(armRotRangeDangerLow, armRotRangeDangerHigh, armRotationPosition));
+            boolean isArmInDangerZone = (Within.within(armRotRangeDangerLow, armRotRangeDangerHigh, armRotationPosition));
             boolean isFourbarClear = (isArmInside); // Need more logic here.
-            boolean isFourbarHome = (within(fourbarLowerPositionHome - potPrecision, fourbarLowerPositionHome + potPrecision, fourBar.getFourBarPosition()));
+            boolean isFourbarHome = (Within.within(fourbarLowerPositionHome - potPrecision, fourbarLowerPositionHome + potPrecision, fourBar.getFourBarPosition()));
 
             //Go HOME (Back pickup position between fourbars)
             if (gamepad2.a) {
@@ -321,7 +328,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 sleep(1000);
                 //Double check before moving down
                 armRotationPosition = arm.getArmRotationPosition();
-                isArmHome = (within(armRotPositionHome - precision, armRotPositionHome + precision, armRotationPosition) && within(armVertPositionHome - precision, armVertPositionHome + precision, armVerticalPosition));
+                isArmHome = (Within.within(armRotPositionHome - precision, armRotPositionHome + precision, armRotationPosition) && Within.within(armVertPositionHome - precision, armVertPositionHome + precision, armVerticalPosition));
                 if (isArmHome) {
                     fourBar.setFourbarPosition(fourbarLowerPositionHome, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
@@ -352,7 +359,6 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
         }
     }
-
     // Threaded Gamepad 1. Everything Gamepad 1 will happen below.
     public void run() {
         try {
@@ -423,9 +429,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     // Telemetry Configuration
     //----------------------------------------------------------------------------------------------
 
-    boolean within(double low, double high, double number) {
-        return (number >= low && number <= high);
-    }
+//    boolean within(double low, double high, double number) {
+//        return (number >= low && number <= high);
+//    }
 
     void composeTelemetry(boolean imuTelemetry) {
         telemetry.clearAll();
