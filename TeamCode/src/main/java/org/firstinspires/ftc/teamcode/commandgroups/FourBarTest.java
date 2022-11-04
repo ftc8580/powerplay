@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.commandgroups;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.CDArm;
-import org.firstinspires.ftc.teamcode.CDFourBar;
+import org.firstinspires.ftc.teamcode.subsystems.CDArm;
+import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 import org.firstinspires.ftc.teamcode.commands.ArmMoveRotate;
 import org.firstinspires.ftc.teamcode.commands.ArmMoveVertical;
 import org.firstinspires.ftc.teamcode.commands.FourBarSetPosition;

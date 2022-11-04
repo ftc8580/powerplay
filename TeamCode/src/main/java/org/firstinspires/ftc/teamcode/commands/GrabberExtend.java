@@ -2,26 +2,26 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.subsystems.CDArm;
+import org.firstinspires.ftc.teamcode.subsystems.CDGrabber;
 import org.firstinspires.ftc.teamcode.util.CDRuntime;
 
-public class ArmMoveVertical extends CommandBase {
-    private final CDArm arm;
+public class GrabberExtend extends CommandBase {
+    private final CDGrabber grabber;
     private final double targetPosition;
-    private double targetTimeMs;
     private final CDRuntime runtime = new CDRuntime();
+    private double targetTimeMs;
 
-    public ArmMoveVertical(CDArm subsystem, double targetPosition) {
-        this.arm = subsystem;
+    public GrabberExtend(CDGrabber subsystem, double targetPosition) {
+        this.grabber = subsystem;
         this.targetPosition = targetPosition;
-        addRequirements(arm);
+        addRequirements(grabber);
     }
 
     @Override
     public void initialize() {
-        targetTimeMs = arm.getVerticalSweepTimeMs(targetPosition);
+        targetTimeMs = grabber.getExtendTimeMs(targetPosition);
         runtime.reset();
-        arm.setArmVerticalPosition(targetPosition);
+        grabber.setExtendPosition(targetPosition);
     }
 
     @Override

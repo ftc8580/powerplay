@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.commandgroups.FourBarTest;
+import org.firstinspires.ftc.teamcode.subsystems.CDArm;
+import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 
 @Autonomous
 public class CDAutonFourBarTest extends CommandOpMode {

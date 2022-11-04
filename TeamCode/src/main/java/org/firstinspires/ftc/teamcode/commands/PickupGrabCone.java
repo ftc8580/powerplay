@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.CDPickup;
+import org.firstinspires.ftc.teamcode.subsystems.CDPickup;
 import org.firstinspires.ftc.teamcode.util.CDRuntime;
 
 public class PickupGrabCone extends CommandBase {

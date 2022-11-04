@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.CDFourBar;
+import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 import org.firstinspires.ftc.teamcode.util.CDRuntime;
 
 public class FourBarSetPosition extends CommandBase {

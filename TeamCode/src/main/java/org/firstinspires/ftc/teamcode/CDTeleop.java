@@ -6,6 +6,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.subsystems.CDArm;
+import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
+import org.firstinspires.ftc.teamcode.subsystems.CDGrabber;
+import org.firstinspires.ftc.teamcode.subsystems.CDPickup;
+
 // Telemetry
 
 //
