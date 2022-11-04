@@ -7,7 +7,7 @@ public class CDRuntime extends ElapsedTime {
         super();
     }
 
-    public boolean isTimedOut(double timeoutSeconds) {
-        return this.seconds() > timeoutSeconds;
+    public boolean isTimedOutMs(double timeoutMs) {
+        return this.milliseconds() > timeoutMs;
     }
 }

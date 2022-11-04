@@ -11,7 +11,6 @@ public class CDFourBar extends SubsystemBase {
     private final static double fourBarSlowSpeedMultiplier = .7;
 
     private final AnalogInput fourBarPotentiometer;
-    private final CDArm arm;
     private final CDRuntime runtime = new CDRuntime();
     private final DcMotor fourBarMotor;
 
@@ -23,7 +22,6 @@ public class CDFourBar extends SubsystemBase {
     public CDFourBar(CDHardware theHardware) {
         fourBarMotor = theHardware.fourBarMotor;
         fourBarPotentiometer = theHardware.fourBarPotentiometer;
-        arm = new CDArm(theHardware);
 
         fourBarMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         //Added to make sure that the fourBar defaults to brake mode
@@ -130,31 +128,5 @@ public class CDFourBar extends SubsystemBase {
     public void calibrateZeroFourBar() {
         // Reset the encoder to zero on init
         fourBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
-
-    // Arm Controls
-
-    public double getArmVerticalPosition() {
-        return arm.getArmVerticalPosition();
-    }
-
-    public double getArmRotationPosition() {
-        return arm.getArmRotationPosition();
-    }
-
-    public void setArmVerticalPosition(double armVerticalPositionTarget) {
-       arm.setArmVerticalPosition(armVerticalPositionTarget);
-    }
-
-    public void setArmRotationPosition(double armRotationPositionTarget) {
-        arm.setArmRotationPosition(armRotationPositionTarget);
-    }
-
-    public void openPickup() {
-        arm.openPickup();
-    }
-
-    public void closePickup() {
-        arm.closePickup();
     }
 }

@@ -34,8 +34,8 @@ public class CDHardware {
         armVerticalServo = hwMap.get(Servo.class, "servoUpDownArm");
         armRotationServo = hwMap.get(Servo.class, "servoRotArm");
         pickupServo = hwMap.get(Servo.class, "servoIntake");
-        grabberExtendServo = hwMap.get(Servo.class, "servoExtend");
-        grabberServo = hwMap.get(Servo.class, "servoGrab");
+        // grabberExtendServo = hwMap.get(Servo.class, "servoExtend");
+        // grabberServo = hwMap.get(Servo.class, "servoGrab");
     }
 }
 

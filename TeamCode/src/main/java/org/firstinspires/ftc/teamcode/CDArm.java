@@ -3,7 +3,14 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.util.ServoUtils;
+
 public class CDArm extends SubsystemBase {
+    private static final double VERTICAL_SCALE_RANGE_MIN = 0.4;
+    private static final double VERTICAL_SCALE_RANGE_MAX = 0.8;
+    private static final double ROTATION_SCALE_RANGE_MIN = 0.15;
+    private static final double ROTATION_SCALE_RANGE_MAX = 0.37;
+
     // This is where we set the values for our distance sensor
     //TODO reset values below to values from armmotor encoder
 /*    public double defaultArmPosition = 26.0;
@@ -21,7 +28,6 @@ public class CDArm extends SubsystemBase {
 
     private final Servo verticalServo;
     private final Servo rotationServo;
-    private final CDPickup pickup;
 
     /*public boolean armStopped;
     public boolean armError;
@@ -41,10 +47,9 @@ public class CDArm extends SubsystemBase {
     public CDArm(CDHardware theHardware){
         verticalServo = theHardware.armVerticalServo;
         rotationServo = theHardware.armRotationServo;
-        pickup = new CDPickup(theHardware);
 
-        verticalServo.scaleRange(.4, .8);
-        rotationServo.scaleRange(.15, .37);
+        verticalServo.scaleRange(VERTICAL_SCALE_RANGE_MIN, VERTICAL_SCALE_RANGE_MAX);
+        rotationServo.scaleRange(ROTATION_SCALE_RANGE_MIN, ROTATION_SCALE_RANGE_MAX);
 
         verticalServo.setPosition(0.565);
         rotationServo.setPosition(0.338);
@@ -58,19 +63,29 @@ public class CDArm extends SubsystemBase {
         return rotationServo.getPosition();
     }
 
+    public double getVerticalSweepTimeMs(double armVerticalPositionTarget) {
+        return ServoUtils.getSweepTimeMs(
+                getArmVerticalPosition(),
+                armVerticalPositionTarget,
+                VERTICAL_SCALE_RANGE_MIN,
+                VERTICAL_SCALE_RANGE_MAX
+        );
+    }
+
+    public double getRotationSweepTimeMs(double armRotationPositionTarget) {
+        return ServoUtils.getSweepTimeMs(
+                getArmRotationPosition(),
+                armRotationPositionTarget,
+                ROTATION_SCALE_RANGE_MIN,
+                ROTATION_SCALE_RANGE_MAX
+        );
+    }
+
     public void setArmVerticalPosition(double armVerticalPositionTarget) {
         verticalServo.setPosition(armVerticalPositionTarget);
     }
 
     public void setArmRotationPosition(double armRotationPositionTarget) {
         rotationServo.setPosition(armRotationPositionTarget);
-    }
-
-    public void openPickup() {
-        pickup.setServoPosition(1);
-    }
-
-    public void closePickup() {
-        pickup.setServoPosition(0);
     }
 }

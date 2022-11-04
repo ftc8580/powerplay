@@ -3,9 +3,12 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.CDPickup;
+import org.firstinspires.ftc.teamcode.util.CDRuntime;
 
 public class PickupReleaseCone extends CommandBase {
     private final CDPickup pickup;
+    private double targetTimeMs;
+    private final CDRuntime runtime = new CDRuntime();
 
     public PickupReleaseCone(CDPickup subsystem) {
         pickup = subsystem;
@@ -14,11 +17,13 @@ public class PickupReleaseCone extends CommandBase {
 
     @Override
     public void initialize() {
-        pickup.setServoPosition(0);
+        targetTimeMs = pickup.getSweepTimeMs(1);
+        runtime.reset();
+        pickup.setServoPosition(1);
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return runtime.isTimedOutMs(targetTimeMs);
     }
 }
