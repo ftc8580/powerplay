@@ -10,9 +10,9 @@ public class CDGrabber {
         extendServo = theHardware.grabberExtendServo;
         grabServo = theHardware.grabberServo;
 
-        extendServo.scaleRange(0.127, 0.57);
+        extendServo.scaleRange(0.2, 0.67);
         extendServo.setPosition(0.0);
-        grabServo.scaleRange(.35, .75);
+        grabServo.scaleRange(.3, .75);
         grabServo.setPosition(1.0);
     }
 

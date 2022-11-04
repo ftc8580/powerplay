@@ -23,7 +23,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     // Initialize our local variables with values
     // The basespeed "slow" variable is used to control the overall speed of the robot
     // TODO: Work with Drive Team to determine
-    public double baseSpeed = 0.90;
+    public double baseSpeed = 0.50; //drive speed
 
     public boolean imuTelemetry = false;
     //For setting elevator position using buttons
@@ -116,7 +116,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         int i = 0;
 
         while (opModeIsActive()) {
-
+            double armRotationPosition = arm.getArmRotationPosition();
+            double armVerticalPosition = arm.getArmVerticalPosition();
             // Everything Gamespad 2 will be handled between these two comments
             //
             // GAMEPAD 2 Code!
@@ -165,29 +166,33 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
             boolean armUP = gamepad2.dpad_up;
             boolean armDOWN = gamepad2.dpad_down;
+            double armRotMoveSpeed = .001;
+            double armVertMoveSpeed = .008;
 
             // Flip controls if the arm is rotated forward
-            if (armRotPosCurrent < 0.63) {
+            if (armRotationPosition < 0.63) {
                 armUP = gamepad2.dpad_down;
                 armDOWN = gamepad2.dpad_up;
             }
 
+
             if (armUP) {
-                armUpDownAtarget = (armUpDownPosCurrent + .0008);
+                armUpDownAtarget = (armUpDownPosCurrent + armVertMoveSpeed);
                 arm.setArmVerticalPosition(armUpDownAtarget);
             } else if (armDOWN) {
-                armUpDownAtarget = (armUpDownPosCurrent - .0008);
+                armUpDownAtarget = (armUpDownPosCurrent - armVertMoveSpeed);
                 arm.setArmVerticalPosition(armUpDownAtarget);
             }
 
             // arm rotate
             if (gamepad2.right_stick_x > .02 || gamepad2.right_stick_x < -.02) {
                 double armrotA = gamepad2.right_stick_x;
+
                 if (armrotA > .02) {
-                    armrotAtarget = (armRotPosCurrent + .001);
+                    armrotAtarget = (armRotPosCurrent + armRotMoveSpeed);
                     arm.setArmRotationPosition(armrotAtarget);
                 } else if (armrotA < -.02) {
-                    armrotAtarget = (armRotPosCurrent - .001);
+                    armrotAtarget = (armRotPosCurrent - armRotMoveSpeed);
                     arm.setArmRotationPosition(armrotAtarget);
                 }
             }
@@ -196,10 +201,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             pickupPositionCurrent = pickup.getServoPosition();
             pickupTarget = pickup.getServoPosition(); // sets this initially
             if (gamepad2.left_trigger > .01) {
-                pickupTarget = pickupPositionCurrent + .0008;
+                pickupTarget = (pickupPositionCurrent + .02);
                 pickup.setServoPosition(pickupTarget);
             } else if (gamepad2.right_trigger > .01) {
-                pickupTarget = pickupPositionCurrent - .0008;
+                pickupTarget = (pickupPositionCurrent - .02);
                 pickup.setServoPosition(pickupTarget);
             }
 
@@ -207,10 +212,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             extendPosCurrent = grabber.getExtendPosition();
             extendAtarget = grabber.getExtendPosition(); // sets this initially
             if (gamepad1.left_trigger > .01) {
-                extendAtarget = (extendPosCurrent + .0008);
+                extendAtarget = (extendPosCurrent + .02);
                 grabber.setExtendPosition(extendAtarget);
             } else if (gamepad1.right_trigger > .01) {
-                extendAtarget = (extendPosCurrent - .0008);
+                extendAtarget = (extendPosCurrent - .02);
                 grabber.setExtendPosition(extendAtarget);
             }
 
@@ -220,15 +225,14 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             boolean grab = gamepad1.left_bumper;
             boolean release = gamepad1.right_bumper;
             if (grab) {
-                grabAtarget = (grabPosCurrent + .0008);
+                grabAtarget = (grabPosCurrent + .02);
                 grabber.setGrabPosition(grabAtarget);
             } else if (release) {
-                grabAtarget = (grabPosCurrent - .0008);
+                grabAtarget = (grabPosCurrent - .02);
                 grabber.setGrabPosition(grabAtarget);
             }
             // Arm statemachine - This will move and be refactored.
-            double armRotationPosition = arm.getArmRotationPosition();
-            double armVerticalPosition = arm.getArmVerticalPosition();
+
             // Define variables for ranges to parse late
             // For Front and back zones use <= or >= to; Side zones just use < or >
             double armRotRangeFrontLow = 0.63; // Use >= when evaluating
@@ -267,7 +271,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // Variables depending on Arm State
             double potPrecision = 0.05;
             if (isArmInside) {
-                precision = .0008;
+                precision = 0.02; //.0008;
                 armVertMinimum = (0.38 * (fourBarPotCurrent) + 0.52);
             } else {
 
@@ -298,7 +302,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 
             boolean isArmVerticalEnough = (within(armFreelyRotateVerticalHeightLow, armFreelyRotateVerticalHeightHigh, armVerticalPosition) || (within((armVertClearToRotatePosition - precision), (armVertClearToRotatePosition + precision), armRotationPosition)));
-            boolean isArmClearToMoveFree = (armRotPosCurrent >= armVertClearToRotatePosition); // || (isArmVerticalEnough))); // arm is either vertical enough needs more consideration for the fourbar is positioned enough
+            boolean isArmClearToMoveFree = (armVerticalPosition <= armVertClearToRotatePosition); // || (isArmVerticalEnough))); // arm is either vertical enough needs more consideration for the fourbar is positioned enough
             boolean isArmInDangerZone = (within(armRotRangeDangerLow, armRotRangeDangerHigh, armRotationPosition));
             boolean isFourbarClear = (isArmInside); // Need more logic here.
             boolean isFourbarHome = (within(fourbarLowerPositionHome - potPrecision, fourbarLowerPositionHome + potPrecision, fourBar.getFourBarPosition()));
@@ -316,6 +320,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 arm.setArmRotationPosition(armRotPositionHome);
                 sleep(1000);
                 //Double check before moving down
+                armRotationPosition = arm.getArmRotationPosition();
                 isArmHome = (within(armRotPositionHome - precision, armRotPositionHome + precision, armRotationPosition) && within(armVertPositionHome - precision, armVertPositionHome + precision, armVerticalPosition));
                 if (isArmHome) {
                     fourBar.setFourbarPosition(fourbarLowerPositionHome, false);
@@ -357,7 +362,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 // User controls for the robot speed overall
                 //if (gamepad1.left_trigger != 0) {
                 if (gamepad1.y) {
-                    robotSpeed = baseSpeed * 1.0;
+                    robotSpeed = baseSpeed * 1.5;
                     //} else if (gamepad1.right_trigger != 0) {
                 } else if (gamepad1.x) {
                     robotSpeed = baseSpeed * .4;
