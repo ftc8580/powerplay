@@ -185,9 +185,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
             // arm rotate
             double rotationSpeed = fourBarOp.getRightX();
-            if (rotationSpeed > 0) {
+            if (rotationSpeed > 0 && arm.isArmClearToRotateFree(fourBar, true)) {
                 arm.setArmRotationPosition(armRotationPosition + ARM_ROTATION_MOVE_SPEED);
-            } else if (rotationSpeed < 0) {
+            } else if (rotationSpeed < 0 && arm.isArmClearToRotateFree(fourBar, true)) {
                 arm.setArmRotationPosition(armRotationPosition - ARM_ROTATION_MOVE_SPEED);
             }
 

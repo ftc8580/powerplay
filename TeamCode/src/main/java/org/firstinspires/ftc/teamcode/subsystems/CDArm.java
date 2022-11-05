@@ -147,7 +147,7 @@ public class CDArm extends SubsystemBase {
         );
     }
 
-    public boolean isArmClearToMoveFree(CDFourBar fourBar, boolean isPickedUp) {
+    public boolean isArmClearToRotateFree(CDFourBar fourBar, boolean isPickedUp) {
         return getArmRotationPosition() >= getArmVerticalClearToRotatePosition(fourBar, isPickedUp);
     }
 

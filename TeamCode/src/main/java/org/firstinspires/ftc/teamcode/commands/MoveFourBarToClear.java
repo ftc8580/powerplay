@@ -28,7 +28,7 @@ public class MoveFourBarToClear extends CommandBase {
     @Override
     public void execute() {
         if (
-                !arm.isArmClearToMoveFree(fourBar, conePickedUp) &&
+                !arm.isArmClearToRotateFree(fourBar, conePickedUp) &&
                 (!mustBeInside || !arm.isArmInsideFourBar()) &&
                 fourBar.getFourBarPosition() < CDFourBar.ARM_CLEARED_POSITION_HOME
         ) {
