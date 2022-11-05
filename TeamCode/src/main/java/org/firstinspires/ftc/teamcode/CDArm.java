@@ -35,7 +35,7 @@ public class CDArm {
     //public double armRotationCurrentThreshold;
     public double armRotationPositionCurrent;
     public double armRotationLastPosition;*/
-    public double armClearToRotatePositionWithCone = .565; //(.87* fourBarPositionCurrent - .14);
+    public double armClearToRotatePositionWithCone = .415; //(.87* fourBarPositionCurrent - .14);
     //TODO define armClearToRotatePositionNoCone y=.92x+.01
 
     public CDArm(CDHardware theHardware){
@@ -45,8 +45,8 @@ public class CDArm {
         verticalServo.scaleRange(.4, .8);
         rotationServo.scaleRange(.15, .37);
 
-        verticalServo.setPosition(0.565);
-        rotationServo.setPosition(0.343);
+        verticalServo.setPosition(armClearToRotatePositionWithCone);
+        rotationServo.setPosition(0.333);
     }
     //public double getArmThreshold () { return armCurrentThreshold; }
     //public double getArmRotationThreshold() {return armRotationCurrentThreshold; }

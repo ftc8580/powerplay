@@ -94,10 +94,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     public void runOpMode() {
         // Initialize our classes to variables
         robotHardware = new CDHardware(hardwareMap);
-        CDFourBar fourBar = new CDFourBar(robotHardware);
+        CDGrabber grabber = new CDGrabber(robotHardware);
         CDArm arm = new CDArm(robotHardware);
         CDPickup pickup = new CDPickup(robotHardware);
-        CDGrabber grabber = new CDGrabber(robotHardware);
+        CDFourBar fourBar = new CDFourBar(robotHardware);
 
         // Configure initial variables
         //TODO if we want pacman model to be default this should be set to true
@@ -170,27 +170,6 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
 
 
-            // Pickup
-            pickupPositionCurrent = pickup.getServoPosition();
-            pickupTarget = pickup.getServoPosition(); // sets this initially
-            double pickupMaxRange = 1.0;
-            double pickupMinRange = 0.0;
-            int pickupTimeout = 250;
-                // pickup.pickup()
-                // pickup.release()
-
-            boolean isPickupClosed = Within.within(pickupMinRange, pickupMaxRange, pickup.getServoPosition());
-
-            if (gamepad2.left_trigger > .01) {
-                pickupTarget = (pickupPositionCurrent + .02);
-                if (!isPickupClosed) {
-                    pickup.setServoPosition(pickupTarget);
-                }
-            } else if (gamepad2.right_trigger > .01) {
-                pickupTarget = (pickupPositionCurrent - .02);
-                pickup.setServoPosition(pickupTarget);
-            }
-            isPickupClosed = Within.within(pickupMinRange, pickupMaxRange, pickup.getServoPosition());
 
             // Extend
             extendPosCurrent = grabber.getExtendPosition();
@@ -238,14 +217,15 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double armRotPositionFront = 0.820;
             double armRotPositionLeft = 0.560;
             double armRotPositionRight = 0.058; //Notice extra zero
-            double armRotPositionBack = 0.343;
+            double armRotPositionBack = 0.333;
 
             // Define variables for Home Positions. HOME is back pickup position between fourbars.
             double fourbarLowerPositionHome = 0.230;
             double fourbarMiddlePositionHome = 0.800; //
             double fourbarArmClearedPositionHome = 0.800; // 0.6 when loaded
-            double armVertPositionHome = 0.565;
-            double armRotPositionHome = 0.343;
+            double armVertPositionHome = 0.415; // same as armClearToRotatePositionWithCone in arm class
+            double armRotPositionHome = 0.333;
+
 
             // Statemachine for Arm
             double armVertMinimum; //Mainly for use in other places, but this is how we manage the state of it.
@@ -269,14 +249,42 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // Fourbar is higher than the minimium collision of arm
 
             // Pickup
-            double pickedUpLow = 0.0; // NEED TO UPDATE!!
-            double pickedUpHigh = 0.25; // NEED TO UPDATE!!
-//            boolean isPickedUp = Within.within(pickedUpLow, pickedUpHigh, grabber.getGrabPosition());
-            boolean isPickedUp = true; // Test prior line after test is satisfied.
+            pickupPositionCurrent = pickup.getServoPosition();
+            pickupTarget = pickup.getServoPosition(); // sets this initially
+            double pickupMaxRange = 1.0; // Closed
+            double pickupMinRange = 0.0; // Open
+            double pickupCloseMinRange = 0.69;
+            double pickupCloseMaxRange = 1.0;
+            // Arm position for picking up
+            double armVertConePickupLowPostion = 0.555;
+            double armVertConePickupHighPostion = armVertPositionHome;
+
+            int pickupTimeout = 250;
+            // pickup.pickup()
+            // pickup.release()
+
+            boolean isPickupClosed = Within.within(pickupMinRange, pickupMaxRange, pickup.getServoPosition());
+
+            if (gamepad2.right_trigger > .01) {
+//                pickupTarget = (pickupPositionCurrent - .002);
+                pickup.setServoPosition(pickupMinRange);
+                arm.setArmVerticalPosition(armVertConePickupHighPostion);
+//                }
+            } else if (gamepad2.left_trigger > .01) {
+//                pickupTarget = (pickupPositionCurrent + .002);
+                arm.setArmVerticalPosition(armVertConePickupLowPostion);
+                pickup.setServoPosition(pickupMaxRange);
+                arm.setArmVerticalPosition(armVertConePickupHighPostion);
+
+            }
+
+
             // Cone variants
+            isPickupClosed = Within.within(pickupMinRange, pickupMaxRange, pickup.getServoPosition());
+
             fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
 //                double fourbarPositionMinimumFreelyMoveArm = 0.8; // Replaced with armClearToRotatePosition
-            if (isPickedUp) {
+            if (isPickupClosed) {
                 armVertClearToRotatePosition = ((0.87 * fourBarPotCurrent) - 0.14);
             } else {
                 armVertClearToRotatePosition = ((.92 * fourBarPotCurrent) + 0.01);

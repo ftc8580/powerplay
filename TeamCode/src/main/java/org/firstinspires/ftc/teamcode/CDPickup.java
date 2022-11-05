@@ -7,12 +7,12 @@ public class CDPickup {
     private final Servo pickupServo;
 
     public CDPickup(CDHardware theHardware) {
-        double SCALE_RANGE_MIN = 0.283;
-        double SCALE_RANGE_MAX = 0.80;
+        double SCALE_RANGE_MIN = 0.50;
+        double SCALE_RANGE_MAX = 0.70;
 
         pickupServo = theHardware.pickupServo;
         pickupServo.setPosition(0.0);
-//        pickupServo.scaleRange(SCALE_RANGE_MIN, SCALE_RANGE_MAX);
+        pickupServo.scaleRange(SCALE_RANGE_MIN, SCALE_RANGE_MAX);
     }
 
     public double getServoPosition() {
