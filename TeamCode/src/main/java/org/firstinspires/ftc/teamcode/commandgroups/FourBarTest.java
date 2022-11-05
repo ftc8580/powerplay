@@ -13,8 +13,8 @@ public class FourBarTest extends SequentialCommandGroup {
         addCommands(
                 new FourBarSetPosition(fourBar, 1),
                 new ArmMoveVertical(arm, 0),
-                new ArmMoveRotate(arm, 0),
-                new ArmMoveRotate(arm, 1),
+                new ArmMoveRotate(arm, fourBar, 0),
+                new ArmMoveRotate(arm, fourBar, 1),
                 new ArmMoveVertical(arm, 1),
                 new FourBarSetPosition(fourBar, -1)
         );

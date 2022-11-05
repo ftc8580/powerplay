@@ -7,9 +7,21 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.CDHardware;
 import org.firstinspires.ftc.teamcode.util.CDRuntime;
+import org.firstinspires.ftc.teamcode.util.MathUtils;
 
 public class CDFourBar extends SubsystemBase {
-    private final static double fourBarSlowSpeedMultiplier = .7;
+    private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .7;
+    // TODO: Get the correct value for this
+    private final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.25;
+    // TODO Get the correct value for this
+    private final static double ABSOLUTE_LOWER_BOUND_VOLTS = 0.23;
+    private final static double LOW_SPEED_UPPER_BOUND_VOLTS = 1.15;
+    private final static double LOW_SPEED_LOWER_BOUND_VOLTS = 0.33;
+    // Define variables for Home Positions. HOME is back pickup position between fourbars.
+    public final static double LOWER_POSITION_HOME = 0.23;
+    public final static double MIDDLE_POSITION_HOME = 0.8; //
+    public final static double ARM_CLEARED_POSITION_HOME = 0.8; // 0.6 when loaded
+    private final static double POTENTIOMETER_THRESHOLD_PRECISION = 0.05;
 
     private final AnalogInput fourBarPotentiometer;
     private final CDRuntime runtime = new CDRuntime();
@@ -25,13 +37,25 @@ public class CDFourBar extends SubsystemBase {
         fourBarPotentiometer = theHardware.fourBarPotentiometer;
 
         fourBarMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        //Added to make sure that the fourBar defaults to brake mode
-        fourBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fourBarMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fourBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void setFourBarPower(double pow) {
-        fourBarMotor.setPower(pow * fourBarSlowSpeedMultiplier);
+        double potentiometerVolts = getFourBarPotentiometerVolts();
+
+        if (potentiometerVolts >= LOW_SPEED_UPPER_BOUND_VOLTS || potentiometerVolts <= LOW_SPEED_LOWER_BOUND_VOLTS) {
+            pow = pow * 0.5;
+        }
+
+        if (
+                (potentiometerVolts >= ABSOLUTE_UPPER_BOUND_VOLTS && pow > 0) ||
+                (potentiometerVolts <= ABSOLUTE_LOWER_BOUND_VOLTS && pow < 0)
+        ) {
+            pow = 0;
+        }
+
+        fourBarMotor.setPower(pow * FOUR_BAR_SLOW_SPEED_MULTIPLIER);
     }
 
     public double getFourBarPotentiometerVolts() {
@@ -61,7 +85,7 @@ public class CDFourBar extends SubsystemBase {
 
     public synchronized boolean setFourBarPosition(double fourBarPositionTarget, boolean autonMode) {
         // This method will return false for successful turn or true for an error.
-        //TODO Need to confirm threshold is good
+        // TODO: Need to confirm threshold is good
         final double FOURBAR_THRESHOLD_POS = 0.1; // volts
         double fourBarSpeedMultiple; // to set the  speed of the fourbar
         runtime.reset();
@@ -126,8 +150,11 @@ public class CDFourBar extends SubsystemBase {
         return this.FOURBAR_CURRENT_THRESHOLD;
     }
 
-    public void calibrateZeroFourBar() {
-        // Reset the encoder to zero on init
-        fourBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public boolean isFourbarHome() {
+        return MathUtils.isWithinRange(
+                LOWER_POSITION_HOME - POTENTIOMETER_THRESHOLD_PRECISION,
+                LOWER_POSITION_HOME + POTENTIOMETER_THRESHOLD_PRECISION,
+                getFourBarPosition()
+        );
     }
 }

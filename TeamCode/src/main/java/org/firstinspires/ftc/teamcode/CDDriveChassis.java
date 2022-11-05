@@ -4,15 +4,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.util.CDRuntime;
 
 public class CDDriveChassis {
-
-    org.firstinspires.ftc.teamcode.CDHardware robotHardware;
-    private CDRuntime runtime = new CDRuntime();
+    CDHardware robotHardware;
 
     public CDDriveChassis(CDHardware theHardware) {
-        
         robotHardware = theHardware;
         
         robotHardware.leftFrontMotor.setDirection(DcMotorSimple.Direction.FORWARD);
