@@ -67,7 +67,7 @@ public class TensorFlowObjectDetectionWebcam extends LinearOpMode {
 //    private static final String TFOD_MODEL_FILE  = "/storage/emulated/0/FIRST/tflitemodels/model_20221018_182705.tflite";
 
 // Modern Phones / Control Hub
-    private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/model_20221018_182705.tflite";
+    private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/model_20221105_112220.tflite";
 
 
     private static final String[] LABELS = {
