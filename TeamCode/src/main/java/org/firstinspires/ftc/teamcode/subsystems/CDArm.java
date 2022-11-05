@@ -52,11 +52,11 @@ public class CDArm extends SubsystemBase {
     }
 
     public double getArmVerticalPosition() {
-        return verticalServo.getPosition();
+        return MathUtils.roundDouble(verticalServo.getPosition());
     }
 
     public double getArmRotationPosition() {
-        return rotationServo.getPosition();
+        return MathUtils.roundDouble(rotationServo.getPosition());
     }
 
     public double getVerticalSweepTimeMs(double armVerticalPositionTarget) {
