@@ -12,11 +12,14 @@ public class CDFourBar {
     public double fourBarPositionLast;
     public double FOURBAR_CURRENT_THRESHOLD;
     public AnalogInput fourBarPotentiometer;
+    public boolean autonMode;
     private CDRuntime runtime = new CDRuntime();
+
     //TODO Check if 2 is long enough for timeout here???
     private int fourBarTimeout = 2; // timeout for fourbar moves
 
     public CDFourBar(CDHardware theHardware) {
+        autonMode = false;
         robotHardware = theHardware;
         robotHardware.fourBarMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         //Added to make ture that the fourbar defaults to brake mode
@@ -39,26 +42,26 @@ public class CDFourBar {
     //static final double COUNTS_PER_FOURBAR_MOTOR_REV = 288; //Core Hex Motor
     //static final double DRIVE_GEAR_REDUCTION = .52; //This is greater than 1 if geared up
 
-    public synchronized boolean setFourbarDirection(String fourBarLocationTarget, boolean autonMode) {
+    public synchronized boolean setFourbarDirection(String fourBarLocationTarget) {
         // This method will return false for successful turn or true for an error.
         boolean fourBarError = false;
         //TODO  NEED ROBOT: Update fourbarpostarget values below to match readings from robot
         if (fourBarLocationTarget == "ground") {
-            boolean error = setFourbarPosition(.29, autonMode);
+            boolean error = setFourbarPosition(.29);
         } else if (fourBarLocationTarget == "low") {
-            fourBarError = setFourbarPosition(.58, autonMode);
+            fourBarError = setFourbarPosition(.58);
         } else if (fourBarLocationTarget == "medium") {
-            fourBarError = setFourbarPosition(2.47, autonMode);
+            fourBarError = setFourbarPosition(2.47);
         } else if (fourBarLocationTarget == "high") {
-            fourBarError = setFourbarPosition(2.87, autonMode);
+            fourBarError = setFourbarPosition(2.87);
         }
         return fourBarError;
     }
 
-    public synchronized boolean setFourbarPosition(double fourBarPositionTarget, boolean autonMode) {
+    public synchronized boolean setFourbarPosition(double fourBarPositionTarget) {
         // This method will return false for successful turn or true for an error.
         //TODO Need to confirm threshold is good
-        final double FOURBAR_THRESHOLD_POS = 0.1; // volts
+        final double FOURBAR_THRESHOLD_POS = 0.01; // volts
         double fourBarSpeedMultiple; // to set the  speed of the fourbar
         runtime.reset();
         fourBarStop = false; // initially we want the fourbar to move for the while loop

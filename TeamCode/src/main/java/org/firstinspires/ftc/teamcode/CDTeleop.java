@@ -163,7 +163,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 isFourbarInRange = Within.within(fourbarRangeLow, fourbarRangeHigh, fourBarPotCurrent);
                 if (!isFourbarInRange) {
                     double fourBarPositionTarget = Math.max(Math.min(fourbarRangeHigh, fourBarPotCurrent), fourbarRangeLow);
-                    fourBar.setFourbarPosition(fourBarPositionTarget, false);
+                    fourBar.setFourbarPosition(fourBarPositionTarget);
                 }
             }
 //                arm.setArmPower(0.0);
@@ -330,7 +330,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             if (gamepad2.a) {
                 //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
                 if (!isArmClearToRotateFree && !isArmInside) {
-                    fourBar.setFourbarPosition(fourbarArmClearedPositionHome, false);
+                    fourBar.setFourbarPosition(fourbarArmClearedPositionHome);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     sleep(500);
                 }
@@ -342,19 +342,19 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 armRotationPosition = arm.getArmRotationPosition();
                 isArmHome = (Within.within(armRotPositionHome - precision, armRotPositionHome + precision, armRotationPosition) && Within.within(armVertPositionHome - precision, armVertPositionHome + precision, armVerticalPosition));
                 if (isArmHome) {
-                    fourBar.setFourbarPosition(fourbarLowerPositionHome, false);
+                    fourBar.setFourbarPosition(fourbarLowerPositionHome);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
                 }
             } else if (gamepad2.y) {
                 arm.setArmVerticalPosition(armVertPositionHome);
                 sleep(500);
                 if (!isArmClearToRotateFree) {
-                    fourBar.setFourbarPosition(fourbarArmClearedPositionHome, false);
+                    fourBar.setFourbarPosition(fourbarArmClearedPositionHome);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
                     sleep(750);
                 }
                 arm.setArmRotationPosition(armRotPositionFront);
-                fourBar.setFourbarPosition(fourbarMiddlePositionHome, false);
+                fourBar.setFourbarPosition(fourbarMiddlePositionHome);
                 //sleep(750);
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
             }
