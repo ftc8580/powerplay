@@ -138,8 +138,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             armCurrentThreshold = arm.armCurrentThreshold;
 */
             boolean isFourbarInRange;
-            double fourbarRangeLow = 0.23;
-            double fourbarRangeHigh = 1.25; //1.15 is max in normal operation testing, however, set to 1.25 to make sure we are never out of range.
+            double fourbarRangeLow = 0.230;
+            double fourbarRangeHigh = 1.180; //1.15 is max in normal operation testing, however, set to 1.18 to make sure we are never out of range.
             isFourbarInRange = Within.within(fourbarRangeLow, fourbarRangeHigh, fourBarPotCurrent);
             double fourbarUpDownInput = gamepad2.left_stick_y;
             //Slow at top and bottom
@@ -168,44 +168,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 //                arm.setArmPower(0.0);
 
-            //arm vertical
-            armUpDownPosCurrent = arm.getArmVerticalPosition();
-            armUpDownAtarget = arm.getArmVerticalPosition(); // sets this initially
-            armRotPosCurrent = arm.getArmRotationPosition();
-            armrotAtarget = arm.getArmRotationPosition(); // sets this initially
 
-            boolean armUP = gamepad2.dpad_up;
-            boolean armDOWN = gamepad2.dpad_down;
-            double armRotMoveSpeed = .003;
-            double armVertMoveSpeed = .01;
-
-            // Flip controls if the arm is rotated forward
-            if (armRotationPosition < 0.63) {
-                armUP = gamepad2.dpad_down;
-                armDOWN = gamepad2.dpad_up;
-            }
-
-
-            if (armUP) {
-                armUpDownAtarget = (armUpDownPosCurrent + armVertMoveSpeed);
-                arm.setArmVerticalPosition(armUpDownAtarget);
-            } else if (armDOWN) {
-                armUpDownAtarget = (armUpDownPosCurrent - armVertMoveSpeed);
-                arm.setArmVerticalPosition(armUpDownAtarget);
-            }
-
-            // arm rotate
-            if (gamepad2.right_stick_x > .02 || gamepad2.right_stick_x < -.02) {
-                double armrotA = gamepad2.right_stick_x;
-
-                if (armrotA > .02) {
-                    armrotAtarget = (armRotPosCurrent + armRotMoveSpeed);
-                    arm.setArmRotationPosition(armrotAtarget);
-                } else if (armrotA < -.02) {
-                    armrotAtarget = (armRotPosCurrent - armRotMoveSpeed);
-                    arm.setArmRotationPosition(armrotAtarget);
-                }
-            }
 
             // Pickup
             pickupPositionCurrent = pickup.getServoPosition();
@@ -246,30 +209,30 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // Define variables for ranges to parse late
             // For Front and back zones use <= or >= to; Side zones just use < or >
             double armRotRangeFrontLow = 0.630; // Use >= when evaluating
-            double armRotRangeFrontHigh = 1.0;// Use <= when evaluating
-            double armRotRangeLeftLow = 0.47; // Use > when evaluating
-            double armRotRangeLeftHigh = 0.63; //Use < when evaluating
-            double armRotRangeRightLow = 0.0; //Use >= when evaluating
-            double armRotRangeRightHigh = 0.18; //Use < when evaluating
-            double armRotRangeDangerLow = 0.18; // Back area is dangerous //Use >= when evaluating
-            double armRotRangeDangerHigh = 0.47; // Back area is dangerous //Use <= when evaluating
+            double armRotRangeFrontHigh = 1.000;// Use <= when evaluating
+            double armRotRangeLeftLow = 0.471; // Use > when evaluating
+            double armRotRangeLeftHigh = 0.629; //Use < when evaluating
+            double armRotRangeRightLow = 0.000; //Use >= when evaluating
+            double armRotRangeRightHigh = 0.179; //Use < when evaluating
+            double armRotRangeDangerLow = 0.180; // Back area is dangerous //Use >= when evaluating
+            double armRotRangeDangerHigh = 0.470; // Back area is dangerous //Use <= when evaluating
             double armRotInsideFourbarLow = 0.333; // Back area is dangerous except this area //Use >= when evaluating
             double armRotInsideFourbarHigh = 0.353; // Back area is dangerous except this area //Use <= when evaluating
-            double armFreelyRotateVerticalHeightLow = 0.0;
+            double armFreelyRotateVerticalHeightLow = 0.000;
             //TODO DO NOT USE BELOW UNTIL CHECK ON ROBOT - arm will likely collide with floor then moved to front. May also hit robot. Will likely need to define safe fourbar position for this.
-            double armFreelyRotateVerticalHeightHigh = 0.06; //Notice this is very small range 0-0.06 (Four bar all the way down)
+            double armFreelyRotateVerticalHeightHigh = 0.060; //Notice this is very small range 0-0.06 (Four bar all the way down)
 
 
             // Define variables for Arm Positions
-            double armRotPositionFront = 0.82;
-            double armRotPositionLeft = 0.56;
+            double armRotPositionFront = 0.820;
+            double armRotPositionLeft = 0.560;
             double armRotPositionRight = 0.058; //Notice extra zero
             double armRotPositionBack = 0.343;
 
             // Define variables for Home Positions. HOME is back pickup position between fourbars.
-            double fourbarLowerPositionHome = 0.23;
-            double fourbarMiddlePositionHome = 0.8; //
-            double fourbarArmClearedPositionHome = 0.8; // 0.6 when loaded
+            double fourbarLowerPositionHome = 0.230;
+            double fourbarMiddlePositionHome = 0.800; //
+            double fourbarArmClearedPositionHome = 0.800; // 0.6 when loaded
             double armVertPositionHome = 0.565;
             double armRotPositionHome = 0.343;
 
@@ -309,23 +272,61 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 
             boolean isArmVerticalEnough = (Within.within(armFreelyRotateVerticalHeightLow, armFreelyRotateVerticalHeightHigh, armVerticalPosition) || (Within.within((armVertClearToRotatePosition - precision), (armVertClearToRotatePosition + precision), armRotationPosition)));
-            boolean isArmClearToMoveFree = (armVerticalPosition <= armVertClearToRotatePosition); // || (isArmVerticalEnough))); // arm is either vertical enough needs more consideration for the fourbar is positioned enough
+            boolean isArmClearToRotateFree = (armVerticalPosition <= armVertClearToRotatePosition); // || (isArmVerticalEnough))); // arm is either vertical enough needs more consideration for the fourbar is positioned enough
             boolean isArmInDangerZone = (Within.within(armRotRangeDangerLow, armRotRangeDangerHigh, armRotationPosition));
             boolean isFourbarClear = (isArmInside); // Need more logic here.
             boolean isFourbarHome = (Within.within(fourbarLowerPositionHome - potPrecision, fourbarLowerPositionHome + potPrecision, fourBar.getFourBarPosition()));
 
+
+
+            //arm vertical
+            armUpDownPosCurrent = arm.getArmVerticalPosition();
+            armUpDownAtarget = arm.getArmVerticalPosition(); // sets this initially
+            armRotPosCurrent = arm.getArmRotationPosition();
+            armrotAtarget = arm.getArmRotationPosition(); // sets this initially
+
+            boolean armUP = gamepad2.dpad_up;
+            boolean armDOWN = gamepad2.dpad_down;
+            double armRotMoveSpeed = .003;
+            double armVertMoveSpeed = .01;
+
+            // arm rotate
+            if ((gamepad2.right_stick_x > .02 || gamepad2.right_stick_x < -.02) && isArmClearToRotateFree) {
+                double armrotA = gamepad2.right_stick_x;
+                if (armrotA > .02) {
+                    armrotAtarget = (armRotPosCurrent + armRotMoveSpeed);
+                    arm.setArmRotationPosition(armrotAtarget);
+                } else if (armrotA < -.02) {
+                    armrotAtarget = (armRotPosCurrent - armRotMoveSpeed);
+                    arm.setArmRotationPosition(armrotAtarget);
+                }
+            }
+
+            // Flip controls if the arm is rotated forward
+            if (armRotationPosition < 0.63) {
+                armUP = gamepad2.dpad_down;
+                armDOWN = gamepad2.dpad_up;
+            }
+
+            if (armUP) {
+                armUpDownAtarget = (armUpDownPosCurrent + armVertMoveSpeed);
+                arm.setArmVerticalPosition(armUpDownAtarget);
+            } else if ((armDOWN)) {
+                armUpDownAtarget = (armUpDownPosCurrent - armVertMoveSpeed);
+                arm.setArmVerticalPosition(armUpDownAtarget);
+            }
             //Go HOME (Back pickup position between fourbars)
             if (gamepad2.a) {
                 //check if arm needs to rotate and fourbar is high enough - fourbar should be above .8 for arm rotation here
-                if (!isArmClearToMoveFree && !isArmInside) {
+                if (!isArmClearToRotateFree && !isArmInside) {
                     fourBar.setFourbarPosition(fourbarArmClearedPositionHome, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                    sleep(1000);
+                    sleep(500);
                 }
                 arm.setArmVerticalPosition(armVertPositionHome);
                 //TODO add checks and remove sleep below - remember getservo positions gets the last set position not the current position
                 arm.setArmRotationPosition(armRotPositionHome);
-                sleep(1000);
+                sleep(500);
                 //Double check before moving down
                 armRotationPosition = arm.getArmRotationPosition();
                 isArmHome = (Within.within(armRotPositionHome - precision, armRotPositionHome + precision, armRotationPosition) && Within.within(armVertPositionHome - precision, armVertPositionHome + precision, armVerticalPosition));
@@ -335,15 +336,15 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 }
             } else if (gamepad2.y) {
                 arm.setArmVerticalPosition(armVertPositionHome);
-                sleep(1000);
-                if (!isArmClearToMoveFree) {
+                sleep(500);
+                if (!isArmClearToRotateFree) {
                     fourBar.setFourbarPosition(fourbarArmClearedPositionHome, false);
                     fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-                    sleep(2000);
+                    sleep(750);
                 }
                 arm.setArmRotationPosition(armRotPositionFront);
                 fourBar.setFourbarPosition(fourbarMiddlePositionHome, false);
-                sleep(2000);
+                //sleep(750);
                 fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
             }
 

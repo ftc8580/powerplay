@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.*;
-
+import org.firstinspires.ftc.teamcode.util.RoundD;
 
 public class CDArm {
     // This is where we set the values for our distance sensor
@@ -56,11 +56,11 @@ public class CDArm {
     }*/
 
     public double getArmVerticalPosition() {
-        return verticalServo.getPosition();
+        return RoundD.roundD(verticalServo.getPosition());
     }
 
     public double getArmRotationPosition() {
-        return rotationServo.getPosition();
+        return RoundD.roundD(rotationServo.getPosition());
     }
 
     public synchronized void setArmVerticalPosition(double armVerticalPositionTarget) {
