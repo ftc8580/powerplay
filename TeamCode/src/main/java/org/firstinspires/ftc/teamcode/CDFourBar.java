@@ -27,6 +27,8 @@ public class CDFourBar {
         robotHardware.fourBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         fourBarPotentiometer = robotHardware.fourBarPotentiometer;
+        double fourBarPositionDown = .230;
+        setFourbarPosition(fourBarPositionDown);
     }
 
     public synchronized void setFourBarPower(double pow) {

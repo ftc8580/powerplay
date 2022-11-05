@@ -46,7 +46,7 @@ public class CDArm {
         rotationServo.scaleRange(.15, .37);
 
         verticalServo.setPosition(0.565);
-        rotationServo.setPosition(0.338);
+        rotationServo.setPosition(0.343);
     }
     //public double getArmThreshold () { return armCurrentThreshold; }
     //public double getArmRotationThreshold() {return armRotationCurrentThreshold; }
