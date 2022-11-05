@@ -173,13 +173,24 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // Pickup
             pickupPositionCurrent = pickup.getServoPosition();
             pickupTarget = pickup.getServoPosition(); // sets this initially
+            double pickupMaxRange = 1.0;
+            double pickupMinRange = 0.0;
+            int pickupTimeout = 250;
+                // pickup.pickup()
+                // pickup.release()
+
+            boolean isPickupClosed = Within.within(pickupMinRange, pickupMaxRange, pickup.getServoPosition());
+
             if (gamepad2.left_trigger > .01) {
                 pickupTarget = (pickupPositionCurrent + .02);
-                pickup.setServoPosition(pickupTarget);
+                if (!isPickupClosed) {
+                    pickup.setServoPosition(pickupTarget);
+                }
             } else if (gamepad2.right_trigger > .01) {
                 pickupTarget = (pickupPositionCurrent - .02);
                 pickup.setServoPosition(pickupTarget);
             }
+            isPickupClosed = Within.within(pickupMinRange, pickupMaxRange, pickup.getServoPosition());
 
             // Extend
             extendPosCurrent = grabber.getExtendPosition();
