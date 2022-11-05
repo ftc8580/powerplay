@@ -257,6 +257,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double pickupCloseMaxRange = 1.0;
             // Arm position for picking up
             double armVertConePickupLowPostion = 0.555;
+            double armAddToDropHeightClear = .050;
             double armVertConePickupHighPostion = armVertPositionHome;
 
             int pickupTimeout = 250;
@@ -268,7 +269,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             if (gamepad2.right_trigger > .01) {
 //                pickupTarget = (pickupPositionCurrent - .002);
                 pickup.setServoPosition(pickupMinRange);
-                arm.setArmVerticalPosition(armVertConePickupHighPostion);
+                arm.setArmVerticalPosition(arm.getArmVerticalPosition() + armAddToDropHeightClear);
 //                }
             } else if (gamepad2.left_trigger > .01) {
 //                pickupTarget = (pickupPositionCurrent + .002);
