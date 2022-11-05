@@ -74,9 +74,9 @@ public class TensorFlowObjectDetectionWebcam extends LinearOpMode {
 //            "1 Bolt",
 //            "2 Bulb",
 //            "3 Panel"
-            "Cherry",
-            "Ghost",
-            "Pacman"
+            "1 Pacman",
+            "2 Cherry",
+            "3 Ghost"
     };
 
     /*
