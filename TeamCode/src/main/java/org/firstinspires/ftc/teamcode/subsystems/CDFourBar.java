@@ -107,7 +107,7 @@ public class CDFourBar extends SubsystemBase {
         );
     }
 
-    private boolean isArrivedAtTarget(double target) {
+    public boolean isArrivedAtTarget(double target) {
         // TODO: Need to confirm threshold is good
         double FOURBAR_THRESHOLD_DELTA = 0.01;
 
