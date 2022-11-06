@@ -8,13 +8,10 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.util.Within;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commandgroups.FourBarTest;
 import org.firstinspires.ftc.teamcode.commandgroups.MoveToDeliver;
 import org.firstinspires.ftc.teamcode.commandgroups.MoveToHome;
-import org.firstinspires.ftc.teamcode.commands.ArmMoveVertical;
 import org.firstinspires.ftc.teamcode.subsystems.CDArm;
 import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 import org.firstinspires.ftc.teamcode.subsystems.CDGrabber;
