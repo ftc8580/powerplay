@@ -11,25 +11,32 @@ public class CDArm extends SubsystemBase {
     // Define state limits
     private static final double ARM_ROTATION_RANGE_FRONT_LOW = 0.630; // Use >= when evaluating
     private static final double ARM_ROTATION_RANGE_FRONT_HIGH = 1.0;// Use <= when evaluating
-    private static final double ARM_ROTATION_RANGE_LEFT_LOW = 0.47; // Use > when evaluating
-    private static final double ARM_ROTATION_RANGE_LEFT_HIGH = 0.63; //Use < when evaluating
-    private static final double ARM_ROTATION_RANGE_RIGHT_LOW = 0.0; //Use >= when evaluating
-    private static final double ARM_ROTATION_RANGE_RIGHT_HIGH = 0.18; //Use < when evaluating
+    private static final double ARM_ROTATION_RANGE_LEFT_LOW = 0.471; // Use > when evaluating
+    private static final double ARM_ROTATION_RANGE_LEFT_HIGH = 0.629; // Use < when evaluating
+    private static final double ARM_ROTATION_RANGE_RIGHT_LOW = 0.0; // Use >= when evaluating
+    private static final double ARM_ROTATION_RANGE_RIGHT_HIGH = 0.179; // Use < when evaluating
     private static final double ARM_ROTATION_RANGE_DANGER_LOW = 0.18; // Back area is dangerous //Use >= when evaluating
     private static final double ARM_ROTATION_RANGE_DANGER_HIGH = 0.47; // Back area is dangerous //Use <= when evaluating
     private static final double ARM_ROTATION_RANGE_INSIDE_FOURBAR_LOW = 0.333; // Back area is dangerous except this area //Use >= when evaluating
     private static final double ARM_ROTATION_RANGE_INSIDE_FOURBAR_HIGH = 0.353; // Back area is dangerous except this area //Use <= when evaluating
     private static final double ARM_FREELY_ROTATE_VERTICAL_HEIGHT_LOW = 0.0;
     //TODO DO NOT USE BELOW UNTIL CHECK ON ROBOT - arm will likely collide with floor then moved to front. May also hit robot. Will likely need to define safe fourbar position for this.
-    private static final double ARM_FREELY_ROTATE_VERTICAL_HEIGHT_HIGH = 0.06; //Notice this is very small range 0-0.06 (Four bar all the way down)
+    private static final double ARM_FREELY_ROTATE_VERTICAL_HEIGHT_HIGH = 0.06; // Notice this is very small range 0-0.06 (Four bar all the way down)
+    private static final double ARM_CLEAR_TO_ROTATE_WITH_CONE_POSITION = .415; // (.87* fourBarPositionCurrent - .14);
+    private static final double INITIAL_ARM_ROTATION_POSITION = 0.333;
 
-    // Define variables for arm positions
+    // Define variables for rotation positions
     public static final double ARM_ROTATION_POSITION_FRONT = 0.82;
     public static final double ARM_ROTATION_POSITION_LEFT = 0.56;
     public static final double ARM_ROTATION_POSITION_RIGHT = 0.058; //Notice extra zero
-    public static final double ARM_ROTATION_POSITION_BACK = 0.343;
-    public static final double ARM_ROTATION_POSITION_HOME = 0.343;
-    public static final double ARM_VERTICAL_POSITION_HOME = 0.565;
+    public static final double ARM_ROTATION_POSITION_BACK = 0.333;
+    public static final double ARM_ROTATION_POSITION_HOME = ARM_ROTATION_POSITION_BACK;
+
+    // Define variables for rotation positions
+    public static final double ARM_VERTICAL_POSITION_HOME = 0.415;
+    public static final double ARM_VERTICAL_PICKUP_LOW_POSITION = 0.555;
+    public static final double ARM_VERTICAL_PICKUP_HIGH_POSITION = ARM_VERTICAL_POSITION_HOME;
+    private static final double ARM_ADD_TO_DROP_HEIGHT_CLEAR = 0.05;
 
     // Define scale ranges
     private static final double VERTICAL_SCALE_RANGE_MIN = 0.4;
@@ -47,8 +54,8 @@ public class CDArm extends SubsystemBase {
         verticalServo.scaleRange(VERTICAL_SCALE_RANGE_MIN, VERTICAL_SCALE_RANGE_MAX);
         rotationServo.scaleRange(ROTATION_SCALE_RANGE_MIN, ROTATION_SCALE_RANGE_MAX);
 
-        verticalServo.setPosition(0.565);
-        rotationServo.setPosition(0.338);
+        verticalServo.setPosition(ARM_CLEAR_TO_ROTATE_WITH_CONE_POSITION);
+        rotationServo.setPosition(INITIAL_ARM_ROTATION_POSITION);
     }
 
     public double getArmVerticalPosition() {
@@ -147,13 +154,13 @@ public class CDArm extends SubsystemBase {
         );
     }
 
-    public boolean isArmClearToRotateFree(CDFourBar fourBar, boolean isPickedUp) {
-        return getArmRotationPosition() >= getArmVerticalClearToRotatePosition(fourBar, isPickedUp);
+    public boolean isArmClearToRotateFree(CDFourBar fourBar, boolean isPickupClosed) {
+        return getArmVerticalPosition() <= getArmVerticalClearToRotatePosition(fourBar, isPickupClosed);
     }
 
-    public boolean isArmVerticalEnough(CDFourBar fourBar, boolean isPickedUp) {
+    public boolean isArmVerticalEnough(CDFourBar fourBar, boolean isPickupClosed) {
         double precision = getThresholdPrecision();
-        double clearToRotatePosition = getArmVerticalClearToRotatePosition(fourBar, isPickedUp);
+        double clearToRotatePosition = getArmVerticalClearToRotatePosition(fourBar, isPickupClosed);
 
         return MathUtils.isWithinRange(
                 ARM_FREELY_ROTATE_VERTICAL_HEIGHT_LOW,
@@ -171,12 +178,13 @@ public class CDArm extends SubsystemBase {
     }
 
     private double getArmVerticalPositionMinimum(CDFourBar fourBar) {
-        return isArmInsideFourBar() ? 0.38 * fourBar.getFourBarPotentiometerVolts() + 0.52 : 0;
+        return isArmInsideFourBar() ? 0.38 * fourBar.getFourBarPosition() + 0.52 : 0;
     }
 
-    private double getArmVerticalClearToRotatePosition(CDFourBar fourBar, boolean isPickedUp) {
-        return isPickedUp ?
-                0.87 * fourBar.getFourBarPotentiometerVolts() - 0.14 :
-                0.92 * fourBar.getFourBarPotentiometerVolts() + 0.01;
+    // TODO: Revert back to private
+    public double getArmVerticalClearToRotatePosition(CDFourBar fourBar, boolean isPickupClosed) {
+        return isPickupClosed ?
+                0.87 * fourBar.getFourBarPosition() - 0.14 :
+                0.92 * fourBar.getFourBarPosition() + 0.01;
     }
 }

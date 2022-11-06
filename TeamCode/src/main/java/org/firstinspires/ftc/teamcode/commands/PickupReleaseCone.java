@@ -17,9 +17,9 @@ public class PickupReleaseCone extends CommandBase {
 
     @Override
     public void initialize() {
-        targetTimeMs = pickup.getSweepTimeMs(1);
+        targetTimeMs = pickup.getSweepTimeMs(CDPickup.OPEN_POSITION);
         runtime.reset();
-        pickup.setServoPosition(1);
+        pickup.release();
     }
 
     @Override

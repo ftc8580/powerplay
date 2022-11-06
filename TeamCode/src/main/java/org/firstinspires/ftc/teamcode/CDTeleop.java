@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -24,7 +25,6 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     private static final double INVERT_ARM_LIMIT = 0.63;
     private static final double ARM_ROTATION_MOVE_SPEED = 0.01;
     private static final double ARM_VERTICAL_MOVE_SPEED = 0.003;
-    private static final double PICKUP_MOVE_SPEED = 0.02;
     private static final double GRABBER_EXTEND_MOVE_SPEED = 0.02;
     private static final double GRABBER_GRAB_MOVE_SPEED = 0.02;
 
@@ -47,7 +47,6 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     public double robotSpeed;
     public boolean constrainMovement;
     //Fourbar variables
-    public double currentFourBarThreshold;
     public double fourBarPotCurrent;
     public boolean fourBarError;
     //Arm UpDown variables
@@ -79,14 +78,21 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     private GamepadEx chassisOp;
     private GamepadEx fourBarOp;
 
+    // Chassis Buttons
+    GamepadButton highSpeedButton;
+    GamepadButton lowSpeedButton;
+    GamepadButton disablePacmanButton;
+    GamepadButton enablePacmanButton;
+
+    // Four Bar Buttons
     GamepadButton armUpButton;
     GamepadButton armDownButton;
     GamepadButton homeButton;
     GamepadButton deliverButton;
 
-    public CDTeleop() {
-        super();
-
+    @Override
+    public void runOpMode() {
+        // Set up hardware
         // Initialize telemetry
         robotTelemetry = CDTelemetry.initialize(telemetry);
 
@@ -95,7 +101,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         fourBarOp = new GamepadEx(gamepad2);
 
         // Chassis Buttons
-        // TODO
+        highSpeedButton = chassisOp.getGamepadButton(GamepadKeys.Button.Y);
+        lowSpeedButton = chassisOp.getGamepadButton(GamepadKeys.Button.X);
+        disablePacmanButton = chassisOp.getGamepadButton(GamepadKeys.Button.A);
+        enablePacmanButton = chassisOp.getGamepadButton(GamepadKeys.Button.B);
 
         // Four Bar Buttons
         armUpButton = fourBarOp.getGamepadButton(GamepadKeys.Button.DPAD_UP);
@@ -105,14 +114,11 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
         // Initialize our classes to variables
         robotHardware = new CDHardware(hardwareMap);
-        fourBar = new CDFourBar(robotHardware);
+        grabber = new CDGrabber(robotHardware);
         arm = new CDArm(robotHardware);
         pickup = new CDPickup(robotHardware);
-        grabber = new CDGrabber(robotHardware);
-    }
+        fourBar = new CDFourBar(robotHardware);
 
-    @Override
-    public void runOpMode() {
         // Configure initial variables
         // TODO: if we want pacman model to be default this should be set to true
         constrainMovement = false;
@@ -130,10 +136,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         // Polling rate for logging gets set to zero before the while loop
         int i = 0;
 
-        while (opModeIsActive()) {
-            // Clear telemetry output on each loop
-            robotTelemetry.clearAll();
+        robotTelemetry.clearAll();
 
+        while (opModeIsActive()) {
             /******************************
              * GAMEPAD 2 CODE
              ******************************/
@@ -143,22 +148,13 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 robotTelemetry.addLine("DANGER: THE FOURBAR VALUES AREN'T CHANGING!");
                 robotTelemetry.update();
             }
-            //Refresh the fourbarposition and report threshold
-            fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts(); //Potentiometer voltage based
-            currentFourBarThreshold = fourBar.getFourBarCurrentThreshold();
-/*
-            //Refresh the armpostion and report threshold
-            armPosCurrent = arm.getArmPosition();
-            armCurrentThreshold = arm.armCurrentThreshold;
-*/
+
             double fourBarSpeed = fourBarOp.getLeftY();
             if (fourBarSpeed != 0) {
                 fourBar.setFourBarPower(fourBarSpeed * -1);//Remember on controller -y is up
             } else {
                 fourBar.setFourBarPower(0.0);
             }
-
-            fourBarPotCurrent = fourBar.getFourBarPotentiometerVolts();
 
             //arm vertical
             armVerticalPositionCurrent = arm.getArmVerticalPosition();
@@ -169,25 +165,22 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // Flip controls if the arm is rotated forward
             boolean invertVerticalPosition = armRotationPosition < INVERT_ARM_LIMIT;
 
-            armUpButton.whenPressed(
-                    new ArmMoveVertical(
-                            arm,
-                            armVerticalPositionCurrent + (invertVerticalPosition ? -ARM_VERTICAL_MOVE_SPEED : ARM_VERTICAL_MOVE_SPEED)
-                    )
-            );
-
-            armDownButton.whenPressed(
-                    new ArmMoveVertical(
-                            arm,
-                            armVerticalPositionCurrent + (invertVerticalPosition ? ARM_VERTICAL_MOVE_SPEED : -ARM_VERTICAL_MOVE_SPEED)
-                    )
-            );
+            if (armUpButton.get()) {
+                arm.setArmVerticalPosition(
+                        armVerticalPositionCurrent + (invertVerticalPosition ? -ARM_VERTICAL_MOVE_SPEED : ARM_VERTICAL_MOVE_SPEED)
+                );
+            } else if (armDownButton.get()) {
+                arm.setArmVerticalPosition(
+                        armVerticalPositionCurrent + (invertVerticalPosition ? ARM_VERTICAL_MOVE_SPEED : -ARM_VERTICAL_MOVE_SPEED)
+                );
+            }
 
             // arm rotate
             double rotationSpeed = fourBarOp.getRightX();
-            if (rotationSpeed > 0 && arm.isArmClearToRotateFree(fourBar, true)) {
+            boolean armClearToRotate = arm.isArmClearToRotateFree(fourBar, pickup.isPickupClosed);
+            if (rotationSpeed > 0 && armClearToRotate) {
                 arm.setArmRotationPosition(armRotationPosition + ARM_ROTATION_MOVE_SPEED);
-            } else if (rotationSpeed < 0 && arm.isArmClearToRotateFree(fourBar, true)) {
+            } else if (rotationSpeed < 0 && armClearToRotate) {
                 arm.setArmRotationPosition(armRotationPosition - ARM_ROTATION_MOVE_SPEED);
             }
 
@@ -196,9 +189,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double closePickupSpeed = fourBarOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
             pickupPositionCurrent = pickup.getServoPosition();
             if (openPickupSpeed > 0) {
-                pickup.setServoPosition(pickupPositionCurrent + PICKUP_MOVE_SPEED);
+                pickup.release();
             } else if (closePickupSpeed > 0) {
-                pickup.setServoPosition(pickupPositionCurrent - PICKUP_MOVE_SPEED);
+                pickup.pickup();
             }
 
             // Extend
@@ -224,6 +217,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             //Go HOME (Back pickup position between fourbars)
             homeButton.whenPressed(new MoveToHome(fourBar, arm, pickup));
             deliverButton.whenPressed(new MoveToDeliver(fourBar, arm, pickup));
+
+            // To handle whileHeld and whenPressed conditions
+            CommandScheduler.getInstance().run();
 
             // End Gamepad 2
 
@@ -253,19 +249,18 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 // Everything gamepad 1:
                 // User controls for the robot speed overall
                 // TODO: The else overrides the robot speed
-                if (chassisOp.getButton(GamepadKeys.Button.Y)) {
+                if (highSpeedButton.get()) {
                     robotSpeed = baseSpeed * 1.5;
-                } else if (chassisOp.getButton(GamepadKeys.Button.X)) {
+                } else if (lowSpeedButton.get()) {
                     robotSpeed = baseSpeed * .4;
                 } else {
                     robotSpeed = baseSpeed;
                 }
 
-                if (chassisOp.getButton(GamepadKeys.Button.A)) {
+                if (disablePacmanButton.get()) {
                     //Button A = unconstrained movement
                     constrainMovement = false;
-                }
-                if (chassisOp.getButton(GamepadKeys.Button.B)) {
+                } else if (enablePacmanButton.get()) {
                     //Button B = constrained movement
                     constrainMovement = true;
                     // Flip the boolean to toggle modes for drive constraints
@@ -309,11 +304,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         telemetry.addData("motorRF ", "%.2f", rightFrontPower);
         telemetry.addData("motorLR ", "%.2f", leftRearPower);
         telemetry.addData("motorRR ", "%.2f", rightRearPower);
-        telemetry.addData("FourbarPotCurrent", "%.2f", fourBarPotCurrent);
-        telemetry.addData("CurrFourbarThreshold", "%.2f", currentFourBarThreshold);
+        // telemetry.addData("FourbarPotCurrent", "%.2f", fourBarPotCurrent);
         telemetry.addData("fourbarerror", fourBarError);
         double fourbarPositiontoRotateHOME = .8;
-        telemetry.addData("FourBarPotUnderHome", (fourBarPotCurrent < fourbarPositiontoRotateHOME));
+        // telemetry.addData("FourBarPotUnderHome", (fourBarPotCurrent < fourbarPositiontoRotateHOME));
         //telemetry.addData("CurrArmThresh", "%.2f", armCurrentThreshold);
         //telemetry.addData("CurrArmDownThresh", "%.2f", armDownThresh);
         //telemetry.addData("ArmPosition", armPosCurrent);

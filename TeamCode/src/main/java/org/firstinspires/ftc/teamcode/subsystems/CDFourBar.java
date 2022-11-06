@@ -5,149 +5,124 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.CDHardware;
 import org.firstinspires.ftc.teamcode.util.CDRuntime;
+import org.firstinspires.ftc.teamcode.util.CDTelemetry;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
+
+import java.util.Objects;
 
 public class CDFourBar extends SubsystemBase {
     private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .7;
-    // TODO: Get the correct value for this
-    private final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.25;
-    // TODO Get the correct value for this
+    private final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.18;
     private final static double ABSOLUTE_LOWER_BOUND_VOLTS = 0.23;
-    private final static double LOW_SPEED_UPPER_BOUND_VOLTS = 1.15;
-    private final static double LOW_SPEED_LOWER_BOUND_VOLTS = 0.33;
+    private final static double LOW_SPEED_UPPER_BOUND_VOLTS = 1.08;
+    private final static double LOW_SPEED_LOWER_BOUND_VOLTS = 0.34;
+
     // Define variables for Home Positions. HOME is back pickup position between fourbars.
-    public final static double LOWER_POSITION_HOME = 0.23;
-    public final static double MIDDLE_POSITION_HOME = 0.8; //
+    public final static double LOWER_POSITION_HOME = ABSOLUTE_LOWER_BOUND_VOLTS;
+    public final static double MIDDLE_POSITION_HOME = 0.8;
     public final static double ARM_CLEARED_POSITION_HOME = 0.8; // 0.6 when loaded
     private final static double POTENTIOMETER_THRESHOLD_PRECISION = 0.05;
+    private final static double TIMEOUT_MS = 2000;
 
     private final AnalogInput fourBarPotentiometer;
     private final CDRuntime runtime = new CDRuntime();
     private final DcMotor fourBarMotor;
+    private final Telemetry robotTelemetry;
 
-    public boolean fourBarStop;
-    public double fourBarPositionCurrent;
+    public boolean autonMode;
     public double fourBarPositionLast;
-    public double FOURBAR_CURRENT_THRESHOLD;
 
     public CDFourBar(CDHardware theHardware) {
+        autonMode = false;
+
         fourBarMotor = theHardware.fourBarMotor;
         fourBarPotentiometer = theHardware.fourBarPotentiometer;
+        robotTelemetry = CDTelemetry.getInstance();
 
         fourBarMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        fourBarMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fourBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         fourBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        setFourBarPosition(LOWER_POSITION_HOME);
     }
 
     public void setFourBarPower(double pow) {
-        double potentiometerVolts = getFourBarPotentiometerVolts();
-
-        if (potentiometerVolts >= LOW_SPEED_UPPER_BOUND_VOLTS || potentiometerVolts <= LOW_SPEED_LOWER_BOUND_VOLTS) {
-            pow = pow * 0.5;
+        robotTelemetry.addData("fb in range", isInRange());
+        robotTelemetry.addData("fb power", "%.2f", pow);
+        robotTelemetry.update();
+        if (!isInRange() && pow != 0) {
+            pow = 0;
         }
 
-        if (
-                (potentiometerVolts >= ABSOLUTE_UPPER_BOUND_VOLTS && pow > 0) ||
-                (potentiometerVolts <= ABSOLUTE_LOWER_BOUND_VOLTS && pow < 0)
-        ) {
-            pow = 0;
+        if (isInSlowRange()) {
+            pow = pow * 0.5;
         }
 
         fourBarMotor.setPower(pow * FOUR_BAR_SLOW_SPEED_MULTIPLIER);
     }
 
-    public double getFourBarPotentiometerVolts() {
+    public double getFourBarPosition() {
         // Reference https://docs.revrobotics.com/potentiometer/untitled-1#calculating-the-relationship-between-voltage-and-angle
         return fourBarPotentiometer.getVoltage();
     }
 
-    // create variable for counts per motor rev for the fourbar
-    //static final double COUNTS_PER_FOURBAR_MOTOR_REV = 288; //Core Hex Motor
-    //static final double DRIVE_GEAR_REDUCTION = .52; //This is greater than 1 if geared up
-
-    public boolean setFourBarDirection(String fourBarLocationTarget, boolean autonMode) {
+    /* public boolean setFourBarDirection(String fourBarLocationTarget) {
         // This method will return false for successful turn or true for an error.
         boolean fourBarError = false;
         //TODO  NEED ROBOT: Update fourbarpostarget values below to match readings from robot
-        if (fourBarLocationTarget == "ground") {
-            fourBarError = setFourBarPosition(.29, autonMode);
-        } else if (fourBarLocationTarget == "low") {
-            fourBarError = setFourBarPosition(.58, autonMode);
-        } else if (fourBarLocationTarget == "medium") {
-            fourBarError = setFourBarPosition(2.47, autonMode);
-        } else if (fourBarLocationTarget == "high") {
-            fourBarError = setFourBarPosition(2.87, autonMode);
+        if (Objects.equals(fourBarLocationTarget, "ground")) {
+            fourBarError = setFourBarPosition(.29);
+        } else if (Objects.equals(fourBarLocationTarget, "low")) {
+            fourBarError = setFourBarPosition(.58);
+        } else if (Objects.equals(fourBarLocationTarget, "medium")) {
+            fourBarError = setFourBarPosition(2.47);
+        } else if (Objects.equals(fourBarLocationTarget, "high")) {
+            fourBarError = setFourBarPosition(2.87);
         }
         return fourBarError;
-    }
+    } */
 
-    public synchronized boolean setFourBarPosition(double fourBarPositionTarget, boolean autonMode) {
-        // This method will return false for successful turn or true for an error.
+    public boolean setFourBarPosition(double fourBarPositionTarget) {
+        // This method will return true for successful turn or false for an error.
         // TODO: Need to confirm threshold is good
-        final double FOURBAR_THRESHOLD_POS = 0.1; // volts
+        double FOURBAR_THRESHOLD_DELTA = 0.01;
+
         double fourBarSpeedMultiple; // to set the  speed of the fourbar
+        double fourBarPositionDelta;
         runtime.reset();
-        fourBarStop = false; // initially we want the fourbar to move for the while loop
-        fourBarPositionCurrent = 0; //updates every loop at the end, zero to start while loop for comparison
-        while (!fourBarStop) {
-            //This gets the current fourbar position and sets it to a variable
-            //TODO Check if 2 is long enough for timeout here???
-            int fourBarTimeout = 2;
-            if (runtime.seconds() > fourBarTimeout) {
-                return false;
+        while (true) {
+            //TODO Check if 2000 is long enough for timeout here???
+            if (runtime.isTimedOutMs(TIMEOUT_MS)) {
+                return true;
             }
-            fourBarPositionLast = getFourBarPotentiometerVolts(); //updates every loop for the position going into the move.
-//            if (fourbarposcurrent == fourbarposlast) {
-//                fourbarstop = true;
-//                return true; // There was an error, the value didn't change.
-//            };
-            FOURBAR_CURRENT_THRESHOLD = Math.abs(fourBarPositionLast - fourBarPositionTarget); // Check the current gap between target and current position
-            //TODO Confirm tolerance of .06 is good. Below uses values of .03 and .01 - Is the slow code ever used?
-            if (FOURBAR_CURRENT_THRESHOLD <= .06) { // Stop tolerance
+            fourBarPositionDelta = Math.abs(getFourBarPosition() - fourBarPositionTarget); // Check the current gap between target and current position
+            robotTelemetry.addData("position", "%.2f", getFourBarPosition());
+            robotTelemetry.addData("target", "%.2f", fourBarPositionTarget);
+            robotTelemetry.addData("delta", "%.2f", fourBarPositionDelta);
+            robotTelemetry.update();
+            if (fourBarPositionDelta <= FOURBAR_THRESHOLD_DELTA) { // Stop tolerance
                 setFourBarPower(0.0); // need to stop the fourbar before leaving the loop
-                fourBarStop = true; // leave the while loop
-                return false;
+                return true;
             }
-            if (autonMode) {
-                fourBarSpeedMultiple = 1.0; // Run full speed or do the ifs
+
+            if (fourBarPositionDelta <= 0.03) {
+                fourBarSpeedMultiple = autonMode ? 0.8 : 0.6;
+            } else if (fourBarPositionDelta <= 0.01) {
+                fourBarSpeedMultiple = autonMode ? 0.3 : 0.2;
             } else {
-                fourBarSpeedMultiple = 0.8;
+                fourBarSpeedMultiple = autonMode ? 1 : 0.8;
             }
-            if (FOURBAR_CURRENT_THRESHOLD <= .03) { // Prepare to slow tolerance
-                if (autonMode) {
-                    fourBarSpeedMultiple = .8; // Prepare to slow
-                } else {
-                    fourBarSpeedMultiple = .6; // Prepare to slow
-                }
-            } else if (FOURBAR_CURRENT_THRESHOLD <= .01) { // Prepare to stop tolerance
-                // Do this before we stop
-                if (autonMode) {
-                    fourBarSpeedMultiple = .3; // Prepare to stop
-                } else {
-                    fourBarSpeedMultiple = .3;
-                }
-            }
+
             //TODO: Check if -1 or 1 needed here to make it move in the correct direction
             if (fourBarPositionLast > fourBarPositionTarget) {
                 setFourBarPower(-1 * fourBarSpeedMultiple);
-                fourBarStop = false;
             } else if (fourBarPositionLast < fourBarPositionTarget) {
                 setFourBarPower(1 * fourBarSpeedMultiple);
-                fourBarStop = false;
             }
-            fourBarPositionCurrent = getFourBarPotentiometerVolts(); //updates every loop to see where we landed for lockup detection.
         }
-        return false; // Returns false if successfully made the moves, no error.
-    }
-
-    public double getFourBarPosition() {
-        return fourBarMotor.getCurrentPosition();
-    }
-
-    public double getFourBarCurrentThreshold() {
-        return this.FOURBAR_CURRENT_THRESHOLD;
     }
 
     public boolean isFourbarHome() {
@@ -156,5 +131,18 @@ public class CDFourBar extends SubsystemBase {
                 LOWER_POSITION_HOME + POTENTIOMETER_THRESHOLD_PRECISION,
                 getFourBarPosition()
         );
+    }
+
+    private boolean isInRange() {
+        return MathUtils.isWithinRange(
+                ABSOLUTE_LOWER_BOUND_VOLTS,
+                ABSOLUTE_UPPER_BOUND_VOLTS,
+                getFourBarPosition()
+        );
+    }
+
+    private boolean isInSlowRange() {
+        double currentPosition = getFourBarPosition();
+        return currentPosition >= LOW_SPEED_UPPER_BOUND_VOLTS || currentPosition <= LOW_SPEED_LOWER_BOUND_VOLTS;
     }
 }

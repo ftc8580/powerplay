@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.CDPickup;
 public class MoveToHome extends SequentialCommandGroup {
     public MoveToHome(CDFourBar fourBar, CDArm arm, CDPickup pickup) {
         addCommands(
-                new MoveFourBarToClear(arm, fourBar, true, true),
+                new MoveFourBarToClear(arm, fourBar, true, pickup.isPickupClosed),
                 new ArmVerticalHome(arm),
                 new ArmRotateHome(arm),
                 new MoveFourBarToHome(arm, fourBar)

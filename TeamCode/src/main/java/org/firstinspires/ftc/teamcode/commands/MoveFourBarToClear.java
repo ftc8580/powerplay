@@ -2,13 +2,15 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.CDArm;
 import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
+import org.firstinspires.ftc.teamcode.util.CDTelemetry;
 
 public class MoveFourBarToClear extends CommandBase {
     private final CDArm arm;
     private final CDFourBar fourBar;
-    private boolean isMotorRunning;
+    private final Telemetry robotTelemetry;
     private final boolean mustBeInside;
     private final boolean conePickedUp;
 
@@ -17,28 +19,31 @@ public class MoveFourBarToClear extends CommandBase {
         this.fourBar = fourBar;
         this.mustBeInside = mustBeInside;
         this.conePickedUp = conePickedUp;
+        this.robotTelemetry = CDTelemetry.getInstance();
         addRequirements(arm, fourBar);
     }
 
     @Override
-    public void initialize() {
-        isMotorRunning = true;
-    }
-
-    @Override
     public void execute() {
+        /* robotTelemetry.addData("Moving to clear?", !arm.isArmClearToRotateFree(fourBar, conePickedUp) &&
+                (!mustBeInside || !arm.isArmInsideFourBar()) &&
+                fourBar.getFourBarPosition() < CDFourBar.ARM_CLEARED_POSITION_HOME);
+        robotTelemetry.update();
         if (
                 !arm.isArmClearToRotateFree(fourBar, conePickedUp) &&
                 (!mustBeInside || !arm.isArmInsideFourBar()) &&
                 fourBar.getFourBarPosition() < CDFourBar.ARM_CLEARED_POSITION_HOME
         ) {
-            fourBar.setFourBarPosition(CDFourBar.ARM_CLEARED_POSITION_HOME, false);
-            isMotorRunning = false;
-        }
+            robotTelemetry.addLine("Moving to clear!!!");
+            robotTelemetry.update();
+            fourBar.setFourBarPosition(CDFourBar.ARM_CLEARED_POSITION_HOME);
+        } */
+
+        fourBar.setFourBarPosition(CDFourBar.ARM_CLEARED_POSITION_HOME);
     }
 
     @Override
     public boolean isFinished() {
-        return !isMotorRunning;
+        return true;
     }
 }

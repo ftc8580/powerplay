@@ -16,7 +16,7 @@ public class FourBarSetPosition extends CommandBase {
 
     @Override
     public void execute() {
-        fourBar.setFourBarPower(targetPosition > 0 ? 1 : -1);
+        fourBar.setFourBarPosition(targetPosition);
     }
 
     @Override

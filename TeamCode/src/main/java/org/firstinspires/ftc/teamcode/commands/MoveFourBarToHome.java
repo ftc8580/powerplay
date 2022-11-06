@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 public class MoveFourBarToHome extends CommandBase {
     private final CDArm arm;
     private final CDFourBar fourBar;
-    private boolean isMotorRunning;
 
     public MoveFourBarToHome(CDArm subsystem, CDFourBar fourBar) {
         this.arm = subsystem;
@@ -17,18 +16,12 @@ public class MoveFourBarToHome extends CommandBase {
     }
 
     @Override
-    public void initialize() {
-        isMotorRunning = true;
-    }
-
-    @Override
     public void execute() {
-        fourBar.setFourBarPosition(CDFourBar.LOWER_POSITION_HOME, false);
-        isMotorRunning = false;
+        fourBar.setFourBarPosition(CDFourBar.LOWER_POSITION_HOME);
     }
 
     @Override
     public boolean isFinished() {
-        return !isMotorRunning;
+        return true;
     }
 }

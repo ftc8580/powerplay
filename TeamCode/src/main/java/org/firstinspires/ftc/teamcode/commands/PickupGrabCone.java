@@ -17,9 +17,9 @@ public class PickupGrabCone extends CommandBase {
 
     @Override
     public void initialize() {
-        targetTimeMs = pickup.getSweepTimeMs(0);
+        targetTimeMs = pickup.getSweepTimeMs(CDPickup.CLOSED_POSITION);
         runtime.reset();
-        pickup.setServoPosition(0);
+        pickup.pickup();
     }
 
     @Override
