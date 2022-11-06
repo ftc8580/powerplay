@@ -92,6 +92,29 @@ public class CDArm extends SubsystemBase {
         verticalServo.setPosition(armVerticalPositionTarget);
     }
 
+    public void setArmVerticalPositionSafe(CDFourBar fourBar, double armVerticalPositionTarget) {
+        if (isVerticalMoveWithinSafeRange(fourBar, armVerticalPositionTarget)) {
+            verticalServo.setPosition(armVerticalPositionTarget);
+        } else if (isArmFront()) {
+            // TODO: Figure out what needs to happen here
+        } else if (isArmBack()) {
+            verticalServo.setPosition(getArmVerticalPositionMinimum(fourBar));
+        } else {
+            verticalServo.setPosition(0.68);
+        }
+    }
+
+    private boolean isVerticalMoveWithinSafeRange(CDFourBar fourBar, double target) {
+        if (isArmFront()) {
+            // TODO: Determine safe range
+            return true;
+        } else if (isArmBack()) {
+            return target >= getArmVerticalPositionMinimum(fourBar);
+        } else {
+            return target <= 0.68;
+        }
+    }
+
     public void setArmRotationPosition(double armRotationPositionTarget) {
         rotationServo.setPosition(armRotationPositionTarget);
     }
