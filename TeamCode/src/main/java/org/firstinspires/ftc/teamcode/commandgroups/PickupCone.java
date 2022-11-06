@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.CDPickup;
 
 public class PickupCone extends SequentialCommandGroup {
     public PickupCone(CDArm arm, CDPickup pickup) {
+        // TODO: ensure fourbar is at 0.23 before execution
         addCommands(
                 new ArmPickupLowPosition(arm),
                 new PickupGrabCone(pickup),

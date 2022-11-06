@@ -24,3 +24,8 @@ public class MoveToHome extends SequentialCommandGroup {
         addRequirements(fourBar, arm, pickup);
     }
 }
+
+/*
+1. Move to home up position
+  * check if arm is clear to rotate and arm inside four bar
+ */

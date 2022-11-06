@@ -32,6 +32,9 @@ public class CDArm extends SubsystemBase {
     public static final double ARM_ROTATION_POSITION_BACK = 0.333;
     public static final double ARM_ROTATION_POSITION_HOME = ARM_ROTATION_POSITION_BACK;
 
+    public static final double ALLEY_DELIVERY_LEFT_ROTATION = 0.43;
+    public static final double ALLEY_DELIVERY_RIGHT_ROTATION = 0.19;
+
     // Define variables for rotation positions
     public static final double ARM_VERTICAL_POSITION_HOME = 0.415;
     public static final double ARM_VERTICAL_PICKUP_LOW_POSITION = 0.555;
@@ -39,6 +42,7 @@ public class CDArm extends SubsystemBase {
     private static final double ARM_ADD_TO_DROP_HEIGHT_CLEAR = 0.05;
 
     // Define scale ranges
+    // TODO: Need to scale differently in different places. Need new variables?
     private static final double VERTICAL_SCALE_RANGE_MIN = 0.4;
     private static final double VERTICAL_SCALE_RANGE_MAX = 0.8;
     private static final double ROTATION_SCALE_RANGE_MIN = 0.15;
@@ -92,7 +96,16 @@ public class CDArm extends SubsystemBase {
         rotationServo.setPosition(armRotationPositionTarget);
     }
 
-    public boolean isArmInsideFourBar() {
+    // TODO: Use left and right bumpers
+    public void setArmDeliveryLeft() {
+        setArmRotationPosition(ALLEY_DELIVERY_LEFT_ROTATION);
+    }
+
+    public void setArmDeliveryRight() {
+        setArmRotationPosition(ALLEY_DELIVERY_RIGHT_ROTATION);
+    }
+
+    public boolean isArmRotationInsideFourBar() {
         return MathUtils.isWithinRange(
                 ARM_ROTATION_RANGE_INSIDE_FOURBAR_LOW,
                 ARM_ROTATION_RANGE_INSIDE_FOURBAR_HIGH,
@@ -174,11 +187,11 @@ public class CDArm extends SubsystemBase {
     }
 
     private double getThresholdPrecision() {
-        return isArmInsideFourBar() ? 0.0008 : 0.02;
+        return isArmRotationInsideFourBar() ? 0.0008 : 0.02;
     }
 
     private double getArmVerticalPositionMinimum(CDFourBar fourBar) {
-        return isArmInsideFourBar() ? 0.38 * fourBar.getFourBarPosition() + 0.52 : 0;
+        return isArmRotationInsideFourBar() ? 0.38 * fourBar.getFourBarPosition() + 0.52 : 0;
     }
 
     // TODO: Revert back to private

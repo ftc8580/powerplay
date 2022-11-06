@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.util.CDTelemetry;
 public class CDTeleop extends LinearOpMode implements Runnable {
     // Static variables for tuning
     private static final double INVERT_ARM_LIMIT = 0.63;
-    private static final double ARM_ROTATION_MOVE_SPEED = 0.01;
-    private static final double ARM_VERTICAL_MOVE_SPEED = 0.003;
+    private static final double ARM_ROTATION_MOVE_SPEED = 0.001;
+    private static final double ARM_VERTICAL_MOVE_SPEED = 0.008;
     private static final double GRABBER_EXTEND_MOVE_SPEED = 0.02;
     private static final double GRABBER_GRAB_MOVE_SPEED = 0.02;
 
@@ -32,7 +32,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     // Initialize our local variables with values
     // The baseSpeed "slow" variable is used to control the overall speed of the robot
     // TODO: Work with Drive Team to determine
-    public double baseSpeed = 0.50;
+    public double baseSpeed = 0.90;
 
     // Initialize our local variables for use later in telemetry or other methods
     //Drive variables
@@ -88,6 +88,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     GamepadButton armDownButton;
     GamepadButton homeButton;
     GamepadButton deliverButton;
+    GamepadButton deliveryArmLeftButton;
+    GamepadButton deliveryArmRightButton;
 
     @Override
     public void runOpMode() {
@@ -110,6 +112,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         armDownButton = fourBarOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
         homeButton = fourBarOp.getGamepadButton(GamepadKeys.Button.A);
         deliverButton = fourBarOp.getGamepadButton(GamepadKeys.Button.Y);
+        deliveryArmLeftButton = fourBarOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
+        deliveryArmRightButton = fourBarOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
 
         // Initialize our classes to variables
         robotHardware = new CDHardware(hardwareMap);
@@ -183,6 +187,12 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 arm.setArmRotationPosition(armRotationPosition - ARM_ROTATION_MOVE_SPEED);
             }
 
+            if (deliveryArmLeftButton.get()) {
+                arm.setArmDeliveryLeft();
+            } else if (deliveryArmRightButton.get()) {
+                arm.setArmDeliveryRight();
+            }
+
             // Pickup
             double openPickupSpeed = fourBarOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
             double closePickupSpeed = fourBarOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
@@ -246,9 +256,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             while (opModeIsActive()) {
                 // Everything gamepad 1:
                 // User controls for the robot speed overall
-                // TODO: The else overrides the robot speed
                 if (highSpeedButton.get()) {
-                    robotSpeed = baseSpeed * 1.5;
+                    robotSpeed = baseSpeed * 1.1;
                 } else if (lowSpeedButton.get()) {
                     robotSpeed = baseSpeed * .4;
                 } else {
@@ -266,7 +275,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 }
 
                 double strafeSpeed = chassisOp.getLeftX() * robotSpeed;
-                double forwardSpeed = chassisOp.getLeftY() * robotSpeed;
+                double forwardSpeed = chassisOp.getLeftY() * -1 * robotSpeed;
                 double turnSpeed = chassisOp.getRightX() * robotSpeed;
 
                 if (constrainMovement) {
