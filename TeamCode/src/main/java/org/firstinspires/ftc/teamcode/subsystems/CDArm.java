@@ -96,7 +96,6 @@ public class CDArm extends SubsystemBase {
         rotationServo.setPosition(armRotationPositionTarget);
     }
 
-    // TODO: Use left and right bumpers
     public void setArmDeliveryLeft() {
         setArmRotationPosition(ALLEY_DELIVERY_LEFT_ROTATION);
     }
@@ -183,6 +182,14 @@ public class CDArm extends SubsystemBase {
                 clearToRotatePosition - precision,
                 clearToRotatePosition + precision,
                 getArmRotationPosition()
+        );
+    }
+
+    public boolean isArmVerticalWithinFourBar(CDFourBar fourBar, boolean isPickupClosed) {
+        return MathUtils.isWithinRange(
+                getArmVerticalPositionMinimum(fourBar),
+                getArmVerticalClearToRotatePosition(fourBar, isPickupClosed),
+                getArmVerticalPosition()
         );
     }
 
