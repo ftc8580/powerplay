@@ -5,6 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.subsystems.CDArm;
+import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
+import org.firstinspires.ftc.teamcode.subsystems.CDPickup;
 //
 //import org.firstinspires.ftc.robotcore.external.ClassFactory;
 //import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -97,7 +101,7 @@ public class CDAutonBase extends LinearOpMode {
         //double moveBackTimer = -1;
         myHardware = new CDHardware(hardwareMap);
         myChassis = new CDDriveChassisAuton(myHardware);
-        myFourbar = new CDFourBar(myHardware);
+        myFourbar = new CDFourBar(hardwareMap);
         myArm = new CDArm(myHardware);
         myPickup = new CDPickup(myHardware);
 
