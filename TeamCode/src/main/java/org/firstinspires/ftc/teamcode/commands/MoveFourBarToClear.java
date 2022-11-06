@@ -25,10 +25,6 @@ public class MoveFourBarToClear extends CommandBase {
 
     @Override
     public void execute() {
-        /* robotTelemetry.addData("Moving to clear?", !arm.isArmClearToRotateFree(fourBar, conePickedUp) &&
-                (!mustBeInside || !arm.isArmInsideFourBar()) &&
-                fourBar.getFourBarPosition() < CDFourBar.ARM_CLEARED_POSITION_HOME);
-        robotTelemetry.update();
         if (
                 !arm.isArmClearToRotateFree(fourBar, conePickedUp) &&
                 (!mustBeInside || !arm.isArmInsideFourBar()) &&
@@ -37,9 +33,7 @@ public class MoveFourBarToClear extends CommandBase {
             robotTelemetry.addLine("Moving to clear!!!");
             robotTelemetry.update();
             fourBar.setFourBarPosition(CDFourBar.ARM_CLEARED_POSITION_HOME);
-        } */
-
-        fourBar.setFourBarPosition(CDFourBar.ARM_CLEARED_POSITION_HOME);
+        }
     }
 
     @Override

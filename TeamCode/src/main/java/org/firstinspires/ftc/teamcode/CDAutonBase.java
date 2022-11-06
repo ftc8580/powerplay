@@ -101,7 +101,7 @@ public class CDAutonBase extends LinearOpMode {
         //double moveBackTimer = -1;
         myHardware = new CDHardware(hardwareMap);
         myChassis = new CDDriveChassisAuton(myHardware);
-        myFourbar = new CDFourBar(myHardware);
+        myFourbar = new CDFourBar(hardwareMap);
         myArm = new CDArm(myHardware);
         myPickup = new CDPickup(myHardware);
 

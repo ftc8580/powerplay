@@ -1,17 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.CDHardware;
 import org.firstinspires.ftc.teamcode.util.CDRuntime;
-import org.firstinspires.ftc.teamcode.util.CDTelemetry;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
-
-import java.util.Objects;
 
 public class CDFourBar extends SubsystemBase {
     private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .7;
@@ -25,43 +20,48 @@ public class CDFourBar extends SubsystemBase {
     public final static double MIDDLE_POSITION_HOME = 0.8;
     public final static double ARM_CLEARED_POSITION_HOME = 0.8; // 0.6 when loaded
     private final static double POTENTIOMETER_THRESHOLD_PRECISION = 0.05;
-    private final static double TIMEOUT_MS = 2000;
+    public final static double TIMEOUT_MS = 2000;
 
     private final AnalogInput fourBarPotentiometer;
     private final CDRuntime runtime = new CDRuntime();
-    private final DcMotor fourBarMotor;
-    private final Telemetry robotTelemetry;
+    private final Motor fourBarMotor;
 
     public boolean autonMode;
-    public double fourBarPositionLast;
 
-    public CDFourBar(CDHardware theHardware) {
+    public CDFourBar(HardwareMap hardwareMap) {
         autonMode = false;
 
-        fourBarMotor = theHardware.fourBarMotor;
-        fourBarPotentiometer = theHardware.fourBarPotentiometer;
-        robotTelemetry = CDTelemetry.getInstance();
+        fourBarMotor = new Motor(hardwareMap, "motorFourBar");
+        fourBarPotentiometer = hardwareMap.get(AnalogInput.class, "fourBarPos");
 
-        fourBarMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        fourBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fourBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fourBarMotor.setRunMode(Motor.RunMode.RawPower);
+        fourBarMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         setFourBarPosition(LOWER_POSITION_HOME);
     }
 
+    public void moveUp() {
+        setFourBarPower(-1);
+    }
+
+    public void moveDown() {
+        setFourBarPower(1);
+    }
+
+    public void stop() {
+        fourBarMotor.stopMotor();
+    }
+
     public void setFourBarPower(double pow) {
-        robotTelemetry.addData("fb in range", isInRange());
-        robotTelemetry.addData("fb power", "%.2f", pow);
-        robotTelemetry.update();
         if (!isInRange() && pow != 0) {
-            pow = 0;
+            return;
         }
 
         if (isInSlowRange()) {
             pow = pow * 0.5;
         }
 
-        fourBarMotor.setPower(pow * FOUR_BAR_SLOW_SPEED_MULTIPLIER);
+        fourBarMotor.set(pow * FOUR_BAR_SLOW_SPEED_MULTIPLIER);
     }
 
     public double getFourBarPosition() {
@@ -85,44 +85,18 @@ public class CDFourBar extends SubsystemBase {
         return fourBarError;
     } */
 
-    public boolean setFourBarPosition(double fourBarPositionTarget) {
+    public boolean setFourBarPosition(double positionTarget) {
         // This method will return true for successful turn or false for an error.
-        // TODO: Need to confirm threshold is good
-        double FOURBAR_THRESHOLD_DELTA = 0.01;
 
-        double fourBarSpeedMultiple; // to set the  speed of the fourbar
-        double fourBarPositionDelta;
-        runtime.reset();
-        while (true) {
-            //TODO Check if 2000 is long enough for timeout here???
-            if (runtime.isTimedOutMs(TIMEOUT_MS)) {
-                return true;
-            }
-            fourBarPositionDelta = Math.abs(getFourBarPosition() - fourBarPositionTarget); // Check the current gap between target and current position
-            robotTelemetry.addData("position", "%.2f", getFourBarPosition());
-            robotTelemetry.addData("target", "%.2f", fourBarPositionTarget);
-            robotTelemetry.addData("delta", "%.2f", fourBarPositionDelta);
-            robotTelemetry.update();
-            if (fourBarPositionDelta <= FOURBAR_THRESHOLD_DELTA) { // Stop tolerance
-                setFourBarPower(0.0); // need to stop the fourbar before leaving the loop
-                return true;
-            }
-
-            if (fourBarPositionDelta <= 0.03) {
-                fourBarSpeedMultiple = autonMode ? 0.8 : 0.6;
-            } else if (fourBarPositionDelta <= 0.01) {
-                fourBarSpeedMultiple = autonMode ? 0.3 : 0.2;
-            } else {
-                fourBarSpeedMultiple = autonMode ? 1 : 0.8;
-            }
-
-            //TODO: Check if -1 or 1 needed here to make it move in the correct direction
-            if (fourBarPositionLast > fourBarPositionTarget) {
-                setFourBarPower(-1 * fourBarSpeedMultiple);
-            } else if (fourBarPositionLast < fourBarPositionTarget) {
-                setFourBarPower(1 * fourBarSpeedMultiple);
+        while (!isArrivedAtTarget(positionTarget) && !runtime.isTimedOutMs(TIMEOUT_MS)) {
+            if (getFourBarPosition() > positionTarget) {
+                moveUp();
+            } else if (getFourBarPosition() < positionTarget) {
+                moveDown();
             }
         }
+        stop();
+        return true;
     }
 
     public boolean isFourbarHome() {
@@ -130,6 +104,17 @@ public class CDFourBar extends SubsystemBase {
                 LOWER_POSITION_HOME - POTENTIOMETER_THRESHOLD_PRECISION,
                 LOWER_POSITION_HOME + POTENTIOMETER_THRESHOLD_PRECISION,
                 getFourBarPosition()
+        );
+    }
+
+    private boolean isArrivedAtTarget(double target) {
+        // TODO: Need to confirm threshold is good
+        double FOURBAR_THRESHOLD_DELTA = 0.01;
+
+        return MathUtils.isWithinRange(
+                -FOURBAR_THRESHOLD_DELTA,
+                FOURBAR_THRESHOLD_DELTA,
+                Math.abs(getFourBarPosition() - target)
         );
     }
 

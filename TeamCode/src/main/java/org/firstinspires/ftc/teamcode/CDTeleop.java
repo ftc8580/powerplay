@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.commandgroups.FourBarTest;
 import org.firstinspires.ftc.teamcode.commandgroups.MoveToDeliver;
 import org.firstinspires.ftc.teamcode.commandgroups.MoveToHome;
 import org.firstinspires.ftc.teamcode.commands.ArmMoveVertical;
@@ -117,7 +118,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         grabber = new CDGrabber(robotHardware);
         arm = new CDArm(robotHardware);
         pickup = new CDPickup(robotHardware);
-        fourBar = new CDFourBar(robotHardware);
+        fourBar = new CDFourBar(hardwareMap);
 
         // Configure initial variables
         // TODO: if we want pacman model to be default this should be set to true
@@ -151,7 +152,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
             double fourBarSpeed = fourBarOp.getLeftY();
             if (fourBarSpeed != 0) {
-                fourBar.setFourBarPower(fourBarSpeed * -1);//Remember on controller -y is up
+                fourBar.setFourBarPower(fourBarSpeed);//Remember on controller -y is up
             } else {
                 fourBar.setFourBarPower(0.0);
             }

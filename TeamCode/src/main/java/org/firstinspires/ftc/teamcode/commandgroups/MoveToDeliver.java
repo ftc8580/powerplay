@@ -14,10 +14,10 @@ public class MoveToDeliver extends SequentialCommandGroup {
     public MoveToDeliver(CDFourBar fourBar, CDArm arm, CDPickup pickup) {
         addCommands(
                 new ArmVerticalHome(arm),
-                new FourBarSetPosition(fourBar, 0.8)
+                new FourBarSetPosition(fourBar, CDFourBar.ARM_CLEARED_POSITION_HOME),
                 // new MoveFourBarToClear(arm, fourBar, false, pickup.isPickupClosed),
-                // new ArmMoveRotate(arm, fourBar, CDArm.ARM_ROTATION_POSITION_FRONT),
-                // new FourBarSetPosition(fourBar, CDFourBar.MIDDLE_POSITION_HOME)
+                new ArmMoveRotate(arm, fourBar, CDArm.ARM_ROTATION_POSITION_FRONT),
+                new FourBarSetPosition(fourBar, 1) // CDFourBar.MIDDLE_POSITION_HOME
         );
         addRequirements(fourBar, arm, pickup);
     }

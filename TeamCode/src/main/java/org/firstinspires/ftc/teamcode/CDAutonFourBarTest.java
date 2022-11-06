@@ -15,7 +15,7 @@ public class CDAutonFourBarTest extends CommandOpMode {
     public void initialize() {
         CDHardware hardware = new CDHardware(hardwareMap);
         arm = new CDArm(hardware);
-        fourBar = new CDFourBar(hardware);
+        fourBar = new CDFourBar(hardwareMap);
         testCommandGroup = new FourBarTest(fourBar, arm);
 
         schedule(testCommandGroup);
