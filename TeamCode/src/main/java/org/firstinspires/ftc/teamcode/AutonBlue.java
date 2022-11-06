@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.CDAutonBase;
 import org.firstinspires.ftc.teamcode.CDDriveChassisAuton;
 
 @Autonomous(name="CDAutonBlue", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class AutonBlue extends CDAutonBase {
 
     @Override
