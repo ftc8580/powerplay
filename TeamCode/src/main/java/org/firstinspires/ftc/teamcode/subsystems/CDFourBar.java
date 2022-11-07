@@ -11,8 +11,9 @@ import org.firstinspires.ftc.teamcode.util.MathUtils;
 import java.util.Objects;
 
 public class CDFourBar extends SubsystemBase {
-    private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .7;
-    private final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.18;
+    private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .9;
+    // Set higher to prevent situations where we're locked out because the arm got pushed up
+    private final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.30;
     private final static double ABSOLUTE_LOWER_BOUND_VOLTS = 0.23;
     private final static double LOW_SPEED_UPPER_BOUND_VOLTS = 1.08;
     private final static double LOW_SPEED_LOWER_BOUND_VOLTS = 0.34;
@@ -67,35 +68,15 @@ public class CDFourBar extends SubsystemBase {
         fourBarMotor.set(pow * FOUR_BAR_SLOW_SPEED_MULTIPLIER);
     }
 
+    public double getFourBarPower() {
+        return fourBarMotor.get();
+    }
+
     public double getFourBarPosition() {
         // Reference https://docs.revrobotics.com/potentiometer/untitled-1#calculating-the-relationship-between-voltage-and-angle
         return fourBarPotentiometer.getVoltage();
     }
-
-    // For teleop:
-    // B: Set four bar high, arm vertical to 0.31
-    // X: Set four bar back home
-    // Y: Set four bar medium, arm vertical to 0.415 (home)
-    // A: Set four bar low, arm vertical to 0.415 (home)
-    // (Y stick) Unicorn: arm rotation 0.84, arm vertical 0.62, four bar 0.96
-    public boolean setFourBarDirection(String fourBarLocationTarget) {
-        // This method will return false for successful turn or true for an error.
-        boolean fourBarError = false;
-        //TODO  NEED ROBOT: Update fourbarpostarget values below to match readings from robot
-        // if (Objects.equals(fourBarLocationTarget, "ground")) {
-        //     fourBarError = setFourBarPosition(.29);
-        // } else
-
-        if (Objects.equals(fourBarLocationTarget, "low")) {
-            fourBarError = setFourBarPosition(.53);
-        } else if (Objects.equals(fourBarLocationTarget, "medium")) {
-            fourBarError = setFourBarPosition(0.77);
-        } else if (Objects.equals(fourBarLocationTarget, "high")) {
-            fourBarError = setFourBarPosition(1.12);
-        }
-        return fourBarError;
-    }
-
+    
     public boolean setFourBarPosition(double positionTarget) {
         // This method will return true for successful turn or false for an error.
 

@@ -51,6 +51,9 @@ public class CDArm extends SubsystemBase {
     private final Servo verticalServo;
     private final Servo rotationServo;
 
+    private double verticalPosition;
+    private double rotationPosition;
+
     public CDArm(CDHardware theHardware){
         verticalServo = theHardware.armVerticalServo;
         rotationServo = theHardware.armRotationServo;
@@ -59,15 +62,17 @@ public class CDArm extends SubsystemBase {
         rotationServo.scaleRange(ROTATION_SCALE_RANGE_MIN, ROTATION_SCALE_RANGE_MAX);
 
         verticalServo.setPosition(ARM_CLEAR_TO_ROTATE_WITH_CONE_POSITION);
+        verticalPosition = ARM_CLEAR_TO_ROTATE_WITH_CONE_POSITION;
         rotationServo.setPosition(INITIAL_ARM_ROTATION_POSITION);
+        rotationPosition = INITIAL_ARM_ROTATION_POSITION;
     }
 
     public double getArmVerticalPosition() {
-        return MathUtils.roundDouble(verticalServo.getPosition());
+        return MathUtils.roundDouble(verticalPosition);
     }
 
     public double getArmRotationPosition() {
-        return MathUtils.roundDouble(rotationServo.getPosition());
+        return MathUtils.roundDouble(rotationPosition);
     }
 
     public double getVerticalSweepTimeMs(double armVerticalPositionTarget) {
@@ -90,13 +95,40 @@ public class CDArm extends SubsystemBase {
 
     public void setArmVerticalPosition(double armVerticalPositionTarget) {
         verticalServo.setPosition(armVerticalPositionTarget);
+        verticalPosition = armVerticalPositionTarget;
+    }
+
+    // TODO: Replace all instances of setArmVerticalPosition with this
+    public void setArmVerticalPositionSafe(CDFourBar fourBar, double armVerticalPositionTarget) {
+        if (isVerticalMoveWithinSafeRange(fourBar, armVerticalPositionTarget)) {
+            // Do nothing
+        } else if (isArmFront()) {
+            // TODO: Figure out what needs to happen here
+        } else if (isArmBack()) {
+            armVerticalPositionTarget = getArmVerticalPositionMinimum(fourBar);
+        } else {
+            armVerticalPositionTarget = 0.68;
+        }
+
+        setArmVerticalPosition(armVerticalPositionTarget);
+    }
+
+    private boolean isVerticalMoveWithinSafeRange(CDFourBar fourBar, double target) {
+        if (isArmFront()) {
+            // TODO: Determine safe range
+            return true;
+        } else if (isArmBack()) {
+            return target >= getArmVerticalPositionMinimum(fourBar);
+        } else {
+            return target <= 0.68;
+        }
     }
 
     public void setArmRotationPosition(double armRotationPositionTarget) {
         rotationServo.setPosition(armRotationPositionTarget);
+        rotationPosition = armRotationPositionTarget;
     }
 
-    // TODO: Use left and right bumpers
     public void setArmDeliveryLeft() {
         setArmRotationPosition(ALLEY_DELIVERY_LEFT_ROTATION);
     }
@@ -183,6 +215,14 @@ public class CDArm extends SubsystemBase {
                 clearToRotatePosition - precision,
                 clearToRotatePosition + precision,
                 getArmRotationPosition()
+        );
+    }
+
+    public boolean isArmVerticalWithinFourBar(CDFourBar fourBar, boolean isPickupClosed) {
+        return MathUtils.isWithinRange(
+                getArmVerticalPositionMinimum(fourBar),
+                getArmVerticalClearToRotatePosition(fourBar, isPickupClosed),
+                getArmVerticalPosition()
         );
     }
 
