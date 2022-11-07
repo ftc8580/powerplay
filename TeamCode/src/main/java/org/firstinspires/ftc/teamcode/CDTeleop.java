@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commandgroups.MoveToDeliver;
 import org.firstinspires.ftc.teamcode.commandgroups.MoveToHome;
 import org.firstinspires.ftc.teamcode.commandgroups.PickupCone;
+import org.firstinspires.ftc.teamcode.commands.FourBarSetPosition;
 import org.firstinspires.ftc.teamcode.subsystems.CDArm;
 import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 import org.firstinspires.ftc.teamcode.subsystems.CDGrabber;
@@ -32,7 +33,6 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     private Thread teleopGamepad1Thread;
     // Initialize our local variables with values
     // The baseSpeed "slow" variable is used to control the overall speed of the robot
-    // TODO: Work with Drive Team to determine
     public double baseSpeed = 0.90;
 
     // Initialize our local variables for use later in telemetry or other methods
@@ -86,6 +86,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     GamepadButton deliverButton;
     GamepadButton deliveryArmLeftButton;
     GamepadButton deliveryArmRightButton;
+    GamepadButton fourBarLowButton;
+    GamepadButton fourBarMediumButton;
+    GamepadButton fourBarHighButton;
 
     @Override
     public void runOpMode() {
@@ -106,10 +109,14 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         // Four Bar Buttons
         armUpButton = fourBarOp.getGamepadButton(GamepadKeys.Button.DPAD_UP);
         armDownButton = fourBarOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
-        homeButton = fourBarOp.getGamepadButton(GamepadKeys.Button.A);
-        deliverButton = fourBarOp.getGamepadButton(GamepadKeys.Button.Y);
         deliveryArmLeftButton = fourBarOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
         deliveryArmRightButton = fourBarOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
+        homeButton = fourBarOp.getGamepadButton(GamepadKeys.Button.X);
+        fourBarLowButton = fourBarOp.getGamepadButton(GamepadKeys.Button.A);
+        fourBarMediumButton = fourBarOp.getGamepadButton(GamepadKeys.Button.Y);
+        fourBarHighButton = fourBarOp.getGamepadButton(GamepadKeys.Button.B);
+        // TODO: Make sure these stick buttons are correct
+        deliverButton = fourBarOp.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON);
 
         // Initialize our classes to variables
         robotHardware = new CDHardware(hardwareMap);
@@ -150,6 +157,16 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             } else {
                 fourBar.setFourBarPower(0.0);
             }
+
+            // TODO: Arm vertical & rotation positions
+            // B: Set four bar high, arm vertical to 0.31
+            // X: Set four bar back home
+            // Y: Set four bar medium, arm vertical to 0.415 (home)
+            // A: Set four bar low, arm vertical to 0.415 (home)
+            // (Y stick) Unicorn: arm rotation 0.84, arm vertical 0.62, four bar 0.96
+            fourBarLowButton.whenPressed(new FourBarSetPosition(fourBar, "low"));
+            fourBarMediumButton.whenPressed(new FourBarSetPosition(fourBar, "medium"));
+            fourBarHighButton.whenPressed(new FourBarSetPosition(fourBar, "high"));
 
             //arm vertical
             armVerticalPosition = arm.getArmVerticalPosition();
@@ -194,7 +211,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 pickup.release();
             } else if (closePickupSpeed > 0) {
                 pickupTarget = CDPickup.CLOSED_POSITION;
-                new PickupCone(arm, pickup).schedule();
+                new PickupCone(arm, pickup, fourBar).schedule();
             }
 
             // Extend

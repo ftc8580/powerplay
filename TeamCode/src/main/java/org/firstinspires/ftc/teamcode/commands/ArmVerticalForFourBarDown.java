@@ -29,6 +29,7 @@ public class ArmVerticalForFourBarDown extends CommandBase {
         double targetPosition = CDArm.ARM_VERTICAL_POSITION_HOME;
 
         if (arm.isArmBack()) {
+            // TODO: figure out why this just drops the arm completely?!
             targetPosition = 0; // arm.getArmVerticalClearToRotatePosition(fourBar, pickup.isPickupClosed);
         } else if (arm.isArmFront()) {
             // TODO: Use actual value
