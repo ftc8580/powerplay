@@ -76,30 +76,6 @@ public class CDFourBar extends SubsystemBase {
         return fourBarPotentiometer.getVoltage();
     }
 
-    // For teleop:
-    // B: Set four bar high, arm vertical to 0.31
-    // X: Set four bar back home
-    // Y: Set four bar medium, arm vertical to 0.415 (home)
-    // A: Set four bar low, arm vertical to 0.415 (home)
-    // (Y stick) Unicorn: arm rotation 0.84, arm vertical 0.62, four bar 0.96
-    public boolean setFourBarDirection(String fourBarLocationTarget) {
-        // This method will return false for successful turn or true for an error.
-        boolean fourBarError = false;
-        //TODO  NEED ROBOT: Update fourbarpostarget values below to match readings from robot
-        // if (Objects.equals(fourBarLocationTarget, "ground")) {
-        //     fourBarError = setFourBarPosition(.29);
-        // } else
-
-        if (Objects.equals(fourBarLocationTarget, "low")) {
-            fourBarError = setFourBarPosition(.53);
-        } else if (Objects.equals(fourBarLocationTarget, "medium")) {
-            fourBarError = setFourBarPosition(0.77);
-        } else if (Objects.equals(fourBarLocationTarget, "high")) {
-            fourBarError = setFourBarPosition(1.12);
-        }
-        return fourBarError;
-    }
-
     public boolean setFourBarPosition(double positionTarget) {
         // This method will return true for successful turn or false for an error.
 
