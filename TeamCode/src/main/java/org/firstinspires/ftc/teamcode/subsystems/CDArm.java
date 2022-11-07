@@ -51,6 +51,9 @@ public class CDArm extends SubsystemBase {
     private final Servo verticalServo;
     private final Servo rotationServo;
 
+    private double verticalPosition;
+    private double rotationPosition;
+
     public CDArm(CDHardware theHardware){
         verticalServo = theHardware.armVerticalServo;
         rotationServo = theHardware.armRotationServo;
@@ -59,15 +62,17 @@ public class CDArm extends SubsystemBase {
         rotationServo.scaleRange(ROTATION_SCALE_RANGE_MIN, ROTATION_SCALE_RANGE_MAX);
 
         verticalServo.setPosition(ARM_CLEAR_TO_ROTATE_WITH_CONE_POSITION);
+        verticalPosition = ARM_CLEAR_TO_ROTATE_WITH_CONE_POSITION;
         rotationServo.setPosition(INITIAL_ARM_ROTATION_POSITION);
+        rotationPosition = INITIAL_ARM_ROTATION_POSITION;
     }
 
     public double getArmVerticalPosition() {
-        return MathUtils.roundDouble(verticalServo.getPosition());
+        return MathUtils.roundDouble(verticalPosition);
     }
 
     public double getArmRotationPosition() {
-        return MathUtils.roundDouble(rotationServo.getPosition());
+        return MathUtils.roundDouble(rotationPosition);
     }
 
     public double getVerticalSweepTimeMs(double armVerticalPositionTarget) {
@@ -90,18 +95,21 @@ public class CDArm extends SubsystemBase {
 
     public void setArmVerticalPosition(double armVerticalPositionTarget) {
         verticalServo.setPosition(armVerticalPositionTarget);
+        verticalPosition = armVerticalPositionTarget;
     }
 
     public void setArmVerticalPositionSafe(CDFourBar fourBar, double armVerticalPositionTarget) {
         if (isVerticalMoveWithinSafeRange(fourBar, armVerticalPositionTarget)) {
-            verticalServo.setPosition(armVerticalPositionTarget);
+            // Do nothing
         } else if (isArmFront()) {
             // TODO: Figure out what needs to happen here
         } else if (isArmBack()) {
-            verticalServo.setPosition(getArmVerticalPositionMinimum(fourBar));
+            armVerticalPositionTarget = getArmVerticalPositionMinimum(fourBar);
         } else {
-            verticalServo.setPosition(0.68);
+            armVerticalPositionTarget = 0.68;
         }
+
+        setArmVerticalPosition(armVerticalPositionTarget);
     }
 
     private boolean isVerticalMoveWithinSafeRange(CDFourBar fourBar, double target) {
@@ -117,6 +125,7 @@ public class CDArm extends SubsystemBase {
 
     public void setArmRotationPosition(double armRotationPositionTarget) {
         rotationServo.setPosition(armRotationPositionTarget);
+        rotationPosition = armRotationPositionTarget;
     }
 
     public void setArmDeliveryLeft() {

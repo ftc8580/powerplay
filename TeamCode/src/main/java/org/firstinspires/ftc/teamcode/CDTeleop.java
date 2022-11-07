@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commandgroups.MoveToDeliver;
 import org.firstinspires.ftc.teamcode.commandgroups.MoveToHome;
+import org.firstinspires.ftc.teamcode.commandgroups.PickupCone;
 import org.firstinspires.ftc.teamcode.subsystems.CDArm;
 import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 import org.firstinspires.ftc.teamcode.subsystems.CDGrabber;
@@ -36,35 +37,30 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
     // Initialize our local variables for use later in telemetry or other methods
     //Drive variables
-    public double y;
-    public double x;
-    public double rx;
-    public double leftFrontPower;
-    public double leftRearPower;
-    public double rightFrontPower;
-    public double rightRearPower;
+    public double forwardSpeed;
+    public double strafeSpeed;
+    public double turnSpeed;
     public double robotSpeed;
     public boolean constrainMovement;
     //Fourbar variables
-    public double fourBarPotCurrent;
-    public boolean fourBarError;
+    public double fourBarPosition;
     //Arm UpDown variables
-    public double armVerticalPositionCurrent;
-    public double armUpDownAtarget;
+    public double armVerticalPosition;
+    public double armVerticalTarget;
 
     //ArmRot variables
     public double armRotationPosition;
-    public double armrotAtarget;
+    public double armRotationTarget;
 
     // Pickup variables
-    public double pickupPositionCurrent;
+    public double pickupPosition;
     public double pickupTarget;
     // Extend variables
-    public double extendPosCurrent;
-    public double extendAtarget;
+    public double extendPosition;
+    public double extendTarget;
     // Grab variables
-    public double grabPosCurrent;
-    public double grabAtarget;
+    public double grabPosition;
+    public double grabTarget;
 
     public Telemetry robotTelemetry;
 
@@ -139,20 +135,16 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         // Polling rate for logging gets set to zero before the while loop
         int i = 0;
 
-        robotTelemetry.clearAll();
-
         while (opModeIsActive()) {
             /******************************
              * GAMEPAD 2 CODE
              ******************************/
 
             // FOURBAR CODE
-            if (fourBarError) {
-                robotTelemetry.addLine("DANGER: THE FOURBAR VALUES AREN'T CHANGING!");
-                robotTelemetry.update();
-            }
+            fourBarPosition = fourBar.getFourBarPosition();
 
             double fourBarSpeed = fourBarOp.getLeftY();
+            // TODO: Try scheduling arm adjustment only if in unsafe range, otherwise just set power
             if (fourBarSpeed != 0) {
                 fourBar.setFourBarPower(fourBarSpeed);//Remember on controller -y is up
             } else {
@@ -160,21 +152,21 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 
             //arm vertical
-            armVerticalPositionCurrent = arm.getArmVerticalPosition();
-            armUpDownAtarget = arm.getArmVerticalPosition(); // sets this initially
+            armVerticalPosition = arm.getArmVerticalPosition();
+            armVerticalTarget = arm.getArmVerticalPosition(); // sets this initially
             armRotationPosition = arm.getArmRotationPosition();
-            armrotAtarget = arm.getArmRotationPosition(); // sets this initially
+            armRotationTarget = arm.getArmRotationPosition(); // sets this initially
 
             // Flip controls if the arm is rotated forward
             boolean invertVerticalPosition = armRotationPosition < INVERT_ARM_LIMIT;
 
             if (armUpButton.get()) {
                 arm.setArmVerticalPosition(
-                        armVerticalPositionCurrent + (invertVerticalPosition ? -ARM_VERTICAL_MOVE_SPEED : ARM_VERTICAL_MOVE_SPEED)
+                        armVerticalPosition + (invertVerticalPosition ? -ARM_VERTICAL_MOVE_SPEED : ARM_VERTICAL_MOVE_SPEED)
                 );
             } else if (armDownButton.get()) {
                 arm.setArmVerticalPosition(
-                        armVerticalPositionCurrent + (invertVerticalPosition ? ARM_VERTICAL_MOVE_SPEED : -ARM_VERTICAL_MOVE_SPEED)
+                        armVerticalPosition + (invertVerticalPosition ? ARM_VERTICAL_MOVE_SPEED : -ARM_VERTICAL_MOVE_SPEED)
                 );
             }
 
@@ -196,31 +188,37 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // Pickup
             double openPickupSpeed = fourBarOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
             double closePickupSpeed = fourBarOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
-            pickupPositionCurrent = pickup.getServoPosition();
+            pickupPosition = pickup.getServoPosition();
             if (openPickupSpeed > 0) {
+                pickupTarget = CDPickup.OPEN_POSITION;
                 pickup.release();
             } else if (closePickupSpeed > 0) {
-                pickup.pickup();
+                pickupTarget = CDPickup.CLOSED_POSITION;
+                new PickupCone(arm, pickup).schedule();
             }
 
             // Extend
             double extendGrabber = chassisOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
             double retractGrabber = chassisOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
-            extendPosCurrent = grabber.getExtendPosition();
+            extendPosition = grabber.getExtendPosition();
             if (extendGrabber > 0) {
-                grabber.setExtendPosition(extendPosCurrent + GRABBER_EXTEND_MOVE_SPEED);
+                extendTarget = extendPosition + GRABBER_EXTEND_MOVE_SPEED;
+                grabber.setExtendPosition(extendTarget);
             } else if (retractGrabber > 0) {
-                grabber.setExtendPosition(extendPosCurrent - GRABBER_EXTEND_MOVE_SPEED);
+                extendTarget = extendPosition - GRABBER_EXTEND_MOVE_SPEED;
+                grabber.setExtendPosition(extendTarget);
             }
 
             //Grab
             boolean closeGrabber = chassisOp.getButton(GamepadKeys.Button.LEFT_BUMPER);
             boolean openGrabber = chassisOp.getButton(GamepadKeys.Button.RIGHT_BUMPER);
-            grabPosCurrent = grabber.getGrabPosition();
+            grabPosition = grabber.getGrabPosition();
             if (closeGrabber) {
-                grabber.setGrabPosition(grabPosCurrent + GRABBER_GRAB_MOVE_SPEED);
+                grabTarget = grabPosition + GRABBER_GRAB_MOVE_SPEED;
+                grabber.setGrabPosition(grabTarget);
             } else if (openGrabber) {
-                grabber.setGrabPosition(grabPosCurrent - GRABBER_GRAB_MOVE_SPEED);
+                grabTarget = grabPosition - GRABBER_GRAB_MOVE_SPEED;
+                grabber.setGrabPosition(grabTarget);
             }
 
             //Go HOME (Back pickup position between fourbars)
@@ -235,7 +233,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // Telemetry Stuff -
             // need to slow down the logging
             if (i == 10) {
-                robotTelemetry.update();
+                composeTelemetry();
                 i = 0;
             } else {
                 i++;
@@ -274,9 +272,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                     //constrainMovement = !constrainMovement;
                 }
 
-                double strafeSpeed = chassisOp.getLeftX() * robotSpeed;
-                double forwardSpeed = chassisOp.getLeftY() * -1 * robotSpeed;
-                double turnSpeed = chassisOp.getRightX() * robotSpeed;
+                strafeSpeed = chassisOp.getLeftX() * -1 * robotSpeed;
+                forwardSpeed = chassisOp.getLeftY() * -1 * robotSpeed;
+                turnSpeed = chassisOp.getRightX() * -1 * robotSpeed;
 
                 if (constrainMovement) {
                     if (Math.abs(strafeSpeed) > Math.abs(forwardSpeed)) {
@@ -299,39 +297,33 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         }
     }
 
-    void composeTelemetry(boolean imuTelemetry) {
+    void composeTelemetry() {
         // Clear previous ouput
-        telemetry.clearAll();
+        robotTelemetry.clearAll();
 
         // Add data to telemetry
-        telemetry.addData("y input", "%.2f", y);
-        telemetry.addData("x input", "%.2f", x);
-        telemetry.addData("rx input", "%.2f", rx);
-        telemetry.addData("motorLF ", "%.2f", leftFrontPower);
-        telemetry.addData("motorRF ", "%.2f", rightFrontPower);
-        telemetry.addData("motorLR ", "%.2f", leftRearPower);
-        telemetry.addData("motorRR ", "%.2f", rightRearPower);
-        // telemetry.addData("FourbarPotCurrent", "%.2f", fourBarPotCurrent);
-        telemetry.addData("fourbarerror", fourBarError);
-        double fourbarPositiontoRotateHOME = .8;
-        // telemetry.addData("FourBarPotUnderHome", (fourBarPotCurrent < fourbarPositiontoRotateHOME));
-        //telemetry.addData("CurrArmThresh", "%.2f", armCurrentThreshold);
-        //telemetry.addData("CurrArmDownThresh", "%.2f", armDownThresh);
-        //telemetry.addData("ArmPosition", armPosCurrent);
-        //telemetry.addData("armerror", armError);
-        telemetry.addData("ArmUpDownPosition", (armVerticalPositionCurrent));
-        telemetry.addData("ArmUpDownTarget", (armUpDownAtarget));
-        telemetry.addData("ArmRotPosition", armRotationPosition);
-        telemetry.addData("ArmRotTarget", armrotAtarget);
-        telemetry.addData("PickupPosition", (pickupPositionCurrent));
-        telemetry.addData("PickupTarget", (pickupTarget));
-        telemetry.addData("ExtendPosition", (extendPosCurrent));
-        telemetry.addData("ExtendTarget", (extendAtarget));
-        telemetry.addData("GrabPosition", (grabPosCurrent));
-        telemetry.addData("GrabTarget", (grabAtarget));
-        //telemetry.addData("PickupPosition", pickUpPosCurrent);
+        robotTelemetry.addData("y input", "%.2f", forwardSpeed);
+        robotTelemetry.addData("x input", "%.2f", strafeSpeed);
+        robotTelemetry.addData("rx input", "%.2f", turnSpeed);
+        // TODO: Do we need motor speeds? Drive is handled by MecanumDrive class now
+        // telemetry.addData("motorLF ", "%.2f", leftFrontPower);
+        // telemetry.addData("motorRF ", "%.2f", rightFrontPower);
+        // telemetry.addData("motorLR ", "%.2f", leftRearPower);
+        // telemetry.addData("motorRR ", "%.2f", rightRearPower);
+        robotTelemetry.addData("forubar position", "%.2f", fourBarPosition);
+        robotTelemetry.addData("FourBarPotUnderHome", fourBarPosition < CDFourBar.ARM_CLEARED_POSITION_HOME);
+        robotTelemetry.addData("ArmUpDownPosition", armVerticalPosition);
+        robotTelemetry.addData("ArmUpDownTarget", armVerticalTarget);
+        robotTelemetry.addData("ArmRotPosition", armRotationPosition);
+        robotTelemetry.addData("ArmRotTarget", armRotationTarget);
+        robotTelemetry.addData("PickupPosition", pickupPosition);
+        robotTelemetry.addData("PickupTarget", pickupTarget);
+        robotTelemetry.addData("ExtendPosition", extendPosition);
+        robotTelemetry.addData("ExtendTarget", extendTarget);
+        robotTelemetry.addData("GrabPosition", grabPosition);
+        robotTelemetry.addData("GrabTarget", grabTarget);
 
         // Loop and update the dashboard
-        telemetry.update();
+        robotTelemetry.update();
     }
 }

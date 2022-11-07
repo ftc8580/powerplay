@@ -17,6 +17,8 @@ public class FourBarSetPosition extends CommandBase {
     @Override
     public void execute() {
         double currentPosition = fourBar.getFourBarPosition();
+        if (fourBar.getFourBarPower() != 0) return;
+
         if (currentPosition > targetPosition) {
             fourBar.moveUp();
         } else if (currentPosition < targetPosition) {

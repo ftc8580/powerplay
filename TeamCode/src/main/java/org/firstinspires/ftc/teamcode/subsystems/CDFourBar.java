@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.util.MathUtils;
 import java.util.Objects;
 
 public class CDFourBar extends SubsystemBase {
-    private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .7;
+    private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .9;
     private final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.18;
     private final static double ABSOLUTE_LOWER_BOUND_VOLTS = 0.23;
     private final static double LOW_SPEED_UPPER_BOUND_VOLTS = 1.08;
@@ -65,6 +65,10 @@ public class CDFourBar extends SubsystemBase {
         }
 
         fourBarMotor.set(pow * FOUR_BAR_SLOW_SPEED_MULTIPLIER);
+    }
+
+    public double getFourBarPower() {
+        return fourBarMotor.get();
     }
 
     public double getFourBarPosition() {
