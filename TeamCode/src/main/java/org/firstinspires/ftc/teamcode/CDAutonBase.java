@@ -123,7 +123,6 @@ public class CDAutonBase extends LinearOpMode {
         myChassis.robotHardware.leftRearMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         myChassis.robotHardware.leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        myTurret.robotHardware.fourbarmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER); \\commented because using pot for position
-
 //        myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        myArm.robotHardware.armmotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER)
 

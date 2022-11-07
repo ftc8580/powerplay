@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.util.CDRuntime;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
+import java.util.Objects;
+
 public class CDFourBar extends SubsystemBase {
     private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .9;
     // Set higher to prevent situations where we're locked out because the arm got pushed up
@@ -54,6 +56,7 @@ public class CDFourBar extends SubsystemBase {
     }
 
     public void setFourBarPower(double pow) {
+        // TODO: If pot is more than 1.18, we should reset it to 1.18
         if (!isInRange() && pow != 0) {
             return;
         }
@@ -73,7 +76,7 @@ public class CDFourBar extends SubsystemBase {
         // Reference https://docs.revrobotics.com/potentiometer/untitled-1#calculating-the-relationship-between-voltage-and-angle
         return fourBarPotentiometer.getVoltage();
     }
-
+    
     public boolean setFourBarPosition(double positionTarget) {
         // This method will return true for successful turn or false for an error.
 

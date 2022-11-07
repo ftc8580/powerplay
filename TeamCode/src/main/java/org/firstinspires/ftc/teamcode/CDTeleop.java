@@ -289,6 +289,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                     //constrainMovement = !constrainMovement;
                 }
 
+
                 strafeSpeed = chassisOp.getLeftX() * -1 * robotSpeed;
                 forwardSpeed = chassisOp.getLeftY() * -1 * robotSpeed;
                 turnSpeed = chassisOp.getRightX() * -1 * robotSpeed;
