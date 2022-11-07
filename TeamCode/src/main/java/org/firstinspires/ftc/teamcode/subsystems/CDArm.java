@@ -98,6 +98,7 @@ public class CDArm extends SubsystemBase {
         verticalPosition = armVerticalPositionTarget;
     }
 
+    // TODO: Replace all instances of setArmVerticalPosition with this
     public void setArmVerticalPositionSafe(CDFourBar fourBar, double armVerticalPositionTarget) {
         if (isVerticalMoveWithinSafeRange(fourBar, armVerticalPositionTarget)) {
             // Do nothing

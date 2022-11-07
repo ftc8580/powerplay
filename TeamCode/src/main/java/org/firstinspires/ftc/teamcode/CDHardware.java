@@ -24,7 +24,6 @@ public class CDHardware {
 
     public CDHardware (HardwareMap hwMap){
         //Defines Hardware map from Control Hub
-        //TODO: Need to double check motor mapping on the driver hub and check orientation
         leftFrontMotor = hwMap.get(DcMotor.class, "motorLF");
         rightFrontMotor = hwMap.get(DcMotor.class, "motorRF");
         leftRearMotor = hwMap.get(DcMotor.class, "motorLR");
