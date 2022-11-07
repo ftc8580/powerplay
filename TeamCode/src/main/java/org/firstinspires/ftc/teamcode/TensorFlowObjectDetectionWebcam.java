@@ -35,11 +35,15 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This 2022-2023 OpMode illustrates the basics of using the TensorFlow Object Detection API to
@@ -67,8 +71,7 @@ public class TensorFlowObjectDetectionWebcam extends LinearOpMode {
 //    private static final String TFOD_MODEL_FILE  = "/storage/emulated/0/FIRST/tflitemodels/model_20221018_182705.tflite";
 
 // Modern Phones / Control Hub
-    private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/model_20221105_112220.tflite";
-
+    private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/model_20221106_122744.tflite";
 
     private static final String[] LABELS = {
 //            "1 Bolt",
@@ -106,12 +109,24 @@ public class TensorFlowObjectDetectionWebcam extends LinearOpMode {
      */
     private TFObjectDetector tfod;
 
+    // *** ADD WEBCAM CONTROLS -- SECTION START ***
+    ExposureControl myExposureControl;  // declare exposure control object
+    long minExp;
+    long maxExp;
+    long curExp;            // exposure is duration, in time units specified
+
+    GainControl myGainControl;      // declare gain control object
+    int minGain;
+    int maxGain;
+    int curGain;
+
     @Override
     public void runOpMode() {
-        // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
-        // first.
+
         initVuforia();
         initTfod();
+        // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
+        // first.
 
         /**
          * Activate TensorFlow Object Detection before we wait for the start command.
@@ -126,19 +141,46 @@ public class TensorFlowObjectDetectionWebcam extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(1.0, 16.0/9.0);
+            tfod.setZoom(3.5, 16.0/9.0);
         }
 
-        /** Wait for the game to begin */
-        telemetry.addData(">", "Press Play to start op mode");
-        telemetry.update();
-        waitForStart();
+        myExposureControl = vuforia.getCamera().getControl(ExposureControl.class);
+        myExposureControl.setMode(ExposureControl.Mode.Auto);
 
+        myGainControl = vuforia.getCamera().getControl(GainControl.class);
+
+
+        // get webcam exposure limits
+        minExp = myExposureControl.getMinExposure(TimeUnit.MILLISECONDS);
+        maxExp = myExposureControl.getMaxExposure(TimeUnit.MILLISECONDS);
+        myExposureControl.setExposure(300, TimeUnit.MILLISECONDS);
+
+        // get webcam gain limits
+        minGain = myGainControl.getMinGain();
+        maxGain = myGainControl.getMaxGain();
+        myGainControl.setGain(100);
+
+        curExp = myExposureControl.getExposure(TimeUnit.MILLISECONDS);
+        curGain = myGainControl.getGain();
+
+
+        /** Wait for the game to begin */
+        telemetry.addLine("\nTouch Start arrow to control webcam Exposure and Gain");
+        telemetry.addData("\nCurrent exposure mode", myExposureControl.getMode());
+        telemetry.addData("Min exposure value", minExp);
+        telemetry.addData("Max exposure value", maxExp);
+        telemetry.addData("Current exposure value", curExp);
+        telemetry.addData("Min exposure value", minGain);
+        telemetry.addData("Max exposure value", maxGain);
+        telemetry.addData("Current exposure value", curGain);
+        telemetry.addData(">", "Press Play to start op mode");
+
+        waitForStart();
         if (opModeIsActive()) {
             while (opModeIsActive()) {
+                    // the last time that call was made.
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Objects Detected", updatedRecognitions.size());
@@ -155,11 +197,19 @@ public class TensorFlowObjectDetectionWebcam extends LinearOpMode {
                             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 );
                             telemetry.addData("- Position (Row/Col)","%.0f / %.0f", row, col);
                             telemetry.addData("- Size (Width/Height)","%.0f / %.0f", width, height);
+                            telemetry.addData("\nCurrent exposure mode", myExposureControl.getMode());
+                            telemetry.addData("Min exposure value", minExp);
+                            telemetry.addData("Max exposure value", maxExp);
+                            telemetry.addData("Current exposure value", curExp);
+                            telemetry.addData("Min exposure value", minGain);
+                            telemetry.addData("Max exposure value", maxGain);
+                            telemetry.addData("Current exposure value", curGain);
                         }
                         telemetry.update();
                     }
                 }
             }
+
         }
     }
 
@@ -186,9 +236,9 @@ public class TensorFlowObjectDetectionWebcam extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
             "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.75f;
+        tfodParameters.minResultConfidence = 0.40f;
         tfodParameters.isModelTensorFlow2 = true;
-        tfodParameters.inputSize = 300;
+        tfodParameters.inputSize =300;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
 
         // Use loadModelFromAsset() if the TF Model is built in as an asset by Android Studio
@@ -197,3 +247,4 @@ public class TensorFlowObjectDetectionWebcam extends LinearOpMode {
         tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
     }
 }
+
