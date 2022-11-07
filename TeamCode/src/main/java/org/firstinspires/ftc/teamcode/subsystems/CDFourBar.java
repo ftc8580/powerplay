@@ -8,11 +8,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.util.CDRuntime;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
-import java.util.Objects;
-
 public class CDFourBar extends SubsystemBase {
     private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .9;
-    private final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.18;
+    // Set higher to prevent situations where we're locked out because the arm got pushed up
+    private final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.30;
     private final static double ABSOLUTE_LOWER_BOUND_VOLTS = 0.23;
     private final static double LOW_SPEED_UPPER_BOUND_VOLTS = 1.08;
     private final static double LOW_SPEED_LOWER_BOUND_VOLTS = 0.34;
@@ -55,7 +54,6 @@ public class CDFourBar extends SubsystemBase {
     }
 
     public void setFourBarPower(double pow) {
-        // TODO: If pot is more than 1.18, we should reset it to 1.18
         if (!isInRange() && pow != 0) {
             return;
         }

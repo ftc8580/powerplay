@@ -33,7 +33,6 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     private Thread teleopGamepad1Thread;
     // Initialize our local variables with values
     // The baseSpeed "slow" variable is used to control the overall speed of the robot
-    // TODO: Work with Drive Team to determine
     public double baseSpeed = 0.90;
 
     // Initialize our local variables for use later in telemetry or other methods
@@ -212,7 +211,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 pickup.release();
             } else if (closePickupSpeed > 0) {
                 pickupTarget = CDPickup.CLOSED_POSITION;
-                new PickupCone(arm, pickup).schedule();
+                new PickupCone(arm, pickup, fourBar).schedule();
             }
 
             // Extend
