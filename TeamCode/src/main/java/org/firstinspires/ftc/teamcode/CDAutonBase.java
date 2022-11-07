@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.CDArm;
 import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
+import org.firstinspires.ftc.teamcode.subsystems.CDGrabber;
 import org.firstinspires.ftc.teamcode.subsystems.CDPickup;
 //
 //import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -94,6 +95,7 @@ public class CDAutonBase extends LinearOpMode {
     public CDFourBar myFourbar;
     public CDArm myArm;
     public CDPickup myPickup;
+    public CDGrabber myGrabber;
 
     @Override
     public void runOpMode() {
@@ -104,6 +106,7 @@ public class CDAutonBase extends LinearOpMode {
         myFourbar = new CDFourBar(hardwareMap);
         myArm = new CDArm(myHardware);
         myPickup = new CDPickup(myHardware);
+        myGrabber = new CDGrabber(myHardware);
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");

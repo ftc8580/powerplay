@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.CDDriveChassisAuton;
 
 @Autonomous(name="CDAutonBaseTest", group="Linear Opmode")
+@Disabled
 public class CDAutonBaseTest extends CDAutonBase {
 //    @Override
 //    public void initTokenWeDoNotSee() {
