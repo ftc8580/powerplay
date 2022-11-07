@@ -8,8 +8,6 @@ public class FourBarSetPosition extends CommandBase {
     private final CDFourBar fourBar;
     private final double targetPosition;
 
-    private boolean moveComplete;
-
     public FourBarSetPosition(CDFourBar subsystem, double targetPosition) {
         this.fourBar = subsystem;
         this.targetPosition = targetPosition;
@@ -17,17 +15,24 @@ public class FourBarSetPosition extends CommandBase {
     }
 
     @Override
-    public void initialize() {
-        moveComplete = false;
-    }
-
-    @Override
     public void execute() {
-        moveComplete = fourBar.setFourBarPosition(targetPosition);
+        double currentPosition = fourBar.getFourBarPosition();
+        if (fourBar.getFourBarPower() != 0) return;
+
+        if (currentPosition > targetPosition) {
+            fourBar.moveUp();
+        } else if (currentPosition < targetPosition) {
+            fourBar.moveDown();
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return moveComplete;
+        return fourBar.isArrivedAtTarget(targetPosition);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        fourBar.stop();
     }
 }

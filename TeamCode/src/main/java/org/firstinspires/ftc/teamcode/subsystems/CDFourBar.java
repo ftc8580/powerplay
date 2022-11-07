@@ -8,8 +8,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.util.CDRuntime;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
+import java.util.Objects;
+
 public class CDFourBar extends SubsystemBase {
-    private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .7;
+    private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .9;
     private final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.18;
     private final static double ABSOLUTE_LOWER_BOUND_VOLTS = 0.23;
     private final static double LOW_SPEED_UPPER_BOUND_VOLTS = 1.08;
@@ -19,7 +21,7 @@ public class CDFourBar extends SubsystemBase {
     public final static double LOWER_POSITION_HOME = ABSOLUTE_LOWER_BOUND_VOLTS;
     public final static double MIDDLE_POSITION_HOME = 0.8;
     public final static double ARM_CLEARED_POSITION_HOME = 0.8; // 0.6 when loaded
-    private final static double POTENTIOMETER_THRESHOLD_PRECISION = 0.05;
+    private final static double POTENTIOMETER_THRESHOLD_PRECISION = 0.005;
     public final static double TIMEOUT_MS = 2000;
 
     private final AnalogInput fourBarPotentiometer;
@@ -53,6 +55,7 @@ public class CDFourBar extends SubsystemBase {
     }
 
     public void setFourBarPower(double pow) {
+        // TODO: If pot is more than 1.18, we should reset it to 1.18
         if (!isInRange() && pow != 0) {
             return;
         }
@@ -64,26 +67,38 @@ public class CDFourBar extends SubsystemBase {
         fourBarMotor.set(pow * FOUR_BAR_SLOW_SPEED_MULTIPLIER);
     }
 
+    public double getFourBarPower() {
+        return fourBarMotor.get();
+    }
+
     public double getFourBarPosition() {
         // Reference https://docs.revrobotics.com/potentiometer/untitled-1#calculating-the-relationship-between-voltage-and-angle
         return fourBarPotentiometer.getVoltage();
     }
 
-    /* public boolean setFourBarDirection(String fourBarLocationTarget) {
+    // For teleop:
+    // B: Set four bar high, arm vertical to 0.31
+    // X: Set four bar back home
+    // Y: Set four bar medium, arm vertical to 0.415 (home)
+    // A: Set four bar low, arm vertical to 0.415 (home)
+    // (Y stick) Unicorn: arm rotation 0.84, arm vertical 0.62, four bar 0.96
+    public boolean setFourBarDirection(String fourBarLocationTarget) {
         // This method will return false for successful turn or true for an error.
         boolean fourBarError = false;
         //TODO  NEED ROBOT: Update fourbarpostarget values below to match readings from robot
-        if (Objects.equals(fourBarLocationTarget, "ground")) {
-            fourBarError = setFourBarPosition(.29);
-        } else if (Objects.equals(fourBarLocationTarget, "low")) {
-            fourBarError = setFourBarPosition(.58);
+        // if (Objects.equals(fourBarLocationTarget, "ground")) {
+        //     fourBarError = setFourBarPosition(.29);
+        // } else
+
+        if (Objects.equals(fourBarLocationTarget, "low")) {
+            fourBarError = setFourBarPosition(.53);
         } else if (Objects.equals(fourBarLocationTarget, "medium")) {
-            fourBarError = setFourBarPosition(2.47);
+            fourBarError = setFourBarPosition(0.77);
         } else if (Objects.equals(fourBarLocationTarget, "high")) {
-            fourBarError = setFourBarPosition(2.87);
+            fourBarError = setFourBarPosition(1.12);
         }
         return fourBarError;
-    } */
+    }
 
     public boolean setFourBarPosition(double positionTarget) {
         // This method will return true for successful turn or false for an error.
@@ -107,7 +122,7 @@ public class CDFourBar extends SubsystemBase {
         );
     }
 
-    private boolean isArrivedAtTarget(double target) {
+    public boolean isArrivedAtTarget(double target) {
         // TODO: Need to confirm threshold is good
         double FOURBAR_THRESHOLD_DELTA = 0.01;
 
