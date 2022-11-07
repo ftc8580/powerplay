@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.CDHardware;
 import org.firstinspires.ftc.teamcode.util.ServoUtils;
 
 public class CDGrabber extends SubsystemBase {
-    private static final double EXTEND_SCALE_RANGE_MIN = 0.2;
-    private static final double EXTEND_SCALE_RANGE_MAX = 0.67;
+    private static final double EXTEND_SCALE_RANGE_MIN = 0.5;
+    private static final double EXTEND_SCALE_RANGE_MAX = 0.9;
     private static final double GRAB_SCALE_RANGE_MIN = 0.3;
     private static final double GRAB_SCALE_RANGE_MAX = 0.75;
 
