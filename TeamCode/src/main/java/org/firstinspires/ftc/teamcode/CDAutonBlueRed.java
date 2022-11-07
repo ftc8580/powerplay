@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.subsystems.CDArm;
 
-@Autonomous(name="CDAutonSimpleALL", group="Linear Opmode")
+@Autonomous(name="CDAutonBlueRed", group="Linear Opmode")
 //@Disabled
 public class CDAutonBlueRed extends CDAutonBase {
 
