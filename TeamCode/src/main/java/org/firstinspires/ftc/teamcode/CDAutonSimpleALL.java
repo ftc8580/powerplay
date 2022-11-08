@@ -23,7 +23,7 @@ public class CDAutonSimpleALL extends CDAutonBase {
         double signalLocation = 1; //Values should be 1,2 or 3
 
         //This is a simple auton to pick up cone and park based on signal location
-
+        myFourbar.setFourBarPosition(.23);
         //Pick up cone
         myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION);
         myPickup.pickup();
@@ -31,14 +31,14 @@ public class CDAutonSimpleALL extends CDAutonBase {
         myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION);
 
         //Drive forward 2 squares plus to center of square
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 52, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 49, 10.0);
 
         //Drive to correct square
         if (signalLocation == 1) {
-            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -24, 5.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -23, 5.0);
         }
         if (signalLocation ==3) {
-            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 24, 5.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 23, 5.0);
         }
     }
 

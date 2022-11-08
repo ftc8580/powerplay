@@ -127,7 +127,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
         // Configure initial variables
         // TODO: if we want pacman model to be default this should be set to true
-        constrainMovement = false;
+        constrainMovement = true;
 
         //Wait for the driver to press PLAY on the driver station/phone
         robotTelemetry.addData("Status", "Fully Initialized");
@@ -152,7 +152,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
             double fourBarSpeed = fourBarOp.getLeftY();
             // TODO: Try scheduling arm adjustment only if in unsafe range, otherwise just set power
-            if (fourBarSpeed != 0) {
+            if ((fourBarSpeed <= -0.01) || (fourBarSpeed >= 0.01)) {
                 fourBar.setFourBarPower(fourBarSpeed);//Remember on controller -y is up
             } else {
                 fourBar.setFourBarPower(0.0);
