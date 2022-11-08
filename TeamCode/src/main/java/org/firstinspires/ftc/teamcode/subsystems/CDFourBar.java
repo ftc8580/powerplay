@@ -22,7 +22,7 @@ public class CDFourBar extends SubsystemBase {
     public final static double LOWER_POSITION_HOME = ABSOLUTE_LOWER_BOUND_VOLTS;
     public final static double MIDDLE_POSITION_HOME = 0.8;
     public final static double ARM_CLEARED_POSITION_HOME = 0.8; // 0.6 when loaded
-    private final static double POTENTIOMETER_THRESHOLD_PRECISION = 0.005;
+    private final static double POTENTIOMETER_THRESHOLD_PRECISION = 0.001;
     public final static double TIMEOUT_MS = 2000;
 
     private final AnalogInput fourBarPotentiometer;
@@ -44,11 +44,11 @@ public class CDFourBar extends SubsystemBase {
     }
 
     public void moveUp() {
-        setFourBarPower(-1);
+        setFourBarPower(1);
     }
 
     public void moveDown() {
-        setFourBarPower(1);
+        setFourBarPower(-1);
     }
 
     public void stop() {
@@ -82,9 +82,9 @@ public class CDFourBar extends SubsystemBase {
 
         while (!isArrivedAtTarget(positionTarget) && !runtime.isTimedOutMs(TIMEOUT_MS)) {
             if (getFourBarPosition() > positionTarget) {
-                moveUp();
-            } else if (getFourBarPosition() < positionTarget) {
                 moveDown();
+            } else if (getFourBarPosition() < positionTarget) {
+                moveUp();
             }
         }
         stop();
@@ -101,7 +101,7 @@ public class CDFourBar extends SubsystemBase {
 
     public boolean isArrivedAtTarget(double target) {
         // TODO: Need to confirm threshold is good
-        double FOURBAR_THRESHOLD_DELTA = 0.01;
+        double FOURBAR_THRESHOLD_DELTA = 0.001;
 
         return MathUtils.isWithinRange(
                 -FOURBAR_THRESHOLD_DELTA,

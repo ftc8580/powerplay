@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.subsystems.CDArm;
 
-@Autonomous(name="CDAutonBlueRed", group="Linear Opmode")
+@Autonomous(name="CDAutonLeftDeliver", group="Linear Opmode")
 //@Disabled
-public class CDAutonBlueRed extends CDAutonBase {
+public class CDAutonLeftDeliver extends CDAutonBase {
 
     //    @Override
     //    public void initTokenWeDoNotSee() {
@@ -27,7 +27,7 @@ public class CDAutonBlueRed extends CDAutonBase {
         myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION);
 
         //Drive forward to deliver to medium junction
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 40, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 37, 10.0);
 
         //Raise fourbar to medium delivery height and rotate arm to delivery position
 //        myFourbar.setFourBarDirection("medium");
@@ -44,7 +44,7 @@ public class CDAutonBlueRed extends CDAutonBase {
 
         //Drive to correct square
         if (signalLocation == 1) {
-            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -24, 5.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -23, 5.0);
             //Only if near cone stack. Try to pick up cone. NOT SURE IF THIS IS EVEN POSSIBLE.
 /*            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 5.0);
             myArm.setArmVerticalPosition(0.200);
@@ -57,7 +57,7 @@ public class CDAutonBlueRed extends CDAutonBase {
             myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION);*/
         }
         if (signalLocation ==3) {
-            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 24, 5.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 23, 5.0);
         }
     }
 

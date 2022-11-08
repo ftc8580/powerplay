@@ -68,10 +68,11 @@ public class CDAutonBase extends LinearOpMode {
     // Public variables for use in executeautons method
     public CDHardware myHardware;
     public CDDriveChassisAuton myChassis;
-    public CDFourBar myFourbar;
     public CDArm myArm;
-    public CDPickup myPickup;
     public CDGrabber myGrabber;
+    public CDFourBar myFourbar;
+    public CDPickup myPickup;
+
 
     @Override
     public void runOpMode() {
