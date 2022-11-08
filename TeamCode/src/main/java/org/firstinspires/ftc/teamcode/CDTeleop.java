@@ -33,7 +33,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     private Thread teleopGamepad1Thread;
     // Initialize our local variables with values
     // The baseSpeed "slow" variable is used to control the overall speed of the robot
-    public double baseSpeed = 0.90;
+    public double baseSpeed = 0.75;
 
     // Initialize our local variables for use later in telemetry or other methods
     //Drive variables
@@ -111,10 +111,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         armDownButton = fourBarOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN);
         deliveryArmLeftButton = fourBarOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER);
         deliveryArmRightButton = fourBarOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
-        homeButton = fourBarOp.getGamepadButton(GamepadKeys.Button.X);
-        fourBarLowButton = fourBarOp.getGamepadButton(GamepadKeys.Button.A);
-        fourBarMediumButton = fourBarOp.getGamepadButton(GamepadKeys.Button.Y);
-        fourBarHighButton = fourBarOp.getGamepadButton(GamepadKeys.Button.B);
+        homeButton = fourBarOp.getGamepadButton(GamepadKeys.Button.A);
+        fourBarLowButton = fourBarOp.getGamepadButton(GamepadKeys.Button.X);
+        fourBarMediumButton = fourBarOp.getGamepadButton(GamepadKeys.Button.B);
+        fourBarHighButton = fourBarOp.getGamepadButton(GamepadKeys.Button.Y);
         // TODO: Make sure these stick buttons are correct
         deliverButton = fourBarOp.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON);
 
