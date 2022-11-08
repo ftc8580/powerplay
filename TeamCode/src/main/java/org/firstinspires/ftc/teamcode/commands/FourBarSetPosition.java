@@ -32,7 +32,7 @@ public class FourBarSetPosition extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void initialize() {
         double currentPosition = fourBar.getFourBarPosition();
         if ((fourBar.getFourBarPower() <= -0.01) || (fourBar.getFourBarPower() >= 0.01)) return;
 
