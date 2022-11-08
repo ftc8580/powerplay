@@ -24,8 +24,8 @@ import org.firstinspires.ftc.teamcode.util.CDTelemetry;
 public class CDTeleop extends LinearOpMode implements Runnable {
     // Static variables for tuning
     private static final double INVERT_ARM_LIMIT = 0.63;
-    private static final double ARM_ROTATION_MOVE_SPEED = 0.001;
-    private static final double ARM_VERTICAL_MOVE_SPEED = 0.008;
+    private static final double ARM_ROTATION_MOVE_SPEED = 0.008;
+    private static final double ARM_VERTICAL_MOVE_SPEED = 0.012;
     private static final double GRABBER_EXTEND_MOVE_SPEED = 0.02;
     private static final double GRABBER_GRAB_MOVE_SPEED = 0.02;
 
@@ -152,7 +152,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
             double fourBarSpeed = fourBarOp.getLeftY();
             // TODO: Try scheduling arm adjustment only if in unsafe range, otherwise just set power
-            if ((fourBarSpeed <= -0.01) || (fourBarSpeed >= 0.01)) {
+            if ((fourBarSpeed <= -0.1) || (fourBarSpeed >= 0.1)) {
                 fourBar.setFourBarPower(fourBarSpeed);//Remember on controller -y is up
             } else {
                 fourBar.setFourBarPower(0.0);
@@ -227,8 +227,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 
             //Grab
-            boolean closeGrabber = chassisOp.getButton(GamepadKeys.Button.LEFT_BUMPER);
-            boolean openGrabber = chassisOp.getButton(GamepadKeys.Button.RIGHT_BUMPER);
+            boolean closeGrabber = chassisOp.getButton(GamepadKeys.Button.RIGHT_BUMPER);
+            boolean openGrabber = chassisOp.getButton(GamepadKeys.Button.LEFT_BUMPER);
             grabPosition = grabber.getGrabPosition();
             if (closeGrabber) {
                 grabTarget = grabPosition + GRABBER_GRAB_MOVE_SPEED;
