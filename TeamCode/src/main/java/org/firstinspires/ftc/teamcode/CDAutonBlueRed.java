@@ -30,7 +30,7 @@ public class CDAutonBlueRed extends CDAutonBase {
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 40, 10.0);
 
         //Raise fourbar to medium delivery height and rotate arm to delivery position
-        myFourbar.setFourBarDirection("medium");
+//        myFourbar.setFourBarDirection("medium");
         myArm.setArmRotationPosition(CDArm.ALLEY_DELIVERY_RIGHT_ROTATION);
 
         //Drop Cone
