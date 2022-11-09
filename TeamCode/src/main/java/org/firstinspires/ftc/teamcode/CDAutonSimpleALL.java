@@ -2,11 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.*;
 
-import org.firstinspires.ftc.teamcode.commands.ArmVerticalHome;
 import org.firstinspires.ftc.teamcode.subsystems.CDArm;
 import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 
-import java.nio.file.ClosedWatchServiceException;
 
 @Autonomous(name="CDAutonSimpleALL", group="Linear Opmode")
 //@Disabled
@@ -20,14 +18,20 @@ public class CDAutonSimpleALL extends CDAutonBase {
 
     @Override
     public void executeAuton() {
-        double signalLocation = 1; //Values should be 1,2 or 3
+        double signalLocation = 3; //Values should be 1,2 or 3
 
         //This is a simple auton to pick up cone and park based on signal location
+        myFourbar.setFourBarPosition(CDFourBar.MIDDLE_POSITION_HOME);
+        sleep (10000);
+/*        //Pick up cone
+        myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION);
+        sleep (500);
+        myPickup.pickup();
+        sleep (500);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 2, 10.0);
         myFourbar.setFourBarPosition(.23);
         //Pick up cone
-        myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION);
-        myPickup.pickup();
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 2, 10.0);
+        sleep (250);
         myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION);
 
         //Drive forward 2 squares plus to center of square
@@ -39,7 +43,7 @@ public class CDAutonSimpleALL extends CDAutonBase {
         }
         if (signalLocation ==3) {
             myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 23, 5.0);
-        }
+        }*/
     }
 
 }

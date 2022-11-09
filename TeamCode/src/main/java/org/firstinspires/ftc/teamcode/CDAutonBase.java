@@ -80,10 +80,11 @@ public class CDAutonBase extends LinearOpMode {
         //double moveBackTimer = -1;
         myHardware = new CDHardware(hardwareMap);
         myChassis = new CDDriveChassisAuton(myHardware);
-        myFourbar = new CDFourBar(hardwareMap);
         myArm = new CDArm(myHardware);
-        myPickup = new CDPickup(myHardware);
         myGrabber = new CDGrabber(myHardware);
+        myFourbar = new CDFourBar(hardwareMap);
+        myPickup = new CDPickup(myHardware);
+
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");

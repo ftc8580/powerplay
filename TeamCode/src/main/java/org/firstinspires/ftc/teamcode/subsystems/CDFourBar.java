@@ -14,12 +14,12 @@ public class CDFourBar extends SubsystemBase {
     private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = .9;
     // Set higher to prevent situations where we're locked out because the arm got pushed up
     private final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.30;
-    private final static double ABSOLUTE_LOWER_BOUND_VOLTS = 0.23;
+    private final static double ABSOLUTE_LOWER_BOUND_VOLTS = 0.20;
     private final static double LOW_SPEED_UPPER_BOUND_VOLTS = 1.08;
     private final static double LOW_SPEED_LOWER_BOUND_VOLTS = 0.34;
 
     // Define variables for Home Positions. HOME is back pickup position between fourbars.
-    public final static double LOWER_POSITION_HOME = ABSOLUTE_LOWER_BOUND_VOLTS;
+    public final static double LOWER_POSITION_HOME = 0.22; //ABSOLUTE_LOWER_BOUND_VOLTS;
     public final static double MIDDLE_POSITION_HOME = 0.8;
     public final static double ARM_CLEARED_POSITION_HOME = 0.8; // 0.6 when loaded
     private final static double POTENTIOMETER_THRESHOLD_PRECISION = 0.001;
@@ -89,6 +89,7 @@ public class CDFourBar extends SubsystemBase {
         // This method will return true for successful turn or false for an error.
 
         while (!isArrivedAtTarget(positionTarget) && !runtime.isTimedOutMs(TIMEOUT_MS)) {
+//            while(getFourBarPosition() != positionTarget) {
             if (getFourBarPosition() > positionTarget) {
                 moveDown();
             } else if (getFourBarPosition() < positionTarget) {
