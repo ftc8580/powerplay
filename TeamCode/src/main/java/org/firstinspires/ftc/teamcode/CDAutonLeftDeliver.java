@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.subsystems.CDArm;
+import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 
 @Autonomous(name="CDAutonLeftDeliver", group="Linear Opmode")
 //@Disabled
@@ -18,10 +19,12 @@ public class CDAutonLeftDeliver extends CDAutonBase {
     public void executeAuton() {
         double signalLocation = 1; //Values should be 1,2 or 3
 
-        //This is a simple auton to pick up cone and park based on signal location
-
+        //This auton delivers cone to medium junction
+        myFourbar.setFourBarPosition(CDFourBar.LOWER_POSITION_HOME);
+        sleep (100);
         //Pick up cone
         myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION);
+        sleep (200);
         myPickup.pickup();
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 2, 10.0);
         myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION);
