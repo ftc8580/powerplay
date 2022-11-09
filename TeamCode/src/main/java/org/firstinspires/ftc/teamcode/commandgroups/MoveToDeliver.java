@@ -11,7 +11,11 @@ import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 import org.firstinspires.ftc.teamcode.subsystems.CDPickup;
 
 public class MoveToDeliver extends SequentialCommandGroup {
+    public boolean isExecuting;
+
     public MoveToDeliver(CDFourBar fourBar, CDArm arm, CDPickup pickup) {
+        isExecuting = false;
+
         addCommands(
                 new ArmVerticalHome(arm),
                 new FourBarSetPosition(fourBar, CDFourBar.ARM_CLEARED_POSITION_HOME),
@@ -20,5 +24,17 @@ public class MoveToDeliver extends SequentialCommandGroup {
                 new FourBarSetPosition(fourBar, 1) // CDFourBar.MIDDLE_POSITION_HOME
         );
         addRequirements(fourBar, arm, pickup);
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        isExecuting = true;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        isExecuting = false;
     }
 }

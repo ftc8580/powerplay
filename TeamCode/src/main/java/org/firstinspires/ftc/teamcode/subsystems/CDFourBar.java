@@ -44,11 +44,19 @@ public class CDFourBar extends SubsystemBase {
     }
 
     public void moveUp() {
-        setFourBarPower(1);
+        moveUp(FOUR_BAR_SLOW_SPEED_MULTIPLIER);
     }
 
     public void moveDown() {
-        setFourBarPower(-1);
+        moveDown(FOUR_BAR_SLOW_SPEED_MULTIPLIER);
+    }
+
+    public void moveUp(double pow) {
+        setFourBarPower(pow);
+    }
+
+    public void moveDown(double pow) {
+        setFourBarPower(-1 * pow);
     }
 
     public void stop() {
@@ -101,10 +109,10 @@ public class CDFourBar extends SubsystemBase {
 
     public boolean isArrivedAtTarget(double target) {
         // TODO: Need to confirm threshold is good
-        double FOURBAR_THRESHOLD_DELTA = 0.001;
+        double FOURBAR_THRESHOLD_DELTA = 0.005;
 
         return MathUtils.isWithinRange(
-                -FOURBAR_THRESHOLD_DELTA,
+                0,
                 FOURBAR_THRESHOLD_DELTA,
                 Math.abs(getFourBarPosition() - target)
         );

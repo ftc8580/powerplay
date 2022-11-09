@@ -32,7 +32,7 @@ public class CDArm extends SubsystemBase {
     public static final double ARM_ROTATION_POSITION_BACK = 0.333;
     public static final double ARM_ROTATION_POSITION_HOME = ARM_ROTATION_POSITION_BACK;
 
-    public static final double ALLEY_DELIVERY_LEFT_ROTATION = 0.43;
+    public static final double ALLEY_DELIVERY_LEFT_ROTATION = 0.47;
     public static final double ALLEY_DELIVERY_RIGHT_ROTATION = 0.19;
 
     // Define variables for rotation positions

@@ -125,6 +125,13 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         pickup = new CDPickup(robotHardware);
         fourBar = new CDFourBar(hardwareMap);
 
+        // Commands
+        FourBarSetPosition fourBarSetLowCommand = new FourBarSetPosition(fourBar, "low");
+        FourBarSetPosition fourBarSetMediumCommand = new FourBarSetPosition(fourBar, "medium");
+        FourBarSetPosition fourBarSetHighCommand = new FourBarSetPosition(fourBar, "high");
+        MoveToHome homeCommand = new MoveToHome(fourBar, arm, pickup);
+        MoveToDeliver unicornCommand = new MoveToDeliver(fourBar, arm, pickup);
+
         // Configure initial variables
         // TODO: if we want pacman model to be default this should be set to true
         constrainMovement = true;
@@ -154,7 +161,13 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // TODO: Try scheduling arm adjustment only if in unsafe range, otherwise just set power
             if ((fourBarSpeed <= -0.1) || (fourBarSpeed >= 0.1)) {
                 fourBar.setFourBarPower(fourBarSpeed);//Remember on controller -y is up
-            } else {
+            } else if (
+                    !fourBarSetLowCommand.isExecuting &&
+                    !fourBarSetMediumCommand.isExecuting &&
+                    !fourBarSetHighCommand.isExecuting &&
+                    !homeCommand.isExecuting &&
+                    !unicornCommand.isExecuting
+            ) {
                 fourBar.setFourBarPower(0.0);
             }
 
@@ -164,9 +177,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // Y: Set four bar medium, arm vertical to 0.415 (home)
             // A: Set four bar low, arm vertical to 0.415 (home)
             // (Y stick) Unicorn: arm rotation 0.84, arm vertical 0.62, four bar 0.96
-            fourBarLowButton.whenPressed(new FourBarSetPosition(fourBar, "low"));
-            fourBarMediumButton.whenPressed(new FourBarSetPosition(fourBar, "medium"));
-            fourBarHighButton.whenPressed(new FourBarSetPosition(fourBar, "high"));
+
+            fourBarLowButton.whenPressed(fourBarSetLowCommand);
+            fourBarMediumButton.whenPressed(fourBarSetMediumCommand);
+            fourBarHighButton.whenPressed(fourBarSetHighCommand);
 
             //arm vertical
             armVerticalPosition = arm.getArmVerticalPosition();
@@ -239,8 +253,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             }
 
             //Go HOME (Back pickup position between fourbars)
-            homeButton.whenPressed(new MoveToHome(fourBar, arm, pickup));
-            deliverButton.whenPressed(new MoveToDeliver(fourBar, arm, pickup));
+            homeButton.whenPressed(homeCommand);
+            deliverButton.whenPressed(unicornCommand);
 
             // To handle whileHeld and whenPressed conditions
             CommandScheduler.getInstance().run();

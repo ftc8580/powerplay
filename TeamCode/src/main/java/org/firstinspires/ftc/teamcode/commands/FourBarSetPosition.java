@@ -4,12 +4,13 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class FourBarSetPosition extends CommandBase {
     private final CDFourBar fourBar;
     private final double targetPosition;
+
+    public boolean isExecuting;
 
     public FourBarSetPosition(CDFourBar subsystem, String targetPosition) {
         double target = subsystem.getFourBarPosition();
@@ -28,18 +29,19 @@ public class FourBarSetPosition extends CommandBase {
     public FourBarSetPosition(CDFourBar subsystem, double targetPosition) {
         this.fourBar = subsystem;
         this.targetPosition = targetPosition;
+        this.isExecuting = false;
         addRequirements(fourBar);
     }
 
     @Override
-    public void initialize() {
+    public void execute() {
+        isExecuting = true;
         double currentPosition = fourBar.getFourBarPosition();
-        if ((fourBar.getFourBarPower() <= -0.01) || (fourBar.getFourBarPower() >= 0.01)) return;
 
         if (currentPosition > targetPosition) {
-            fourBar.moveDown();
+            fourBar.moveDown(0.7);
         } else if (currentPosition < targetPosition) {
-            fourBar.moveUp();
+            fourBar.moveUp(0.1);
         }
     }
 
@@ -50,6 +52,7 @@ public class FourBarSetPosition extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        isExecuting = false;
         fourBar.stop();
     }
 }
