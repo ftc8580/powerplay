@@ -17,7 +17,7 @@ public class CDAutonLeftDeliver extends CDAutonBase {
 
     @Override
     public void executeAuton() {
-        double signalLocation = 1; //Values should be 1,2 or 3
+        double signalLocation = Integer.parseInt(positionNumber); //Values should be 1,2 or 3
 
         //This auton delivers cone to medium junction
         myFourbar.setFourBarPosition(CDFourBar.LOWER_POSITION_HOME);
@@ -33,12 +33,13 @@ public class CDAutonLeftDeliver extends CDAutonBase {
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 37, 10.0);
 
         //Raise fourbar to medium delivery height and rotate arm to delivery position
-//        myFourbar.setFourBarDirection("medium");
+        myFourbar.setFourBarPosition(Alley_Delivery_Fourbar_Medium);
+        sleep(1000);
         myArm.setArmRotationPosition(CDArm.ALLEY_DELIVERY_RIGHT_ROTATION);
-
+        sleep(1000);
         //Drop Cone
         myPickup.release();
-
+        sleep(1000);
         //Rotate arm back to HOME position to prevent collision
         myArm.setArmRotationPosition(CDArm.ARM_ROTATION_POSITION_HOME);
 
