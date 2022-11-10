@@ -94,6 +94,7 @@ public class CDFourBar extends SubsystemBase {
     
     public boolean setFourBarPosition(double positionTarget) {
         // This method will return true for successful turn or false for an error.
+        runtime.reset();
 
         while (!isArrivedAtTarget(positionTarget) && !runtime.isTimedOutMs(TIMEOUT_MS)) {
 //            while(getFourBarPosition() != positionTarget) {
