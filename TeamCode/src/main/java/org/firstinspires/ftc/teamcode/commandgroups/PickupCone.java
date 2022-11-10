@@ -18,6 +18,6 @@ public class PickupCone extends SequentialCommandGroup {
                 new PickupGrabCone(pickup),
                 new ArmPickupHighPosition(arm)
         );
-        addRequirements(arm, pickup);
+        addRequirements(arm, pickup, fourBar);
     }
 }

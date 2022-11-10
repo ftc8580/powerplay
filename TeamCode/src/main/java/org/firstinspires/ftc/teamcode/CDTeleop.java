@@ -19,15 +19,16 @@ import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 import org.firstinspires.ftc.teamcode.subsystems.CDGrabber;
 import org.firstinspires.ftc.teamcode.subsystems.CDPickup;
 import org.firstinspires.ftc.teamcode.util.CDTelemetry;
+import org.firstinspires.ftc.teamcode.util.MathUtils;
 
 @TeleOp(name = "CDTeleop", group = "Linear Opmode")
 public class CDTeleop extends LinearOpMode implements Runnable {
     // Static variables for tuning
     private static final double INVERT_ARM_LIMIT = 0.63;
-    private static final double ARM_ROTATION_MOVE_SPEED = 0.008;
+    private static final double ARM_ROTATION_MOVE_SPEED = 0.009;
     private static final double ARM_VERTICAL_MOVE_SPEED = 0.012;
-    private static final double GRABBER_EXTEND_MOVE_SPEED = 0.02;
-    private static final double GRABBER_GRAB_MOVE_SPEED = 0.02;
+    private static final double GRABBER_EXTEND_MOVE_SPEED = 0.25;
+    private static final double GRABBER_GRAB_MOVE_SPEED = 0.25;
 
     // Initialize our teleopThread
     private Thread teleopGamepad1Thread;
@@ -167,9 +168,13 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                     !fourBarSetHighCommand.isExecuting &&
                     !homeCommand.isExecuting &&
                     !unicornCommand.isExecuting
-            ) {
+            )
+            {
                 fourBar.setFourBarPower(0.0);
             }
+//            if (fourBar.isOutOfRange()) {
+//                fourBar.setFourBarPosition(MathUtils.clampDouble(CDFourBar.ABSOLUTE_LOWER_BOUND_VOLTS, CDFourBar.ABSOLUTE_UPPER_BOUND_VOLTS, fourBar.getFourBarPosition()));
+//            }
 
             // TODO: Arm vertical & rotation positions
             // B: Set four bar high, arm vertical to 0.31
@@ -204,9 +209,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             // arm rotate
             double rotationSpeed = fourBarOp.getRightX();
             boolean armClearToRotate = arm.isArmClearToRotateFree(fourBar, pickup.isPickupClosed);
-            if (rotationSpeed > 0 && armClearToRotate) {
+            if (rotationSpeed > 0.2 && armClearToRotate) {
                 arm.setArmRotationPosition(armRotationPosition + ARM_ROTATION_MOVE_SPEED);
-            } else if (rotationSpeed < 0 && armClearToRotate) {
+            } else if (rotationSpeed < -0.2 && armClearToRotate) {
                 arm.setArmRotationPosition(armRotationPosition - ARM_ROTATION_MOVE_SPEED);
             }
 
@@ -220,10 +225,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
             double openPickupSpeed = fourBarOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
             double closePickupSpeed = fourBarOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
             pickupPosition = pickup.getServoPosition();
-            if (openPickupSpeed > 0) {
+            if (openPickupSpeed > 0.2) {
                 pickupTarget = CDPickup.OPEN_POSITION;
                 pickup.release();
-            } else if (closePickupSpeed > 0) {
+            } else if (closePickupSpeed > 0.2) {
                 pickupTarget = CDPickup.CLOSED_POSITION;
                 new PickupCone(arm, pickup, fourBar).schedule();
             }

@@ -17,8 +17,9 @@ public class MoveToHome extends SequentialCommandGroup {
     public MoveToHome(CDFourBar fourBar, CDArm arm, CDPickup pickup) {
         isExecuting = false;
         addCommands(
-                new FourBarSetPosition(fourBar, CDFourBar.ARM_CLEARED_POSITION_HOME),
-                // new MoveFourBarToClear(arm, fourBar, true, pickup.isPickupClosed),
+
+//                new FourBarSetPosition(fourBar, CDFourBar.ARM_CLEARED_POSITION_HOME),
+                new MoveFourBarToClear(arm, fourBar, true, pickup.isPickupClosed),
                 new ArmVerticalHome(arm),
                 new ArmRotateHome(arm),
                 new FourBarSetPosition(fourBar, CDFourBar.LOWER_POSITION_HOME)

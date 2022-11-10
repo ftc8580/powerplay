@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commandgroups;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.commands.ArmMoveRotate;
+import org.firstinspires.ftc.teamcode.commands.ArmMoveVertical;
 import org.firstinspires.ftc.teamcode.commands.ArmVerticalHome;
 import org.firstinspires.ftc.teamcode.commands.FourBarSetPosition;
 import org.firstinspires.ftc.teamcode.commands.MoveFourBarToClear;
@@ -17,11 +18,9 @@ public class MoveToDeliver extends SequentialCommandGroup {
         isExecuting = false;
 
         addCommands(
-                new ArmVerticalHome(arm),
-                new FourBarSetPosition(fourBar, CDFourBar.ARM_CLEARED_POSITION_HOME),
-                // new MoveFourBarToClear(arm, fourBar, false, pickup.isPickupClosed),
-                new ArmMoveRotate(arm, fourBar, CDArm.ARM_ROTATION_POSITION_FRONT),
-                new FourBarSetPosition(fourBar, 1) // CDFourBar.MIDDLE_POSITION_HOME
+                new FourBarSetPosition(fourBar, 0.96),
+                new ArmMoveVertical(arm, 0.62),
+                new ArmMoveRotate(arm, fourBar, 0.84)
         );
         addRequirements(fourBar, arm, pickup);
     }

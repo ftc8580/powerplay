@@ -5,7 +5,7 @@ public class ServoUtils {
     private static final double DEFAULT_DEGREE_RANGE = 270;
     private static final double DEFAULT_SCALE_RANGE_MIN = 0;
     private static final double DEFAULT_SCALE_RANGE_MAX = 1;
-    private static final double THRESHOLD_MULTIPLIER = 10;
+    private static final double THRESHOLD_MULTIPLIER = 6;
 
     public static double getSweepTimeMs(double currentPosition, double targetPosition) {
         return getSweepTimeMs(currentPosition, targetPosition, DEFAULT_SCALE_RANGE_MIN, DEFAULT_SCALE_RANGE_MAX, DEFAULT_DEGREE_RANGE);

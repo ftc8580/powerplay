@@ -18,7 +18,7 @@ public class CDAutonSimpleALL extends CDAutonBase {
 
     @Override
     public void executeAuton() {
-        double signalLocation = 3; //Values should be 1,2 or 3
+        double signalLocation = Integer.parseInt(positionNumber); //Values should be 1,2 or 3
 
         //This is a simple auton to pick up cone and park based on signal location
         myFourbar.setFourBarPosition(CDFourBar.MIDDLE_POSITION_HOME);

@@ -37,7 +37,7 @@ public class CDArm extends SubsystemBase {
 
     // Define variables for rotation positions
     public static final double ARM_VERTICAL_POSITION_HOME = 0.415;
-    public static final double ARM_VERTICAL_PICKUP_LOW_POSITION = 0.555;
+    public static final double ARM_VERTICAL_PICKUP_LOW_POSITION = 1.0;
     public static final double ARM_VERTICAL_PICKUP_HIGH_POSITION = ARM_VERTICAL_POSITION_HOME;
     private static final double ARM_ADD_TO_DROP_HEIGHT_CLEAR = 0.05;
 

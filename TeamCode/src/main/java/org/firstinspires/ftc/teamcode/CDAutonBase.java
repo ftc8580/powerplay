@@ -20,6 +20,8 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Autonomous(name = "CDAutonBase", group = "Linear Opmode")
@@ -27,7 +29,9 @@ import java.util.List;
 public class CDAutonBase extends LinearOpMode {
 
     // Modern Phones / Control Hub
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20221106_122744.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/CDNewSleeve.tflite";
+
+    private static final Pattern pattern = Pattern.compile("([0-9]).+");
 
     private static final String[] LABELS = {
 //            "1 Bolt",
@@ -72,6 +76,7 @@ public class CDAutonBase extends LinearOpMode {
     public CDGrabber myGrabber;
     public CDFourBar myFourbar;
     public CDPickup myPickup;
+    public String positionNumber;
 
 
     @Override
@@ -149,9 +154,12 @@ public class CDAutonBase extends LinearOpMode {
                         double row = (recognition.getTop() + recognition.getBottom()) / 2;
                         double width = Math.abs(recognition.getRight() - recognition.getLeft());
                         double height = Math.abs(recognition.getTop() - recognition.getBottom());
+                        String label = recognition.getLabel();
+                        Matcher matcher = pattern.matcher(label);
+                        positionNumber = matcher.find() ? matcher.group(1) : "";
 
                         telemetry.addData("", " ");
-                        telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+                        telemetry.addData("Image", "%s Pos# %s (%.0f %% Conf.)", recognition.getLabel(), positionNumber, recognition.getConfidence() * 100);
                         telemetry.addData("- Position (Row/Col)", "%.0f / %.0f", row, col);
                         telemetry.addData("- Size (Width/Height)", "%.0f / %.0f", width, height);
                     }
@@ -211,11 +219,11 @@ public class CDAutonBase extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.70f;
+        tfodParameters.minResultConfidence = 0.50f;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 300;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.setClippingMargins(250, 175, 275, 175);
+//        tfod.setClippingMargins(250, 175, 275, 175);
 
         // Use loadModelFromAsset() if the TF Model is built in as an asset by Android Studio
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
