@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,8 +13,6 @@ import org.firstinspires.ftc.teamcode.subsystems.CDPickup;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Parameters;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
@@ -77,7 +74,30 @@ public class CDAutonBase extends LinearOpMode {
     public CDFourBar myFourbar;
     public CDPickup myPickup;
     public String positionNumber;
-    public double Alley_Delivery_Fourbar_Medium = 0.77;
+    //Set fourbar
+    public double alleyDeliverFourbarHIGH = 0.96;
+    public double alleyDeliverFourbarMEDIUM = 0.77;
+    public double alleyDeliverFourbarLOW = 0.53;
+    public double fourbarHOME = 0.22;
+    public double fourbarUNICORN = 0.96;
+    //Set Armvert
+    public double alleyDeliverArmVertHIGH = 0.31;
+    public double alleyDeliverArmVertMEDIUM = 0.415;
+    public double alleyDeliverArmVertLOW = 0.415;
+    public double armVertHOME = 0.415;
+    public double armVertUNICORN = 0.62;
+    public double armVertPickupLOW = 0.60;
+    //setarm rotation
+    public double alleyDeliverArmRotRIGHT = 0.19;
+    public double alleyDeliverArmRotLEFT = 0.47;
+    public double armRotUNICORN = 0.84;
+    public double armRotHOME = 0.333;
+
+
+
+
+
+
 
 
     @Override

@@ -5,9 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.subsystems.CDArm;
 import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 
-@Autonomous(name="CDAutonLeftDeliver", group="Linear Opmode")
+@Autonomous(name="CDAutonStackLEFT", group="Linear Opmode")
 //@Disabled
-public class CDAutonLeftDeliver extends CDAutonBase {
+public class CDAutonStackLEFT extends CDAutonBase {
 
     //    @Override
     //    public void initTokenWeDoNotSee() {
@@ -49,6 +49,16 @@ public class CDAutonLeftDeliver extends CDAutonBase {
         //Drive to correct square
         if (signalLocation == 1) {
             myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -23, 5.0);
+            //Only if near cone stack. Try to pick up cone. NOT SURE IF THIS IS EVEN POSSIBLE.
+/*            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 5.0);
+            myArm.setArmVerticalPosition(0.200);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -4, 10.0);
+            myArm.setArmVerticalPosition(0.350); //above cone positon + 0.150. This goes down.
+            myPickup.pickup();
+            myArm.setArmVerticalPosition(0.1);
+            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 4, 10.0);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 5.0);
+            myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION);*/
         }
         if (signalLocation ==3) {
             myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 23, 5.0);
@@ -68,16 +78,16 @@ public class CDAutonLeftDeliver extends CDAutonBase {
 
 //Arm Vertical
 //myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_POSITION_HOME)
-    //Use CDArm.ARM_VERTICAL_POSITION_HOME for Fourbar Heights of low or medium
-    //Use 0.31 for Fourbar Height high
-    //For picking up cones... use CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION or CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION
+//Use CDArm.ARM_VERTICAL_POSITION_HOME for Fourbar Heights of low or medium
+//Use 0.31 for Fourbar Height high
+//For picking up cones... use CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION or CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION
 
 //Arm Rotation
 //myArm.setArmRotationPosition(CDArm.ALLEY_DELIVERY_LEFT_ROTATION);
-    //Use CDArm.ALLEY_DELIVERY_LEFT_ROTATION for left deliver
-    //Use CDArm.ALLEY_DELIVERY_RIGHT_ROTATION for right deliver
-    //Use CDArm.ARM_ROTATION_POSITION_HOME to set arm rotation to back
+//Use CDArm.ALLEY_DELIVERY_LEFT_ROTATION for left deliver
+//Use CDArm.ALLEY_DELIVERY_RIGHT_ROTATION for right deliver
+//Use CDArm.ARM_ROTATION_POSITION_HOME to set arm rotation to back
 
 //Pickup
-    //myPickup.pickup();
-    //myPickup.release();
+//myPickup.pickup();
+//myPickup.release();
