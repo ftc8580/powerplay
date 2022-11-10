@@ -16,6 +16,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.Exposur
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @TeleOp(name = "8580: TensorFlow Object Detection Webcam", group = "Concept")
@@ -33,6 +35,8 @@ public class TensorFlowObjectDetectionWebcam extends LinearOpMode {
             "2 Cherry",
             "3 Ghost"
     };
+
+    private static final Pattern pattern = Pattern.compile("([0-9]).+");
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -102,9 +106,12 @@ public class TensorFlowObjectDetectionWebcam extends LinearOpMode {
                 double row = (recognition.getTop() + recognition.getBottom()) / 2;
                 double width = Math.abs(recognition.getRight() - recognition.getLeft());
                 double height = Math.abs(recognition.getTop() - recognition.getBottom());
+                String label = recognition.getLabel();
+                Matcher matcher = pattern.matcher(label);
+                String positionNumber = matcher.find() ? matcher.group(1) : "";
 
                 telemetry.addData("", " ");
-                telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+                telemetry.addData("Image", "%s Pos# %s (%.0f %% Conf.)", recognition.getLabel(), positionNumber, recognition.getConfidence() * 100);
                 telemetry.addData("- Position (Row/Col)", "%.0f / %.0f", row, col);
                 telemetry.addData("- Size (Width/Height)", "%.0f / %.0f", width, height);
             }
