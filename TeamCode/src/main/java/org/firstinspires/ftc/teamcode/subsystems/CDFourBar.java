@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.util.CDRuntime;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
-
-import java.util.Objects;
 
 public class CDFourBar extends SubsystemBase {
     private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = 0.9;
@@ -19,13 +19,14 @@ public class CDFourBar extends SubsystemBase {
     private final static double LOW_SPEED_LOWER_BOUND_VOLTS = 0.34;
 
     // Define variables for Home Positions. HOME is back pickup position between fourbars.
-    public final static double LOWER_POSITION_HOME = 0.24; //ABSOLUTE_LOWER_BOUND_VOLTS;
+    public static double LOWER_POSITION_HOME = 0.24; //ABSOLUTE_LOWER_BOUND_VOLTS;
     public final static double MIDDLE_POSITION_HOME = 0.8;
     public final static double ARM_CLEARED_POSITION_HOME = 0.8; // 0.6 when loaded
     private final static double POTENTIOMETER_THRESHOLD_PRECISION = 0.001;
     public final static double TIMEOUT_MS = 2000;
 
     private final AnalogInput fourBarPotentiometer;
+    public static TouchSensor fourBarTouchSensor;
     private final CDRuntime runtime = new CDRuntime();
     private final Motor fourBarMotor;
 
@@ -36,13 +37,26 @@ public class CDFourBar extends SubsystemBase {
 
         fourBarMotor = new Motor(hardwareMap, "motorFourBar");
         fourBarPotentiometer = hardwareMap.get(AnalogInput.class, "fourBarPos");
+        fourBarTouchSensor = hardwareMap.get(TouchSensor.class, "fourbarTouch");
 
         fourBarMotor.setRunMode(Motor.RunMode.RawPower);
         fourBarMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        setFourBarPosition(LOWER_POSITION_HOME);
+//        setFourBarPosition(LOWER_POSITION_HOME); // Need to use the new method specific to recalibration
+        resetFourBarHomePosition();
     }
 
+    public void resetFourBarHomePosition() {
+        boolean resetComplete = false;
+        while (!resetComplete) {
+            if (!CDFourBar.fourBarTouchSensor.isPressed()) {
+                moveDown();
+            } else {
+                CDFourBar.LOWER_POSITION_HOME = getFourBarPosition();
+                resetComplete = true;
+            }
+        }
+    }
     public boolean isOutOfRange() {
         if (getFourBarPosition() > ABSOLUTE_UPPER_BOUND_VOLTS || getFourBarPosition() < ABSOLUTE_LOWER_BOUND_VOLTS) {
             return true;

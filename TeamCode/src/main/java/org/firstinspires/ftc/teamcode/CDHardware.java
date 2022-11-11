@@ -12,6 +12,7 @@ public class CDHardware {
     //Fourbar
     public DcMotor fourBarMotor;
     public AnalogInput fourBarPotentiometer;
+    public TouchSensor fourBarHomeTouchSensor;
     //Arm
     public Servo armVerticalServo;
     public Servo armRotationServo;
@@ -19,6 +20,7 @@ public class CDHardware {
     //Grabber
     public Servo grabberExtendServo;
     public Servo grabberServo;
+
 
 
 
@@ -35,6 +37,7 @@ public class CDHardware {
         pickupServo = hwMap.get(Servo.class, "servoIntake");
         grabberExtendServo = hwMap.get(Servo.class, "servoExtend");
         grabberServo = hwMap.get(Servo.class, "servoGrab");
+        fourBarHomeTouchSensor = hwMap.get(TouchSensor.class, "fourbarTouch");
     }
 }
 

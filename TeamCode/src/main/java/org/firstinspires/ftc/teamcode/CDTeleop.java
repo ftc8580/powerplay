@@ -347,7 +347,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         // telemetry.addData("motorRF ", "%.2f", rightFrontPower);
         // telemetry.addData("motorLR ", "%.2f", leftRearPower);
         // telemetry.addData("motorRR ", "%.2f", rightRearPower);
-        robotTelemetry.addData("forubar position", "%.2f", fourBarPosition);
+        robotTelemetry.addData("fourbar position", "%.2f", fourBarPosition);
+        robotTelemetry.addData("fourbar home", "%.2f", CDFourBar.LOWER_POSITION_HOME);
         robotTelemetry.addData("FourBarPotUnderHome", fourBarPosition < CDFourBar.ARM_CLEARED_POSITION_HOME);
         robotTelemetry.addData("ArmUpDownPosition", armVerticalPosition);
         robotTelemetry.addData("ArmUpDownTarget", armVerticalTarget);

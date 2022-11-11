@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 public class MoveFourBarToHome extends CommandBase {
     private final CDArm arm;
     private final CDFourBar fourBar;
+    public boolean resetComplete;
 
     public MoveFourBarToHome(CDArm subsystem, CDFourBar fourBar) {
         this.arm = subsystem;
@@ -17,11 +18,17 @@ public class MoveFourBarToHome extends CommandBase {
 
     @Override
     public void execute() {
-        fourBar.setFourBarPosition(CDFourBar.LOWER_POSITION_HOME);
+        resetComplete = false;
+        if (!CDFourBar.fourBarTouchSensor.isPressed()) {
+            fourBar.moveDown(0.8);
+        } else {
+            CDFourBar.LOWER_POSITION_HOME = fourBar.getFourBarPosition();
+            resetComplete = true;
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return resetComplete;
     }
 }
