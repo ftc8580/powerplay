@@ -64,6 +64,8 @@ public class CDAutonSimpleALL extends CDAutonBase {
         if (signalLocation == 3) {
             myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 23, 5.0);
         }
+
+        finishAuton();
     }
 
 }

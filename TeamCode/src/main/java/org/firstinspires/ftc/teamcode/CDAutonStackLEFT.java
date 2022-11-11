@@ -101,6 +101,8 @@ public class CDAutonStackLEFT extends CDAutonBase {
             myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 23, 5.0);
             myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 5.0);
         }
+
+        finishAuton();
     }
 
 }
