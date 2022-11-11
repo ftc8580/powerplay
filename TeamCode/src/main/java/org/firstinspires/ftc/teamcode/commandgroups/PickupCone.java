@@ -15,8 +15,11 @@ public class PickupCone extends SequentialCommandGroup {
         addCommands(
                 new FourBarSetPosition(fourBar, CDFourBar.LOWER_POSITION_HOME),
                 new ArmPickupLowPosition(arm),
+                new FourBarSetPosition(fourBar, CDFourBar.LOWER_POSITION_HOME),
                 new PickupGrabCone(pickup),
+                new FourBarSetPosition(fourBar, CDFourBar.LOWER_POSITION_HOME),
                 new ArmPickupHighPosition(arm)
+
         );
         addRequirements(arm, pickup, fourBar);
     }

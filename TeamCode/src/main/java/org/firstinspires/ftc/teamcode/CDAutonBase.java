@@ -78,7 +78,7 @@ public class CDAutonBase extends LinearOpMode {
     public double alleyDeliverFourbarHIGH = 0.96;
     public double alleyDeliverFourbarMEDIUM = 0.77;
     public double alleyDeliverFourbarLOW = 0.53;
-    public double fourbarHOME = 0.22;
+    public double fourbarHOME = 0.23;
     public double fourbarUNICORN = 0.96;
     //Set Armvert
     public double alleyDeliverArmVertHIGH = 0.31;
@@ -147,7 +147,7 @@ public class CDAutonBase extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(1.7, 16.0 / 9.0);
+            tfod.setZoom(1.5, 16.0 / 9.0);
         }
 
         /** Wait for the game to begin */

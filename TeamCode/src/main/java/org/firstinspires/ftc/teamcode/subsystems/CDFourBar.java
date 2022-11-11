@@ -14,12 +14,12 @@ public class CDFourBar extends SubsystemBase {
     private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = 0.9;
     // Set higher to prevent situations where we're locked out because the arm got pushed up
     public final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.30;
-    public final static double ABSOLUTE_LOWER_BOUND_VOLTS = 0.20;
+    public final static double ABSOLUTE_LOWER_BOUND_VOLTS = .22;
     private final static double LOW_SPEED_UPPER_BOUND_VOLTS = 1.08;
     private final static double LOW_SPEED_LOWER_BOUND_VOLTS = 0.34;
 
     // Define variables for Home Positions. HOME is back pickup position between fourbars.
-    public final static double LOWER_POSITION_HOME = 0.22; //ABSOLUTE_LOWER_BOUND_VOLTS;
+    public final static double LOWER_POSITION_HOME = 0.24; //ABSOLUTE_LOWER_BOUND_VOLTS;
     public final static double MIDDLE_POSITION_HOME = 0.8;
     public final static double ARM_CLEARED_POSITION_HOME = 0.8; // 0.6 when loaded
     private final static double POTENTIOMETER_THRESHOLD_PRECISION = 0.001;

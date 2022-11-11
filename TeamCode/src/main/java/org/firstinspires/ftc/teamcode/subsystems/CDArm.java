@@ -37,7 +37,7 @@ public class CDArm extends SubsystemBase {
 
     // Define variables for rotation positions
     public static final double ARM_VERTICAL_POSITION_HOME = 0.415;
-    public static final double ARM_VERTICAL_PICKUP_LOW_POSITION = 1.0;
+    public static final double ARM_VERTICAL_PICKUP_LOW_POSITION = 0.8;
     public static final double ARM_VERTICAL_PICKUP_HIGH_POSITION = ARM_VERTICAL_POSITION_HOME;
     private static final double ARM_ADD_TO_DROP_HEIGHT_CLEAR = 0.05;
 
@@ -61,8 +61,8 @@ public class CDArm extends SubsystemBase {
         verticalServo.scaleRange(VERTICAL_SCALE_RANGE_MIN, VERTICAL_SCALE_RANGE_MAX);
         rotationServo.scaleRange(ROTATION_SCALE_RANGE_MIN, ROTATION_SCALE_RANGE_MAX);
 
-        verticalServo.setPosition(ARM_CLEAR_TO_ROTATE_WITH_CONE_POSITION);
-        verticalPosition = ARM_CLEAR_TO_ROTATE_WITH_CONE_POSITION;
+        verticalServo.setPosition(ARM_VERTICAL_POSITION_HOME);
+        verticalPosition = ARM_VERTICAL_POSITION_HOME;
         rotationServo.setPosition(INITIAL_ARM_ROTATION_POSITION);
         rotationPosition = INITIAL_ARM_ROTATION_POSITION;
     }

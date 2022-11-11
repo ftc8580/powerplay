@@ -11,7 +11,7 @@ public class CDPickup extends SubsystemBase {
     private static final double SCALE_RANGE_MIN = 0.50;
     private static final double SCALE_RANGE_MAX = 0.70;
 
-    public static final double CLOSED_POSITION = 0.73; // 13mm
+    public static final double CLOSED_POSITION = 1.0; // 13mm
     public static final double OPEN_POSITION = 0.0;
 
     private final Servo pickupServo;
