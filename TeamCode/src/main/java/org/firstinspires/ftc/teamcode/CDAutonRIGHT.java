@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name="CDAutonDeliverLEFT", group="Linear Opmode")
+@Autonomous(name="CDAutonRIGHT", group="Linear Opmode")
 //@Disabled
-public class CDAutonDeliverLEFT extends CDAutonBase {
+public class CDAutonRIGHT extends CDAutonBase {
 
     //    @Override
     //    public void initTokenWeDoNotSee() {
@@ -51,10 +51,10 @@ public class CDAutonDeliverLEFT extends CDAutonBase {
         //Raise fourbar to medium delivery height and rotate arm to delivery position
         myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM);
         sleep(750);
-        myArm.setArmRotationPosition(alleyDeliverArmRotRIGHT);
+        myArm.setArmRotationPosition(alleyDeliverArmRotLEFT);
         sleep(1000);
         //Drop Cone
-        myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM - 0.02);
+        //myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM - 0.02);
         myPickup.release();
         sleep(1000);
         //Rotate arm back to HOME position to prevent collision
@@ -88,16 +88,16 @@ public class CDAutonDeliverLEFT extends CDAutonBase {
 
 //Arm Vertical
 //myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_POSITION_HOME)
-    //Use CDArm.ARM_VERTICAL_POSITION_HOME for Fourbar Heights of low or medium
-    //Use 0.31 for Fourbar Height high
-    //For picking up cones... use CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION or CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION
+//Use CDArm.ARM_VERTICAL_POSITION_HOME for Fourbar Heights of low or medium
+//Use 0.31 for Fourbar Height high
+//For picking up cones... use CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION or CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION
 
 //Arm Rotation
 //myArm.setArmRotationPosition(CDArm.ALLEY_DELIVERY_LEFT_ROTATION);
-    //Use CDArm.ALLEY_DELIVERY_LEFT_ROTATION for left deliver
-    //Use CDArm.ALLEY_DELIVERY_RIGHT_ROTATION for right deliver
-    //Use CDArm.ARM_ROTATION_POSITION_HOME to set arm rotation to back
+//Use CDArm.ALLEY_DELIVERY_LEFT_ROTATION for left deliver
+//Use CDArm.ALLEY_DELIVERY_RIGHT_ROTATION for right deliver
+//Use CDArm.ARM_ROTATION_POSITION_HOME to set arm rotation to back
 
 //Pickup
-    //myPickup.pickup();
-    //myPickup.release();
+//myPickup.pickup();
+//myPickup.release();
