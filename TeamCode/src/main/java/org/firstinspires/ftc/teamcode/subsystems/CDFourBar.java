@@ -20,8 +20,8 @@ public class CDFourBar extends SubsystemBase {
 
     // Define variables for Home Positions. HOME is back pickup position between fourbars.
     public static double LOWER_POSITION_HOME = 0.24; //ABSOLUTE_LOWER_BOUND_VOLTS;
-    public final static double MIDDLE_POSITION_HOME = 0.8;
-    public final static double ARM_CLEARED_POSITION_HOME = 0.8; // 0.6 when loaded
+    public static double MIDDLE_POSITION_HOME = LOWER_POSITION_HOME + 0.56; //0.8;
+    public static double ARM_CLEARED_POSITION_HOME = LOWER_POSITION_HOME + 0.56; //0.8; // 0.6 when loaded
     private final static double POTENTIOMETER_THRESHOLD_PRECISION = 0.001;
     public final static double TIMEOUT_MS = 2000;
 

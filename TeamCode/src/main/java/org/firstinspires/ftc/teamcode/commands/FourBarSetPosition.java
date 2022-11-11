@@ -15,11 +15,11 @@ public class FourBarSetPosition extends CommandBase {
     public FourBarSetPosition(CDFourBar subsystem, String targetPosition) {
         double target = subsystem.getFourBarPosition();
         if (Objects.equals(targetPosition, "low")) {
-            target = .53;
+            target = CDFourBar.LOWER_POSITION_HOME + 0.31;//.53;
         } else if (Objects.equals(targetPosition, "medium")) {
-            target = 0.77;
+            target = CDFourBar.LOWER_POSITION_HOME + 0.55;//0.77;
         } else if (Objects.equals(targetPosition, "high")) {
-            target = 1.12;
+            target = CDFourBar.LOWER_POSITION_HOME + 0.9 ;//1.12;
         }
         this.fourBar = subsystem;
         this.targetPosition = target;
