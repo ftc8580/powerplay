@@ -86,10 +86,19 @@ public class CDAutonBase extends LinearOpMode {
     public double alleyDeliverArmVertLOW = 0.415;
     public double armVertHOME = 0.415;
     public double armVertUNICORN = 0.62;
-    public double armVertPickupLOW = 0.60;
+    public double armVertPickupLOW = 0.80;
+    public double armStackPickupMOVE = 0.20;
+    public double armStackPickupHIGH = 0.24;
+    public double armStackPickup5 = 0.415;
+    public double armStackPickup4 = 0.480;
+    public double armStackPickup3 = 0.550;
+    public double armStackPickup2 = 0.575;
+    public double armStackPickup1 = armVertPickupLOW;
+    public double distanceStacktoLow = 12;
+
     //setarm rotation
     public double alleyDeliverArmRotRIGHT = 0.19;
-    public double alleyDeliverArmRotLEFT = 0.47;
+    public double alleyDeliverArmRotLEFT = 0.43;
     public double armRotUNICORN = 0.84;
     public double armRotHOME = 0.333;
 

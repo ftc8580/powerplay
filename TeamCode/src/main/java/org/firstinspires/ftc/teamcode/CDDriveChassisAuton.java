@@ -235,9 +235,10 @@ public class CDDriveChassisAuton {
         int newTurnTargetLR;
         int newTurnTargetLF;
 
-        //Calculate turn inches with a 9.75" wheel base
+        //Calculate turn inches with a 9.75" wheel base 2021 was 9
+        // For 2022 season updated to 13
         //TODO test accuracy on mats. it is slightly overturning right now.
-        double turnInches = turnDeg/360 * (2*3.1415*9);
+        double turnInches = turnDeg/360 * (2*3.1415*13);
 
         //Determine new target position and pass to motor controller
         newTurnTargetRR = robotHardware.rightRearMotor.getCurrentPosition() - (int)(turnInches * COUNTS_PER_INCH);

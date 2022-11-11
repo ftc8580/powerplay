@@ -26,7 +26,7 @@ public class CDAutonRIGHT extends CDAutonBase {
         int signalLocation;
 
         if (positionNumber == null || positionNumber == "") {
-            signalLocation = 1;
+            signalLocation = 3;
         } else {
             signalLocation = Integer.parseInt(positionNumber); //Values should be 1,2 or 3
         }
