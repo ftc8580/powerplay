@@ -25,10 +25,10 @@ import org.firstinspires.ftc.teamcode.util.MathUtils;
 public class CDTeleop extends LinearOpMode implements Runnable {
     // Static variables for tuning
     private static final double INVERT_ARM_LIMIT = 0.63;
-    private static final double ARM_ROTATION_MOVE_SPEED = 0.009;
-    private static final double ARM_VERTICAL_MOVE_SPEED = 0.012;
+    private static final double ARM_ROTATION_MOVE_SPEED = 0.006;
+    private static final double ARM_VERTICAL_MOVE_SPEED = 0.016;
     private static final double GRABBER_EXTEND_MOVE_SPEED = 0.25;
-    private static final double GRABBER_GRAB_MOVE_SPEED = 0.25;
+    private static final double GRABBER_GRAB_MOVE_SPEED = 0.30;
 
     // Initialize our teleopThread
     private Thread teleopGamepad1Thread;

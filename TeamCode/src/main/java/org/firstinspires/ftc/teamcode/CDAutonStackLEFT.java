@@ -14,10 +14,11 @@ public class CDAutonStackLEFT extends CDAutonBase {
     //        SignalWeDoNotSee = 1;
     //    }
 
+    private double signalLocation;
 
     @Override
     public void executeAuton() {
-        double signalLocation = Integer.parseInt(positionNumber); //Values should be 1,2 or 3
+        //double signalLocation = Integer.parseInt(positionNumber); //Values should be 1,2 or 3
 
         //This auton delivers cone to medium junction
         myFourbar.setFourBarPosition(fourbarHOME);
@@ -45,23 +46,60 @@ public class CDAutonStackLEFT extends CDAutonBase {
 
         //Drive forward to center of square
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 12, 10.0);
+        myFourbar.setFourBarPosition(fourbarHOME);
+        myArm.setArmVerticalPosition(armVertHOME);
+
+        //Deliver Cones from Stack
+        myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 5.0);
+        myArm.setArmVerticalPosition(0.200);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -25, 10.0);
+        myArm.setArmVerticalPosition(0.350); //above cone positon + 0.150. This goes down.
+        sleep(500);
+        myPickup.pickup();
+        sleep(500);
+        myArm.setArmVerticalPosition(0.1);
+        sleep(500);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 4, 10.0);
+
+        //Raise fourbar to medium delivery height and rotate arm to delivery position then move to low
+        myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM);
+        sleep(1000);
+        myArm.setArmRotationPosition(alleyDeliverArmRotRIGHT);
+        sleep(501);
+        myFourbar.setFourBarPosition(alleyDeliverFourbarLOW);
+        sleep(1000);
+        //Drop Cone
+        myPickup.release();
+        sleep(1000);
+        //Rotate arm back to HOME position to prevent collision
+        myArm.setArmRotationPosition(armRotHOME);
+        sleep(1000);
+        myFourbar.setFourBarPosition(fourbarHOME);
+
+        sleep(1000);
+
+       //Repeat
+        //myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -4, 10.0);
+        //COPY ABOVE
+        //Subtract .150 each time
+
 
         //Drive to correct square
         if (signalLocation == 1) {
+            //TODO adjust from last cone deliver
             myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -23, 5.0);
-            //Only if near cone stack. Try to pick up cone. NOT SURE IF THIS IS EVEN POSSIBLE.
-/*            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 5.0);
-            myArm.setArmVerticalPosition(0.200);
-            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -4, 10.0);
-            myArm.setArmVerticalPosition(0.350); //above cone positon + 0.150. This goes down.
-            myPickup.pickup();
-            myArm.setArmVerticalPosition(0.1);
-            myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 4, 10.0);
             myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 5.0);
-            myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION);*/
+
+        }
+        if (signalLocation ==2) {
+            //TODO adjust from last cone deliver
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 23, 5.0);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 5.0);
         }
         if (signalLocation ==3) {
+            //TODO adjust from last cone deliver
             myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 23, 5.0);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 5.0);
         }
     }
 

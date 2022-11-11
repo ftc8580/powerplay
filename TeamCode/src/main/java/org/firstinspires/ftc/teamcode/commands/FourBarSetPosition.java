@@ -41,7 +41,7 @@ public class FourBarSetPosition extends CommandBase {
         if (currentPosition > targetPosition) {
             fourBar.moveDown(0.7);
         } else if (currentPosition < targetPosition) {
-            fourBar.moveUp(0.1);
+            fourBar.moveUp(0.20);
         }
     }
 

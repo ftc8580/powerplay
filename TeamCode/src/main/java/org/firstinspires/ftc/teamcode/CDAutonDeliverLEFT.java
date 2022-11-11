@@ -2,22 +2,34 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.subsystems.CDArm;
-import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
-
-@Autonomous(name="CDAutonLeftDeliver", group="Linear Opmode")
+@Autonomous(name="CDAutonDeliverLEFT", group="Linear Opmode")
 //@Disabled
-public class CDAutonLeftDeliver extends CDAutonBase {
+public class CDAutonDeliverLEFT extends CDAutonBase {
 
     //    @Override
     //    public void initTokenWeDoNotSee() {
     //        SignalWeDoNotSee = 1;
     //    }
 
-
     @Override
     public void executeAuton() {
-        double signalLocation = Integer.parseInt(positionNumber); //Values should be 1,2 or 3
+        /* if(positionNumber == "1") {
+            signalLocation = 1;
+        } else if (positionNumber == "2") {
+            signalLocation = 2;
+        } else if (positionNumber == "3") {
+            signalLocation = 3;
+        } else {
+            signalLocation = 3;
+        }*/
+
+        int signalLocation;
+
+        if (positionNumber == null || positionNumber == "") {
+            signalLocation = 1;
+        } else {
+            signalLocation = Integer.parseInt(positionNumber); //Values should be 1,2 or 3
+        }
 
         //This auton delivers cone to medium junction
         myFourbar.setFourBarPosition(fourbarHOME);
@@ -25,8 +37,12 @@ public class CDAutonLeftDeliver extends CDAutonBase {
         //Pick up cone
         myArm.setArmVerticalPosition(armVertPickupLOW);
         sleep (200);
+        myFourbar.setFourBarPosition(fourbarHOME);
+        sleep (200);
         myPickup.pickup();
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 2, 10.0);
+        myFourbar.setFourBarPosition(fourbarHOME);
+        sleep (250);
         myArm.setArmVerticalPosition(armVertHOME);
 
         //Drive forward to deliver to medium junction
@@ -34,17 +50,21 @@ public class CDAutonLeftDeliver extends CDAutonBase {
 
         //Raise fourbar to medium delivery height and rotate arm to delivery position
         myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM);
-        sleep(1000);
+        sleep(750);
         myArm.setArmRotationPosition(alleyDeliverArmRotRIGHT);
-        sleep(501);
+        sleep(1000);
         //Drop Cone
+        myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM - 0.02);
         myPickup.release();
         sleep(1000);
         //Rotate arm back to HOME position to prevent collision
         myArm.setArmRotationPosition(armRotHOME);
 
         //Drive forward to center of square
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 12, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 17, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -5, 10.0);
+        myFourbar.setFourBarPosition(fourbarHOME);
+
 
         //Drive to correct square
         if (signalLocation == 1) {
