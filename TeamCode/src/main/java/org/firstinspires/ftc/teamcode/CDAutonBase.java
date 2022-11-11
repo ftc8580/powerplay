@@ -212,6 +212,16 @@ public class CDAutonBase extends LinearOpMode {
         sleep(2500);
     }
 
+    public void finishAuton() {
+        stop();
+        myPickup = null;
+        myFourbar = null;
+        myGrabber = null;
+        myArm = null;
+        myChassis = null;
+        myHardware = null;
+    }
+
     /**
      * Initialize the Vuforia localization engine.
      */
