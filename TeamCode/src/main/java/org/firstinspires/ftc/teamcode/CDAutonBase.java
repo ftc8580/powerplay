@@ -78,7 +78,7 @@ public class CDAutonBase extends LinearOpMode {
     public double alleyDeliverFourbarHIGH = 0.96;
     public double alleyDeliverFourbarMEDIUM = 0.77;
     public double alleyDeliverFourbarLOW = 0.53;
-    public double fourbarHOME = 0.23;
+    public double fourbarHOME = CDFourBar.LOWER_POSITION_HOME;
     public double fourbarUNICORN = 0.96;
     //Set Armvert
     public double alleyDeliverArmVertHIGH = 0.31;
@@ -100,7 +100,7 @@ public class CDAutonBase extends LinearOpMode {
     public double alleyDeliverArmRotRIGHT = 0.19;
     public double alleyDeliverArmRotLEFT = 0.43;
     public double armRotUNICORN = 0.84;
-    public double armRotHOME = 0.333;
+    public double armRotHOME = 0.343;
 
     @Override
     public void runOpMode() {
@@ -223,12 +223,12 @@ public class CDAutonBase extends LinearOpMode {
 
     public void finishAuton() {
         stop();
-        myPickup = null;
-        myFourbar = null;
-        myGrabber = null;
-        myArm = null;
-        myChassis = null;
-        myHardware = null;
+//        myPickup = null;
+//        myFourbar = null;
+//        myGrabber = null;
+//        myArm = null;
+//        myChassis = null;
+//        myHardware = null;
     }
 
     /**
