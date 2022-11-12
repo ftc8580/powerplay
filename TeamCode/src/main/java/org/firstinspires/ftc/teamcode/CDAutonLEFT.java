@@ -35,7 +35,7 @@ public class CDAutonLEFT extends CDAutonBase {
         myFourbar.setFourBarPosition(fourbarHOME);
         sleep (100);
         //Pick up cone
-        myArm.setArmVerticalPosition(armVertPickupLOW);
+        myArm.setArmVerticalPosition(0.8);
         sleep (200);
         myFourbar.setFourBarPosition(fourbarHOME);
         sleep (200);

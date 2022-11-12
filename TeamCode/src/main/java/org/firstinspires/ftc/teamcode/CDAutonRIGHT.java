@@ -35,7 +35,7 @@ public class CDAutonRIGHT extends CDAutonBase {
         myFourbar.setFourBarPosition(fourbarHOME);
         sleep (100);
         //Pick up cone
-        myArm.setArmVerticalPosition(armVertPickupLOW);
+        myArm.setArmVerticalPosition(0.8);
         sleep (200);
         myFourbar.setFourBarPosition(fourbarHOME);
         sleep (200);
@@ -46,7 +46,7 @@ public class CDAutonRIGHT extends CDAutonBase {
         myArm.setArmVerticalPosition(armVertHOME);
 
         //Drive forward to deliver to medium junction
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 37, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 42, 10.0);
 
         //Raise fourbar to medium delivery height and rotate arm to delivery position
         myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM);
@@ -61,7 +61,7 @@ public class CDAutonRIGHT extends CDAutonBase {
         myArm.setArmRotationPosition(armRotHOME);
 
         //Drive forward to center of square
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 17, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 12, 10.0);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -5, 10.0);
         myFourbar.setFourBarPosition(fourbarHOME);
 
