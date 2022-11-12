@@ -48,7 +48,9 @@ public class CDFourBar extends SubsystemBase {
 
     public void resetFourBarHomePosition() {
         boolean resetComplete = false;
-        while (!resetComplete) {
+        runtime.reset();
+
+        while (!resetComplete && !runtime.isTimedOutMs(TIMEOUT_MS)) {
             if (!CDFourBar.fourBarTouchSensor.isPressed()) {
                 moveDown();
             } else {

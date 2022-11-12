@@ -98,7 +98,7 @@ public class CDAutonBase extends LinearOpMode {
 
     //setarm rotation
     public double alleyDeliverArmRotRIGHT = 0.19;
-    public double alleyDeliverArmRotLEFT = 0.43;
+    public double alleyDeliverArmRotLEFT = 0.47;
     public double armRotUNICORN = 0.84;
     public double armRotHOME = 0.343;
 
