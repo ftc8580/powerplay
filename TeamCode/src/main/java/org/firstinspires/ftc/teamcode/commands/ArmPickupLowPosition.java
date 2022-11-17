@@ -19,7 +19,8 @@ public class ArmPickupLowPosition extends CommandBase {
 
     @Override
     public void initialize() {
-        targetTimeMs = arm.getVerticalSweepTimeMs(CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION);
+        // TODO: Dial this in so that we're not wasting too much time waiting
+        targetTimeMs = 200; // arm.getVerticalSweepTimeMs(CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION);
         runtime.reset();
         arm.setArmVerticalPosition(CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION);
     }
