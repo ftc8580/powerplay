@@ -293,7 +293,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 if (highSpeedButton.get()) {
                     robotSpeed = baseSpeed * 1.1;
                 } else if (lowSpeedButton.get()) {
-                    robotSpeed = baseSpeed * .4;
+                    robotSpeed = baseSpeed * .7;
                 } else {
                     robotSpeed = baseSpeed;
                 }
