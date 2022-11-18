@@ -112,16 +112,24 @@ public class CDFourBar extends SubsystemBase {
         // This method will return true for successful turn or false for an error.
         runtime.reset();
 
-        while (!isArrivedAtTarget(positionTarget) && !runtime.isTimedOutMs(TIMEOUT_MS)) {
-//            while(getFourBarPosition() != positionTarget) {
-            if (getFourBarPosition() > positionTarget) {
-                moveDown();
-            } else if (getFourBarPosition() < positionTarget) {
-                moveUp();
+        double currentPosition = getFourBarPosition();
+
+        while (!isArrivedAtTarget(positionTarget, currentPosition) && !runtime.isTimedOutMs(TIMEOUT_MS)) {
+            double fourBarSpeed = calculateFourBarSpeed(positionTarget, currentPosition);
+            if (currentPosition > positionTarget) {
+                moveDown(fourBarSpeed);
+            } else if (currentPosition < positionTarget) {
+                moveUp(fourBarSpeed);
             }
         }
         stop();
         return true;
+    }
+
+    private double calculateFourBarSpeed(double positionTarget, double currentPosition) {
+        double positionDelta = Math.abs(positionTarget - currentPosition);
+        // TODO: Is a power of 2 a reasonable scaling here?
+        return MathUtils.clampDouble(0.1, 1.0, Math.pow(2, positionDelta));
     }
 
     public boolean isFourbarHome() {
@@ -132,14 +140,14 @@ public class CDFourBar extends SubsystemBase {
         );
     }
 
-    public boolean isArrivedAtTarget(double target) {
+    public boolean isArrivedAtTarget(double targetPosition, double currentPosition) {
         // TODO: Need to confirm threshold is good
         double FOURBAR_THRESHOLD_DELTA = 0.005;
 
         return MathUtils.isWithinRange(
                 0,
                 FOURBAR_THRESHOLD_DELTA,
-                Math.abs(getFourBarPosition() - target)
+                Math.abs(currentPosition - targetPosition)
         );
     }
 

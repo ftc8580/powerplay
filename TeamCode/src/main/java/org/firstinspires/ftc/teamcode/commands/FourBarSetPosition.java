@@ -7,8 +7,9 @@ import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
 import java.util.Objects;
 
 public class FourBarSetPosition extends CommandBase {
-    private final CDFourBar fourBar;
-    private final double targetPosition;
+    private CDFourBar fourBar;
+    private double targetPosition;
+    private double currentPosition;
 
     public boolean isExecuting;
 
@@ -21,16 +22,20 @@ public class FourBarSetPosition extends CommandBase {
         } else if (Objects.equals(targetPosition, "high")) {
             target = CDFourBar.LOWER_POSITION_HOME + 0.9 ;//1.12;
         }
-        this.fourBar = subsystem;
-        this.targetPosition = target;
+        initializeLocals(subsystem, target);
         addRequirements(fourBar);
     }
 
     public FourBarSetPosition(CDFourBar subsystem, double targetPosition) {
-        this.fourBar = subsystem;
+        initializeLocals(subsystem, targetPosition);
+        addRequirements(fourBar);
+    }
+
+    private void initializeLocals(CDFourBar fourBar, double targetPosition) {
+        this.fourBar = fourBar;
         this.targetPosition = targetPosition;
         this.isExecuting = false;
-        addRequirements(fourBar);
+        this.currentPosition = this.fourBar.getFourBarPosition();
     }
 
     @Override
@@ -47,7 +52,7 @@ public class FourBarSetPosition extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return fourBar.isArrivedAtTarget(targetPosition);
+        return fourBar.isArrivedAtTarget(targetPosition, currentPosition);
     }
 
     @Override
