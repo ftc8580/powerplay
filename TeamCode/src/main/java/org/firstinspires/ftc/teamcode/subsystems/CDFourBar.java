@@ -112,16 +112,34 @@ public class CDFourBar extends SubsystemBase {
         // This method will return true for successful turn or false for an error.
         runtime.reset();
 
-        while (!isArrivedAtTarget(positionTarget) && !runtime.isTimedOutMs(TIMEOUT_MS)) {
-//            while(getFourBarPosition() != positionTarget) {
+        double currentPosition = getFourBarPosition();
+
+        while (!isArrivedAtTarget(positionTarget, currentPosition) && !runtime.isTimedOutMs(TIMEOUT_MS)) {
+            // double fourBarSpeed = calculateFourBarSpeedLinear(positionTarget, currentPosition, 2); // avg speed home -> unicorn: 0.62, med: 0.33, low: 0.10
+            // double fourBarSpeed = calculateFourBarSpeedLinear(positionTarget, currentPosition, 3); // avg speed home -> unicorn: 0.71, med: 0.49, low: 0.14
+            // double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 2); // avg speed home -> unicorn: 0.58, med: 0.29, low: 0.09
+            // double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 5); // avg speed home -> unicorn: 0.70, med: 0.48, low: 0.13
+            double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 7); // avg speed home -> unicorn: 0.73, med: 0.53, low: 0.15
+
             if (getFourBarPosition() > positionTarget) {
-                moveDown();
+                moveDown(fourBarSpeed);
             } else if (getFourBarPosition() < positionTarget) {
-                moveUp();
+                moveUp(fourBarSpeed);
             }
         }
         stop();
         return true;
+    }
+
+    private double calculateFourBarSpeedLinear(double positionTarget, double currentPosition, double multiple) {
+        double positionDelta = Math.abs(positionTarget - currentPosition);
+        return MathUtils.clampDouble(0.1, 1.0, positionDelta * multiple);
+    }
+
+    private double calculateFourBarSpeedExponential(double positionTarget, double currentPosition, double multiple) {
+        double positionDelta = Math.abs(positionTarget - currentPosition);
+        double scaledDelta = Math.pow(multiple, positionDelta) - (1 - positionDelta);
+        return MathUtils.clampDouble(0.1, 1.0, scaledDelta);
     }
 
     public boolean isFourbarHome() {
@@ -132,14 +150,13 @@ public class CDFourBar extends SubsystemBase {
         );
     }
 
-    public boolean isArrivedAtTarget(double target) {
-        // TODO: Need to confirm threshold is good
+    public boolean isArrivedAtTarget(double targetPosition, double currentPosition) {
         double FOURBAR_THRESHOLD_DELTA = 0.005;
 
         return MathUtils.isWithinRange(
                 0,
                 FOURBAR_THRESHOLD_DELTA,
-                Math.abs(getFourBarPosition() - target)
+                Math.abs(currentPosition - targetPosition)
         );
     }
 
