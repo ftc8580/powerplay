@@ -29,7 +29,8 @@ public class MoveToDeliver extends SequentialCommandGroup {
                 new ArmPickupHighPosition(arm),
                 new FourBarSetPosition(fourBar, 0.96),
                 new ArmMoveVertical(arm, 0.62),
-                new ArmMoveRotate(arm, fourBar, 0.84)
+                new ArmMoveRotate(arm, fourBar, 0.84),
+                new FourBarSetPosition(fourBar, 0.96)
         );
         addRequirements(fourBar, arm, pickup);
     }
