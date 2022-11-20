@@ -60,10 +60,7 @@ public class CDFourBar extends SubsystemBase {
         }
     }
     public boolean isOutOfRange() {
-        if (getFourBarPosition() > ABSOLUTE_UPPER_BOUND_VOLTS || getFourBarPosition() < ABSOLUTE_LOWER_BOUND_VOLTS) {
-            return true;
-        }
-        return false;
+        return getFourBarPosition() > ABSOLUTE_UPPER_BOUND_VOLTS || getFourBarPosition() < ABSOLUTE_LOWER_BOUND_VOLTS;
     }
 
     public void moveUp() {
@@ -116,10 +113,10 @@ public class CDFourBar extends SubsystemBase {
 
         while (!isArrivedAtTarget(positionTarget, currentPosition) && !runtime.isTimedOutMs(TIMEOUT_MS)) {
             // double fourBarSpeed = calculateFourBarSpeedLinear(positionTarget, currentPosition, 2); // avg speed home -> unicorn: 0.62, med: 0.33, low: 0.10
-            // double fourBarSpeed = calculateFourBarSpeedLinear(positionTarget, currentPosition, 3); // avg speed home -> unicorn: 0.71, med: 0.49, low: 0.14
+            double fourBarSpeed = calculateFourBarSpeedLinear(positionTarget, currentPosition, 3); // avg speed home -> unicorn: 0.71, med: 0.49, low: 0.14
             // double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 2); // avg speed home -> unicorn: 0.58, med: 0.29, low: 0.09
             // double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 5); // avg speed home -> unicorn: 0.70, med: 0.48, low: 0.13
-            double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 7); // avg speed home -> unicorn: 0.73, med: 0.53, low: 0.15
+            // double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 7); // avg speed home -> unicorn: 0.73, med: 0.53, low: 0.15
 
             if (getFourBarPosition() > positionTarget) {
                 moveDown(fourBarSpeed);
@@ -131,12 +128,12 @@ public class CDFourBar extends SubsystemBase {
         return true;
     }
 
-    private double calculateFourBarSpeedLinear(double positionTarget, double currentPosition, double multiple) {
+    public double calculateFourBarSpeedLinear(double positionTarget, double currentPosition, double multiple) {
         double positionDelta = Math.abs(positionTarget - currentPosition);
         return MathUtils.clampDouble(0.1, 1.0, positionDelta * multiple);
     }
 
-    private double calculateFourBarSpeedExponential(double positionTarget, double currentPosition, double multiple) {
+    public double calculateFourBarSpeedExponential(double positionTarget, double currentPosition, double multiple) {
         double positionDelta = Math.abs(positionTarget - currentPosition);
         double scaledDelta = Math.pow(multiple, positionDelta) - (1 - positionDelta);
         return MathUtils.clampDouble(0.1, 1.0, scaledDelta);

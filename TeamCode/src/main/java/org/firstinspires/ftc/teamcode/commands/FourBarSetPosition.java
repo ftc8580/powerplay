@@ -43,10 +43,16 @@ public class FourBarSetPosition extends CommandBase {
         isExecuting = true;
         currentPosition = fourBar.getFourBarPosition();
 
+        // double fourBarSpeed = fourBar.calculateFourBarSpeedLinear(targetPosition, currentPosition, 2); // avg speed home -> unicorn: 0.62, med: 0.33, low: 0.10
+        double fourBarSpeed = fourBar.calculateFourBarSpeedLinear(targetPosition, currentPosition, 3); // avg speed home -> unicorn: 0.71, med: 0.49, low: 0.14
+        // double fourBarSpeed = fourBar.calculateFourBarSpeedExponential(targetPosition, currentPosition, 2); // avg speed home -> unicorn: 0.58, med: 0.29, low: 0.09
+        // double fourBarSpeed = fourBar.calculateFourBarSpeedExponential(targetPosition, currentPosition, 5); // avg speed home -> unicorn: 0.70, med: 0.48, low: 0.13
+        // double fourBarSpeed = fourBar.calculateFourBarSpeedExponential(targetPosition, currentPosition, 7); // avg speed home -> unicorn: 0.73, med: 0.53, low: 0.15
+
         if (currentPosition > targetPosition) {
             fourBar.moveDown(0.7);
         } else if (currentPosition < targetPosition) {
-            fourBar.moveUp(0.15);
+            fourBar.moveUp(fourBarSpeed);
         }
     }
 
