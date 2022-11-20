@@ -12,6 +12,7 @@ public class FourBarSetPosition extends CommandBase {
     private double currentPosition;
     private boolean moveUp;
     private boolean moveDown;
+    private boolean precision;
 
     public boolean isExecuting;
 
@@ -24,11 +25,19 @@ public class FourBarSetPosition extends CommandBase {
         } else if (Objects.equals(targetPosition, "high")) {
             target = CDFourBar.LOWER_POSITION_HOME + 0.9 ;//1.12;
         }
+        this.precision = false;
         initializeLocals(subsystem, target);
         addRequirements(fourBar);
     }
 
     public FourBarSetPosition(CDFourBar subsystem, double targetPosition) {
+        this.precision = false;
+        initializeLocals(subsystem, targetPosition);
+        addRequirements(fourBar);
+    }
+
+    public FourBarSetPosition(CDFourBar subsystem, double targetPosition, boolean precision) {
+        this.precision = precision;
         initializeLocals(subsystem, targetPosition);
         addRequirements(fourBar);
     }
@@ -59,9 +68,9 @@ public class FourBarSetPosition extends CommandBase {
         // double fourBarSpeed = fourBar.calculateFourBarSpeedExponential(targetPosition, currentPosition, 7); // avg speed home -> unicorn: 0.73, med: 0.53, low: 0.15
 
         if (moveDown) {
-            fourBar.moveDown(1);
+            fourBar.moveDown(precision ? 0.1 : 1);
         } else if (moveUp) {
-            fourBar.moveUp(1);
+            fourBar.moveUp(precision ? 0.1 : 1);
         }
     }
 
@@ -77,6 +86,7 @@ public class FourBarSetPosition extends CommandBase {
         isExecuting = false;
         moveDown = false;
         moveUp = false;
+        precision = false;
         fourBar.stop();
     }
 }
