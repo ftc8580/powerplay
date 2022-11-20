@@ -112,16 +112,16 @@ public class CDFourBar extends SubsystemBase {
         double currentPosition = getFourBarPosition();
 
         while (!isArrivedAtTarget(positionTarget, currentPosition) && !runtime.isTimedOutMs(TIMEOUT_MS)) {
-            // double fourBarSpeed = calculateFourBarSpeedLinear(positionTarget, currentPosition, 2); // avg speed home -> unicorn: 0.62, med: 0.33, low: 0.10
-            double fourBarSpeed = calculateFourBarSpeedLinear(positionTarget, currentPosition, 3); // avg speed home -> unicorn: 0.71, med: 0.49, low: 0.14
+            // double fourBarSpeed = calculateFourBarSpeedLinear(positionTarget, currentPosition, 1.5); // avg speed home -> unicorn: 0.62, med: 0.33, low: 0.10
+            // double fourBarSpeed = calculateFourBarSpeedLinear(positionTarget, currentPosition, 3); // avg speed home -> unicorn: 0.71, med: 0.49, low: 0.14
             // double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 2); // avg speed home -> unicorn: 0.58, med: 0.29, low: 0.09
             // double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 5); // avg speed home -> unicorn: 0.70, med: 0.48, low: 0.13
             // double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 7); // avg speed home -> unicorn: 0.73, med: 0.53, low: 0.15
 
             if (getFourBarPosition() > positionTarget) {
-                moveDown(fourBarSpeed);
+                moveDown();
             } else if (getFourBarPosition() < positionTarget) {
-                moveUp(fourBarSpeed);
+                moveUp();
             }
         }
         stop();
