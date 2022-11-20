@@ -229,8 +229,10 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 pickupTarget = CDPickup.OPEN_POSITION;
                 pickup.release();
             } else if (closePickupSpeed > 0.2) {
-                pickupTarget = CDPickup.CLOSED_POSITION;
-                new PickupCone(arm, pickup, fourBar).schedule();
+                if (!pickup.isPickupClosed) {
+                    pickupTarget = CDPickup.CLOSED_POSITION;
+                    new PickupCone(arm, pickup, fourBar).schedule();
+                }
             }
 
             // Extend
