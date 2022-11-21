@@ -6,22 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //@Disabled
 public class CDAutonRIGHT extends CDAutonBase {
 
-    //    @Override
-    //    public void initTokenWeDoNotSee() {
-    //        SignalWeDoNotSee = 1;
-    //    }
-
     @Override
     public void executeAuton() {
-        /* if(positionNumber == "1") {
-            signalLocation = 1;
-        } else if (positionNumber == "2") {
-            signalLocation = 2;
-        } else if (positionNumber == "3") {
-            signalLocation = 3;
-        } else {
-            signalLocation = 3;
-        }*/
 
         int signalLocation;
 
@@ -32,23 +18,27 @@ public class CDAutonRIGHT extends CDAutonBase {
         }
 
         //This auton delivers cone to medium junction
-        myFourbar.setFourBarPosition(fourbarHOME);
+        myFourbar.resetFourBarHomePosition();
         sleep (100);
         //Pick up cone
         myArm.setArmVerticalPosition(0.8);
         sleep (200);
         myFourbar.resetFourBarHomePosition();
-        sleep (300);
+        sleep (200);
         myPickup.pickup();
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 2, 10.0);
-        myFourbar.setFourBarPosition(fourbarHOME);
+        myFourbar.resetFourBarHomePosition();
         sleep (250);
         myArm.setArmVerticalPosition(armVertHOME);
 
         //Drive forward to deliver to medium junction
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 37, 10.0);
+
+/*
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 42, 10.0);
         sleep(100);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -5, 5.0);
+*/
 
         //Raise fourbar to medium delivery height and rotate arm to delivery position
         myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM);
@@ -65,7 +55,7 @@ public class CDAutonRIGHT extends CDAutonBase {
         //Drive forward to center of square
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 17, 10.0);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -5, 10.0);
-        myFourbar.setFourBarPosition(fourbarHOME);
+        myFourbar.resetFourBarHomePosition();
 
 
         //Drive to correct square
@@ -88,19 +78,22 @@ public class CDAutonRIGHT extends CDAutonBase {
 //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -180, 5.0); //Turn left 180 degrees with a 5 second timeout. Positive is right.
 
 //Fourbar Height
-//myFourbar.setFourBarDirection("low"); //Set to deliver on "low", "medium" or "high" junction)
+//myFourbar.resetFourBarHomePosition(); //This takes fourbar down to HOME position
+//myFourbar.setFourBarPosition("low"); //Set to deliver on "low", "medium" or "high" junction)
+//myFourbar.setFourBarPosition("alleyDeliverFourbarMEDIUM"); //See variables in CDAuton Base or enter value between .23 and 1.12
 
 //Arm Vertical
-//myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_POSITION_HOME)
-//Use CDArm.ARM_VERTICAL_POSITION_HOME for Fourbar Heights of low or medium
+//myArm.setArmVerticalPosition(CDArm.ARM_VERTICAL_POSITION_HOME) //See variables in CDAuton Base
+//Use armVertHOME or CDArm.ARM_VERTICAL_POSITION_HOME for Fourbar Heights of low and medium
 //Use 0.31 for Fourbar Height high
-//For picking up cones... use CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION or CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION
+//For picking up cones... Use armVertHOME or armVertPickupLow //use CDArm.ARM_VERTICAL_PICKUP_LOW_POSITION or CDArm.ARM_VERTICAL_PICKUP_HIGH_POSITION
 
 //Arm Rotation
-//myArm.setArmRotationPosition(CDArm.ALLEY_DELIVERY_LEFT_ROTATION);
-//Use CDArm.ALLEY_DELIVERY_LEFT_ROTATION for left deliver
-//Use CDArm.ALLEY_DELIVERY_RIGHT_ROTATION for right deliver
-//Use CDArm.ARM_ROTATION_POSITION_HOME to set arm rotation to back
+//myArm.setArmRotationPosition(alleyDeliverArmRotLEFT);
+//See variables in CDAuton Base
+//Use alleyDeliverArmRotLEFT or CDArm.ALLEY_DELIVERY_LEFT_ROTATION for left deliver
+//Use alleyDeliverArmRotRIGHT or CDArm.ALLEY_DELIVERY_RIGHT_ROTATION for right deliver
+//Use artRotHOME or CDArm.ARM_ROTATION_POSITION_HOME to set arm rotation to back
 
 //Pickup
 //myPickup.pickup();

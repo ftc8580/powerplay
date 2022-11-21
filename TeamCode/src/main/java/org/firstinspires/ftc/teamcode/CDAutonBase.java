@@ -75,7 +75,7 @@ public class CDAutonBase extends LinearOpMode {
     public CDPickup myPickup;
     public String positionNumber;
     //Set fourbar
-    public double alleyDeliverFourbarHIGH = 0.96;
+    public double alleyDeliverFourbarHIGH = 1.12;
     public double alleyDeliverFourbarMEDIUM = 0.77;
     public double alleyDeliverFourbarLOW = 0.53;
     public double fourbarHOME = CDFourBar.LOWER_POSITION_HOME;
@@ -87,20 +87,23 @@ public class CDAutonBase extends LinearOpMode {
     public double armVertHOME = 0.415;
     public double armVertUNICORN = 0.62;
     public double armVertPickupLOW = 0.57;
-    //public double armStackPickupMOVE = 0.20;
+        //public double armStackPickupMOVE = 0.20;
     public double armStackPickupHIGH = 0.24;
     public double armStackPickup5 = 0.415;
     public double armStackPickup4 = 0.480;
     public double armStackPickup3 = 0.550;
     public double armStackPickup2 = 0.575;
     public double armStackPickup1 = armVertPickupLOW;
-    public double distanceStacktoLow = 13;
 
     //setarm rotation
     public double alleyDeliverArmRotRIGHT = 0.19;
     public double alleyDeliverArmRotLEFT = 0.47;
     public double armRotUNICORN = 0.84;
     public double armRotHOME = 0.343;
+
+    //Drive Distances
+    public double distanceStacktoLow = 13;
+
 
     @Override
     public void runOpMode() {
@@ -143,10 +146,10 @@ public class CDAutonBase extends LinearOpMode {
         initVuforia();
         initTfod();
 
-        /**
-         * Activate TensorFlow Object Detection before we wait for the start command.
-         * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
-         **/
+        /*
+          Activate TensorFlow Object Detection before we wait for the start command.
+          Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
+         */
         if (tfod != null) {
             tfod.activate();
 
@@ -159,7 +162,7 @@ public class CDAutonBase extends LinearOpMode {
             tfod.setZoom(1.5, 16.0 / 9.0);
         }
 
-        /** Wait for the game to begin */
+        /* Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         // Logic below is that we want it to start recognizing when we init but not after we start
