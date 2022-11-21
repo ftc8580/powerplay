@@ -136,7 +136,7 @@ public class CDFourBar extends SubsystemBase {
     public double calculateFourBarSpeedExponential(double positionTarget, double currentPosition, double multiple) {
         double positionDelta = Math.abs(positionTarget - currentPosition);
         double scaledDelta = Math.pow(multiple, positionDelta) - (1 - positionDelta);
-        return MathUtils.clampDouble(0.1, 1.0, scaledDelta);
+        return MathUtils.clampDouble(0.4, 1, scaledDelta);
     }
 
     public boolean isFourbarHome() {

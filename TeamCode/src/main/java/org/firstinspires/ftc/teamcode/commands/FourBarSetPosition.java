@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
+import org.firstinspires.ftc.teamcode.util.CDRuntime;
 
 import java.util.Objects;
 
@@ -13,6 +14,7 @@ public class FourBarSetPosition extends CommandBase {
     private boolean moveUp;
     private boolean moveDown;
     private boolean precision;
+    private CDRuntime runtime;
 
     public boolean isExecuting;
 
@@ -49,6 +51,12 @@ public class FourBarSetPosition extends CommandBase {
         this.currentPosition = this.fourBar.getFourBarPosition();
         this.moveUp = false;
         this.moveDown = false;
+        this.runtime = new CDRuntime();
+    }
+
+    @Override
+    public void initialize() {
+        runtime.reset();
     }
 
     @Override
@@ -67,18 +75,27 @@ public class FourBarSetPosition extends CommandBase {
         // double fourBarSpeed = fourBar.calculateFourBarSpeedExponential(targetPosition, currentPosition, 5); // avg speed home -> unicorn: 0.70, med: 0.48, low: 0.13
         // double fourBarSpeed = fourBar.calculateFourBarSpeedExponential(targetPosition, currentPosition, 7); // avg speed home -> unicorn: 0.73, med: 0.53, low: 0.15
 
-        if (moveDown) {
-            fourBar.moveDown(precision ? 0.1 : 1);
-        } else if (moveUp) {
-            fourBar.moveUp(precision ? 0.1 : 1);
+        if (this.currentPosition > this.targetPosition && moveDown) {
+            fourBar.moveDown(precision ? 0.4 : 1);
+        } else if (this.currentPosition < this.targetPosition && moveDown) {
+            moveDown = false;
+            moveUp = true;
+            precision = true;
+        } else if (this.currentPosition < this.targetPosition && moveUp) {
+            fourBar.moveUp(precision ? 0.4 : 1);
+        } else if (this.currentPosition > this.targetPosition && moveUp) {
+            moveUp = false;
+            moveDown = true;
+            precision = true;
         }
     }
 
     @Override
     public boolean isFinished() {
-        return (moveDown && currentPosition < targetPosition) ||
+        return fourBar.isArrivedAtTarget(targetPosition, currentPosition);
+        /* return (moveDown && currentPosition < targetPosition) ||
                 (moveUp && currentPosition > targetPosition) ||
-                fourBar.isArrivedAtTarget(targetPosition, currentPosition);
+                fourBar.isArrivedAtTarget(targetPosition, currentPosition); */
     }
 
     @Override
