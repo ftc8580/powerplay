@@ -93,6 +93,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
     @Override
     public void runOpMode() {
+        CommandScheduler.getInstance().reset();
+
         // Set up hardware
         // Initialize telemetry
         robotTelemetry = CDTelemetry.initialize(telemetry);
@@ -149,6 +151,8 @@ public class CDTeleop extends LinearOpMode implements Runnable {
 
         // Polling rate for logging gets set to zero before the while loop
         int i = 0;
+
+        CommandScheduler.getInstance().enable();
 
         while (opModeIsActive()) {
             /******************************
@@ -277,6 +281,9 @@ public class CDTeleop extends LinearOpMode implements Runnable {
                 i++;
             }
         }
+
+        CommandScheduler.getInstance().reset();
+        CommandScheduler.getInstance().disable();
     }
     // Threaded Gamepad 1. Everything Gamepad 1 will happen below.
     public void run() {

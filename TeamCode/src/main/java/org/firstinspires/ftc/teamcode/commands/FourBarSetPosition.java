@@ -14,7 +14,6 @@ public class FourBarSetPosition extends CommandBase {
     private boolean moveUp;
     private boolean moveDown;
     private boolean precision;
-    private CDRuntime runtime;
 
     public boolean isExecuting;
 
@@ -51,12 +50,6 @@ public class FourBarSetPosition extends CommandBase {
         this.currentPosition = this.fourBar.getFourBarPosition();
         this.moveUp = false;
         this.moveDown = false;
-        this.runtime = new CDRuntime();
-    }
-
-    @Override
-    public void initialize() {
-        runtime.reset();
     }
 
     @Override
