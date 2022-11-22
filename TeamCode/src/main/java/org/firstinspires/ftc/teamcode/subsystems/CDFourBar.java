@@ -11,6 +11,9 @@ import org.firstinspires.ftc.teamcode.util.CDRuntime;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
 public class CDFourBar extends SubsystemBase {
+    public static double UpSpeedAuton = 0.3;
+    public static double DownSpeedAuton = 0.7;
+
     private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = 0.9;
     // Set higher to prevent situations where we're locked out because the arm got pushed up
     public final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.30;
@@ -64,11 +67,20 @@ public class CDFourBar extends SubsystemBase {
     }
 
     public void moveUp() {
-        moveUp(FOUR_BAR_SLOW_SPEED_MULTIPLIER);
+        if (this.autonMode) {
+            moveUp(this.UpSpeedAuton);
+        } else {
+            moveUp(FOUR_BAR_SLOW_SPEED_MULTIPLIER);
+        }
     }
 
     public void moveDown() {
-        moveDown(FOUR_BAR_SLOW_SPEED_MULTIPLIER);
+        double speed;
+        if (this.autonMode) {
+            moveUp(this.DownSpeedAuton);
+        } else {
+            moveDown(FOUR_BAR_SLOW_SPEED_MULTIPLIER);
+        }
     }
 
     public void moveUp(double pow) {

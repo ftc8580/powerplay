@@ -80,6 +80,7 @@ public class CDAutonBase extends LinearOpMode {
     public double alleyDeliverFourbarLOW = 0.53;
     public double fourbarHOME = CDFourBar.LOWER_POSITION_HOME;
     public double fourbarUNICORN = 0.96;
+
     //Set Armvert
     public double alleyDeliverArmVertHIGH = 0.31;
     public double alleyDeliverArmVertMEDIUM = 0.415;
@@ -116,7 +117,10 @@ public class CDAutonBase extends LinearOpMode {
         myFourbar = new CDFourBar(hardwareMap);
         myPickup = new CDPickup(myHardware);
 
-
+        // Set up difference in Auton speeds
+        myFourbar.autonMode=true;
+        myFourbar.UpSpeedAuton = 0.3;
+        myFourbar.DownSpeedAuton = 0.7;
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");
