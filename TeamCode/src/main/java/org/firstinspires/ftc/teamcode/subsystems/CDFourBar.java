@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.util.CDRuntime;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 
 public class CDFourBar extends SubsystemBase {
-    public static double UpSpeedAuton = 0.3;
-    public static double DownSpeedAuton = 0.7;
+    public double UpSpeedAuton = 0.3;
+    public double DownSpeedAuton = 0.7;
 
     private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = 0.9;
     // Set higher to prevent situations where we're locked out because the arm got pushed up
@@ -75,7 +75,6 @@ public class CDFourBar extends SubsystemBase {
     }
 
     public void moveDown() {
-        double speed;
         if (this.autonMode) {
             moveUp(this.DownSpeedAuton);
         } else {
@@ -129,7 +128,7 @@ public class CDFourBar extends SubsystemBase {
             // double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 2); // avg speed home -> unicorn: 0.58, med: 0.29, low: 0.09
             // double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 5); // avg speed home -> unicorn: 0.70, med: 0.48, low: 0.13
             // double fourBarSpeed = calculateFourBarSpeedExponential(positionTarget, currentPosition, 7); // avg speed home -> unicorn: 0.73, med: 0.53, low: 0.15
-
+            currentPosition = getFourBarPosition();
             if (getFourBarPosition() > positionTarget) {
                 moveDown();
             } else if (getFourBarPosition() < positionTarget) {
