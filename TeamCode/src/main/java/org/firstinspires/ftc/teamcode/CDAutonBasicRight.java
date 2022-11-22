@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name="CDAutonBasicRIGHT", group="Linear Opmode")
 //@Disabled
-public class CDAutonRIGHT extends CDAutonBase {
+public class CDAutonBasicRIGHT extends CDAutonBase {
 
     @Override
     public void executeAuton() {
