@@ -94,6 +94,7 @@ public class CDTeleop extends LinearOpMode implements Runnable {
     @Override
     public void runOpMode() {
         CommandScheduler.getInstance().reset();
+        CommandScheduler.getInstance();
 
         // Set up hardware
         // Initialize telemetry
