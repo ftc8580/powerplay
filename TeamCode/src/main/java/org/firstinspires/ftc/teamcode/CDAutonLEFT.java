@@ -47,8 +47,8 @@ public class CDAutonLEFT extends CDAutonBase {
         myArm.setArmRotationPosition(armRotHOME);
 
         //Drive forward to center of square
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 17, 10.0);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -5, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 20, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -8, 10.0);
         myFourbar.resetFourBarHomePosition();
 
 
