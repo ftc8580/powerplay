@@ -18,10 +18,11 @@ public class CDAutonLEFT extends CDAutonBase {
         }
 
         //This auton delivers cone to medium junction
+        myArm.setArmRotationPosition(armRotHOME);
         myFourbar.resetFourBarHomePosition();
         sleep (100);
         //Pick up cone
-        myArm.setArmVerticalPosition(0.8);
+        myArm.setArmVerticalPosition(armVertPickupLOW);
         sleep (200);
         myFourbar.resetFourBarHomePosition();
         sleep (200);

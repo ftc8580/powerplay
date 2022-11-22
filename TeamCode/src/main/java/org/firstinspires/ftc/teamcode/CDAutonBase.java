@@ -87,7 +87,7 @@ public class CDAutonBase extends LinearOpMode {
     public double alleyDeliverArmVertLOW = 0.415;
     public double armVertHOME = 0.415;
     public double armVertUNICORN = 0.62;
-    public double armVertPickupLOW = 0.57;
+    public double armVertPickupLOW = 0.8; //.57
         //public double armStackPickupMOVE = 0.20;
     public double armStackPickupHIGH = 0.24;
     public double armStackPickup5 = 0.415;
@@ -97,10 +97,10 @@ public class CDAutonBase extends LinearOpMode {
     public double armStackPickup1 = armVertPickupLOW;
 
     //setarm rotation
-    public double alleyDeliverArmRotRIGHT = 0.19;
+    public double alleyDeliverArmRotRIGHT = 0.215; //0.19;
     public double alleyDeliverArmRotLEFT = 0.47;
     public double armRotUNICORN = 0.84;
-    public double armRotHOME = 0.343;
+    public double armRotHOME = 0.344; //.343
 
     //Drive Distances
     public double distanceStacktoLow = 13;
@@ -120,7 +120,7 @@ public class CDAutonBase extends LinearOpMode {
         // Set up difference in Auton speeds
         myFourbar.autonMode=true;
         myFourbar.UpSpeedAuton = 0.3;
-        myFourbar.DownSpeedAuton = 0.7;
+        myFourbar.DownSpeedAuton = -0.7;
 
         //Send telemetry to signify robot waiting
         telemetry.addData("Status", "Resetting Encoders");

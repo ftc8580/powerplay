@@ -2,21 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.subsystems.CDArm;
-import org.firstinspires.ftc.teamcode.subsystems.CDFourBar;
-
 @Autonomous(name="CDAutonStackLEFT", group="Linear Opmode")
 //@Disabled
 public class CDAutonStackLEFT extends CDAutonBase {
 
-    //    @Override
-    //    public void initTokenWeDoNotSee() {
-    //        SignalWeDoNotSee = 1;
-    //    }
-
     @Override
     public void executeAuton() {
-        //double signalLocation = Integer.parseInt(positionNumber); //Values should be 1,2 or 3
+
         int signalLocation;
 
         if (positionNumber == null || positionNumber == "") {
@@ -26,6 +18,7 @@ public class CDAutonStackLEFT extends CDAutonBase {
         }
 
         //This auton delivers cone to medium junction
+        myArm.setArmRotationPosition(armRotHOME);
         myFourbar.resetFourBarHomePosition();
         sleep (100);
         //Pick up cone
@@ -54,15 +47,16 @@ public class CDAutonStackLEFT extends CDAutonBase {
         myArm.setArmRotationPosition(armRotHOME);
 
         //Drive forward to center of square
-        myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.2), 17, 10.0);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -5, 10.0);
+        myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.2), 19, 10.0);
+        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, -8, 10.0);
         myFourbar.resetFourBarHomePosition();
 
         //Deliver Cones from Stack
         //Pickup Stack Cones
         myChassis.encoderDriveTurn((CDDriveChassisAuton.TURN_SPEED + 0.1), 90, 5.0);
-        myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.1), -29, 10.0);
         myArm.setArmVerticalPosition(armStackPickupHIGH);
+        myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.1), -28, 10.0);
+        sleep(5000); //remove
         myFourbar.resetFourBarHomePosition();
         sleep(500);
         myArm.setArmVerticalPosition(armStackPickup4); //above cone positon + 0.150. This goes down.
@@ -72,7 +66,7 @@ public class CDAutonStackLEFT extends CDAutonBase {
         myPickup.pickup();
         sleep(500);
         myArm.setArmVerticalPosition(armStackPickupHIGH);
-        sleep(500);
+        sleep(750);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, (distanceStacktoLow), 10.0);
         myArm.setArmVerticalPosition(armVertHOME);
 
