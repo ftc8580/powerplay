@@ -152,8 +152,6 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         // Polling rate for logging gets set to zero before the while loop
         int i = 0;
 
-        CommandScheduler.getInstance().enable();
-
         while (opModeIsActive()) {
             /******************************
              * GAMEPAD 2 CODE
@@ -283,7 +281,6 @@ public class CDTeleop extends LinearOpMode implements Runnable {
         }
 
         CommandScheduler.getInstance().reset();
-        CommandScheduler.getInstance().disable();
     }
     // Threaded Gamepad 1. Everything Gamepad 1 will happen below.
     public void run() {
