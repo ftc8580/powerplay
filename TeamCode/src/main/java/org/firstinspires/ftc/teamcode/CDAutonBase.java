@@ -89,7 +89,7 @@ public class CDAutonBase extends LinearOpMode {
     public double armVertUNICORN = 0.62;
     public double armVertPickupLOW = 0.8; //.57
         //public double armStackPickupMOVE = 0.20;
-    public double armStackPickupHIGH = 0.24;
+    public double armStackPickupHIGH = 0.20; //0.24
     public double armStackPickup5 = 0.415;
     public double armStackPickup4 = 0.480;
     public double armStackPickup3 = 0.550;
@@ -98,7 +98,7 @@ public class CDAutonBase extends LinearOpMode {
 
     //setarm rotation
     public double alleyDeliverArmRotRIGHT = 0.215; //0.19;
-    public double alleyDeliverArmRotLEFT = 0.47;
+    public double alleyDeliverArmRotLEFT = 0.46; //0.47
     public double armRotUNICORN = 0.84;
     public double armRotHOME = 0.344; //.343
 
