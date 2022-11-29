@@ -134,21 +134,21 @@ public class CDAutonStackRIGHT extends CDAutonBase {
         if (signalLocation == 3) {
             //TODO adjust from last cone deliver
             myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.2), -8, 5.0);
-            myArm.setArmRotationPosition(CDArm.ARM_ROTATION_POSITION_HOME);
+            myArm.setArmRotationPosition(armRotHOME);
             myFourbar.resetFourBarHomePosition();
             myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 5.0);
         }
         if (signalLocation ==2) {
             //TODO adjust from last cone deliver
             myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.2), 15, 5.0);
-            myArm.setArmRotationPosition(CDArm.ARM_ROTATION_POSITION_HOME);
+            myArm.setArmRotationPosition(armRotHOME);
             myFourbar.resetFourBarHomePosition();
             myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 5.0);
         }
         if (signalLocation ==1) {
             //TODO adjust from last cone deliver
             myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.2), 38, 5.0);
-            myArm.setArmRotationPosition(CDArm.ARM_ROTATION_POSITION_HOME);
+            myArm.setArmRotationPosition(armRotHOME);
             myFourbar.resetFourBarHomePosition();
             myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 5.0);
         }

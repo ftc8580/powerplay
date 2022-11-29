@@ -23,7 +23,7 @@ public class CDArm extends SubsystemBase {
     //TODO DO NOT USE BELOW UNTIL CHECK ON ROBOT - arm will likely collide with floor then moved to front. May also hit robot. Will likely need to define safe fourbar position for this.
     private static final double ARM_FREELY_ROTATE_VERTICAL_HEIGHT_HIGH = 0.06; // Notice this is very small range 0-0.06 (Four bar all the way down)
     private static final double ARM_CLEAR_TO_ROTATE_WITH_CONE_POSITION = .415; // (.87* fourBarPositionCurrent - .14);
-    private static final double INITIAL_ARM_ROTATION_POSITION = 0.333;
+    private static final double INITIAL_ARM_ROTATION_POSITION = 0.343; //was .333 but almost hitting fourbar now
 
     // Define variables for rotation positions
     public static final double ARM_ROTATION_POSITION_FRONT = 0.82;

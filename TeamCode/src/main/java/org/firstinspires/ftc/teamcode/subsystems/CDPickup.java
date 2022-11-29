@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.util.ServoUtils;
 
 public class CDPickup extends SubsystemBase {
     private static final double SCALE_RANGE_MIN = 0.35;
-    private static final double SCALE_RANGE_MAX = 0.75;
+    private static final double SCALE_RANGE_MAX = 0.71;
 
     public static final double CLOSED_POSITION = 1.0; // 13mm
     public static final double OPEN_POSITION = 0.0;
