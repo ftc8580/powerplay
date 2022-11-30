@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.subsystems.CDArm;
+//import org.firstinspires.ftc.teamcode.subsystems.CDArm;
 
 @Autonomous(name="CDAutonStackRIGHT", group="Linear Opmode")
 //@Disabled
@@ -136,21 +136,21 @@ public class CDAutonStackRIGHT extends CDAutonBase {
             myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.2), -8, 5.0);
             myArm.setArmRotationPosition(armRotHOME);
             myFourbar.resetFourBarHomePosition();
-            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 5.0);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 85, 5.0);
         }
         if (signalLocation ==2) {
             //TODO adjust from last cone deliver
             myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.2), 15, 5.0);
             myArm.setArmRotationPosition(armRotHOME);
             myFourbar.resetFourBarHomePosition();
-            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 5.0);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 85, 5.0);
         }
         if (signalLocation ==1) {
             //TODO adjust from last cone deliver
             myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.2), 38, 5.0);
             myArm.setArmRotationPosition(armRotHOME);
             myFourbar.resetFourBarHomePosition();
-            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 90, 5.0);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 85, 5.0);
         }
 
         finishAuton();

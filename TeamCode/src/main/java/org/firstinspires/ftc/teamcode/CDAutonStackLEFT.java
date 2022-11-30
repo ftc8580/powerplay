@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+//import org.firstinspires.ftc.teamcode.subsystems.CDArm;
+
 @Autonomous(name="CDAutonStackLEFT", group="Linear Opmode")
 //@Disabled
 public class CDAutonStackLEFT extends CDAutonBase {
@@ -53,7 +55,7 @@ public class CDAutonStackLEFT extends CDAutonBase {
 
         //Deliver Cones from Stack
         //Pickup Stack Cones
-        myChassis.encoderDriveTurn((CDDriveChassisAuton.TURN_SPEED + 0.6), 92, 5.0);
+        myChassis.encoderDriveTurn((CDDriveChassisAuton.TURN_SPEED + 0.6), 93.5, 5.0);
         myArm.setArmVerticalPosition(armStackPickupHIGH);
         myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.1), -28, 10.0);
         myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED - 0.15), -1.9, 10.0);
@@ -92,59 +94,63 @@ public class CDAutonStackLEFT extends CDAutonBase {
 
 
         //REPEAT ABOVE FOR SECOND CONE
-        myArm.setArmVerticalPosition(armStackPickupHIGH);
-        myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.1), -distanceStacktoLow, 10.0);
-        sleep(350);
-        myFourbar.resetFourBarHomePosition();
-        sleep(350);
-        myArm.setArmVerticalPosition(armStackPickup3); //above cone positon + 0.150. This goes down.
-        sleep(350);
-        myArm.setArmRotationPosition(0.343);
-        sleep (250);
-        myFourbar.resetFourBarHomePosition();
-        sleep (150);
-        myPickup.pickup();
-        sleep(250);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 1.51, 2);
-        sleep(250);
-        myArm.setArmVerticalPosition(armStackPickupHIGH);
-        sleep(500);
-        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, (distanceStacktoLow-1.5), 10.0);
-        myArm.setArmVerticalPosition(armVertHOME);
+        // NOTE: This is commented out because we were timing out before we could park during drive practice
+//        myArm.setArmVerticalPosition(armStackPickupHIGH);
+//        myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.1), -distanceStacktoLow, 10.0);
+//        sleep(350);
+//        myFourbar.resetFourBarHomePosition();
+//        sleep(350);
+//        myArm.setArmVerticalPosition(armStackPickup3); //above cone positon + 0.150. This goes down.
+//        sleep(350);
+//        myArm.setArmRotationPosition(0.343);
+//        sleep (250);
+//        myFourbar.resetFourBarHomePosition();
+//        sleep (150);
+//        myPickup.pickup();
+//        sleep(250);
+//        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 1.51, 2);
+//        sleep(250);
+//        myArm.setArmVerticalPosition(armStackPickupHIGH);
+//        sleep(500);
+//        myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, (distanceStacktoLow-1.5), 10.0);
+//        myArm.setArmVerticalPosition(armVertHOME);
 
         //Raise fourbar to medium delivery height and rotate arm to delivery position then move to low
-        myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM);
-        sleep(250);
-        myArm.setArmRotationPosition(alleyDeliverArmRotRIGHT);
-        sleep(350);
-        myFourbar.setFourBarPosition(alleyDeliverFourbarLOW);
-        sleep(400);
-        //Drop Cone
-        myPickup.release();
-        sleep(250);
-        myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM);
-        //Rotate arm back to HOME position to prevent collision
-        myArm.setArmRotationPosition(armRotHOME);
+//        myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM);
+//        sleep(250);
+//        myArm.setArmRotationPosition(alleyDeliverArmRotRIGHT);
+//        sleep(350);
+//        myFourbar.setFourBarPosition(alleyDeliverFourbarLOW);
+//        sleep(400);
+//        //Drop Cone
+//        myPickup.release();
+//        sleep(250);
+//        myFourbar.setFourBarPosition(alleyDeliverFourbarMEDIUM);
+//        //Rotate arm back to HOME position to prevent collision
+//        myArm.setArmRotationPosition(armRotHOME);
 
 
         //DRIVE TO PARK in correct square
         if (signalLocation == 1) {
             //TODO adjust from last cone deliver
             myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.2), -8, 5.0);
+            myArm.setArmRotationPosition(armRotHOME);
             myFourbar.resetFourBarHomePosition();
-            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 5.0);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -93.5, 5.0);
         }
         if (signalLocation ==2) {
             //TODO adjust from last cone deliver
             myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.2), 15, 5.0);
+            myArm.setArmRotationPosition(armRotHOME);
             myFourbar.resetFourBarHomePosition();
-            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 5.0);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -93.5, 5.0);
         }
         if (signalLocation ==3) {
             //TODO adjust from last cone deliver
             myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.2), 38, 5.0);
+            myArm.setArmRotationPosition(armRotHOME);
             myFourbar.resetFourBarHomePosition();
-            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -90, 5.0);
+            myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -93.5, 5.0);
         }
 
         finishAuton();
