@@ -17,7 +17,7 @@ public class CDFourBar extends SubsystemBase {
     private final static double FOUR_BAR_SLOW_SPEED_MULTIPLIER = 0.9;
     // Set higher to prevent situations where we're locked out because the arm got pushed up
     public final static double ABSOLUTE_UPPER_BOUND_VOLTS = 1.30;
-    public final static double ABSOLUTE_LOWER_BOUND_VOLTS = .22;
+    public final static double ABSOLUTE_LOWER_BOUND_VOLTS = .20;
     private final static double LOW_SPEED_UPPER_BOUND_VOLTS = 1.08;
     private final static double LOW_SPEED_LOWER_BOUND_VOLTS = 0.34;
 

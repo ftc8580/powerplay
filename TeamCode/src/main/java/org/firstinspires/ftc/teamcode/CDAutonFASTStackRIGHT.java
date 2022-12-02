@@ -135,6 +135,7 @@ public class CDAutonFASTStackRIGHT extends CDAutonBase {
             //myFourbar.resetFourBarHomePosition();
             myFourbar.setFourBarPosition(alleyDeliverFourbarHIGH);
            // myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 85, 5.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2, 5);
         }
         if (signalLocation ==2) {
             //TODO adjust from last cone deliver
@@ -143,6 +144,7 @@ public class CDAutonFASTStackRIGHT extends CDAutonBase {
             //myFourbar.resetFourBarHomePosition();
             myFourbar.setFourBarPosition(alleyDeliverFourbarHIGH);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 85, 5.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2, 5);
         }
         if (signalLocation ==1) {
             //TODO adjust from last cone deliver
@@ -151,6 +153,7 @@ public class CDAutonFASTStackRIGHT extends CDAutonBase {
             //myFourbar.resetFourBarHomePosition();
             myFourbar.setFourBarPosition(alleyDeliverFourbarHIGH);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, 85, 5.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, -2, 5);
         }
 
         finishAuton();

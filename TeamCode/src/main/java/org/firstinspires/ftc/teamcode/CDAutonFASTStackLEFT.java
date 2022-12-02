@@ -29,6 +29,7 @@ public class CDAutonFASTStackLEFT extends CDAutonBase {
         //myFourbar.resetFourBarHomePosition();
         //sleep (100);
         myPickup.pickup();
+        myArm.setArmVerticalPosition(armStackPickup2);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED, 2, 10.0);
         myFourbar.resetFourBarHomePosition();
         //sleep (100);
@@ -51,7 +52,8 @@ public class CDAutonFASTStackLEFT extends CDAutonBase {
         myFourbar.setFourBarPosition(alleyDeliverFourbarLOW);
 
         //Drive forward to center of square
-        myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED), 20.1, 10.0);
+        myChassis.encoderDriveStraight((CDDriveChassisAuton.DRIVE_SPEED + 0.1), 20.1, 10.0);
+        sleep(250);
         myChassis.encoderDriveStraight(CDDriveChassisAuton.DRIVE_SPEED , -6.01, 10.0);
         myFourbar.resetFourBarHomePosition();
 
@@ -136,6 +138,7 @@ public class CDAutonFASTStackLEFT extends CDAutonBase {
             //myFourbar.resetFourBarHomePosition();
             myFourbar.setFourBarPosition(alleyDeliverFourbarHIGH);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -93.5, 5.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
         }
         if (signalLocation ==2) {
             //TODO adjust from last cone deliver
@@ -144,6 +147,7 @@ public class CDAutonFASTStackLEFT extends CDAutonBase {
             //myFourbar.resetFourBarHomePosition();
             myFourbar.setFourBarPosition(alleyDeliverFourbarHIGH);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -93.5, 5.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
         }
         if (signalLocation ==3) {
             //TODO adjust from last cone deliver
@@ -152,6 +156,7 @@ public class CDAutonFASTStackLEFT extends CDAutonBase {
             //myFourbar.resetFourBarHomePosition();
             myFourbar.setFourBarPosition(alleyDeliverFourbarHIGH);
             //myChassis.encoderDriveTurn(CDDriveChassisAuton.TURN_SPEED, -93.5, 5.0);
+            myChassis.encoderDriveStrafe(CDDriveChassisAuton.DRIVE_SPEED, 2, 5);
         }
 
         finishAuton();
