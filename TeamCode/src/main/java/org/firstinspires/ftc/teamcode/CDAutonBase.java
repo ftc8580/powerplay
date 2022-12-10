@@ -119,7 +119,7 @@ public class CDAutonBase extends LinearOpMode {
 
         // Set up difference in Auton speeds
         myFourbar.autonMode=true;
-        myFourbar.UpSpeedAuton = 0.3;
+        myFourbar.UpSpeedAuton = 0.4;
         myFourbar.DownSpeedAuton = -0.8;
 
         //Send telemetry to signify robot waiting
